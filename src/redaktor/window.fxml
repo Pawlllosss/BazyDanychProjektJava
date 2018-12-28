@@ -31,7 +31,7 @@
             <Label text="Sekcja" GridPane.rowIndex="2" />
             <TextField fx:id="imieTextField" GridPane.columnIndex="1" />
             <TextField fx:id="nazwiskoTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button mnemonicParsing="false" onAction="#addRedactor" prefHeight="26.0" prefWidth="130.0" text="Dodaj Redaktora" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onAction="#addRedactor" prefHeight="26.0" prefWidth="130.0" text="Dodaj Redaktora" GridPane.rowIndex="3" />
             <ChoiceBox fx:id="sekcjaChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>

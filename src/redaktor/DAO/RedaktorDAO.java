@@ -30,8 +30,9 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public List<Redaktor> getAll() {
-        final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, s.nazwa from redaktor.redaktor r\n" +
-                "join redaktor.sekcja s USING(sekcja_id);";
+//        final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, s.nazwa from redaktor.redaktor r\n" +
+//                "join redaktor.sekcja s USING(sekcja_id);";
+        final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, r.sekcja_id from redaktor.redaktor r;";
 
         ResultSet resultSet = connectionHandler.executeSelectQuery(REDACTOR_SELECT_QUERY);
         List<Redaktor> redactors = null;
@@ -75,9 +76,9 @@ public class RedaktorDAO implements DAO<Redaktor> {
             long redaktorId  = resultSet.getLong("redaktor_id");
             String imie = resultSet.getString("imie");
             String nazwisko = resultSet.getString("nazwisko");
-            String sekcjaNazwa = resultSet.getString("nazwa");
+            long sekcjaId = resultSet.getLong("sekcja_id");
 
-            Redaktor redaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaNazwa);
+            Redaktor redaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaId);
             redactors.add(redaktor);
         }
 

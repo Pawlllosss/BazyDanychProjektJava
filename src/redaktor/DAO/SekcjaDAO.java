@@ -23,7 +23,25 @@ public class SekcjaDAO implements DAO<Sekcja> {
     }
     @Override
     public Sekcja get(long id) {
-        return null;
+        String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.sekcja s WHERE s.sekcja_id = ?;";
+
+        List<Sekcja> sections = new LinkedList<>();
+        Sekcja sekcja = null;
+
+        PreparedStatement selectBySekcjaIdStatement = connectionHandler.prepareStatement(sekcjaSelectBySekcjaIdQuery);
+        try {
+            selectBySekcjaIdStatement.setLong(1, id);
+            ResultSet resultSet = selectBySekcjaIdStatement.executeQuery();
+            sections = getSectionsFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(!sections.isEmpty()) {
+            sekcja = sections.get(0);
+        }
+
+        return sekcja;
     }
 
     public Sekcja getByNazwa(String nazwa) {

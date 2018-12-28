@@ -5,15 +5,15 @@ public class Redaktor {
     private long redaktorId;
     private String imie;
     private String nazwisko;
-    private String sekcjaNazwa;
+//    private String sekcjaNazwa;
     private long sekcjaId;
 
-    public Redaktor(long redaktorId, String imie, String nazwisko, String sekcjaNazwa) {
-        this.redaktorId = redaktorId;
-        this.imie = imie;
-        this.nazwisko = nazwisko;
-        this.sekcjaNazwa = sekcjaNazwa;
-    }
+//    public Redaktor(long redaktorId, String imie, String nazwisko, String sekcjaNazwa) {
+//        this.redaktorId = redaktorId;
+//        this.imie = imie;
+//        this.nazwisko = nazwisko;
+//        this.sekcjaNazwa = sekcjaNazwa;
+//    }
 
     public Redaktor(long redaktorId, String imie, String nazwisko, long sekcjaId) {
         this.redaktorId = redaktorId;
@@ -46,13 +46,13 @@ public class Redaktor {
         this.nazwisko = nazwisko;
     }
 
-    public String getSekcjaNazwa() {
-        return sekcjaNazwa;
-    }
-
-    public void setSekcjaNazwa(String sekcjaNazwa) {
-        this.sekcjaNazwa = sekcjaNazwa;
-    }
+//    public String getSekcjaNazwa() {
+//        return sekcjaNazwa;
+//    }
+//
+//    public void setSekcjaNazwa(String sekcjaNazwa) {
+//        this.sekcjaNazwa = sekcjaNazwa;
+//    }
 
     public long getSekcjaId() {
         return sekcjaId;
