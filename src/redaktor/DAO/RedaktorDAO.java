@@ -29,10 +29,10 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public List<Redaktor> getAll() {
-        final String REDACTOR_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, s.nazwa from redaktor.redaktor r\n" +
+        final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, s.nazwa from redaktor.redaktor r\n" +
                 "join redaktor.sekcja s USING(sekcja_id);";
 
-        ResultSet resultSet = connectionHandler.executeSelectQuery(REDACTOR_QUERY);
+        ResultSet resultSet = connectionHandler.executeSelectQuery(REDACTOR_SELECT_QUERY);
         List<Redaktor> redactors = new LinkedList<>();
 
         try {
@@ -62,9 +62,9 @@ public class RedaktorDAO implements DAO<Redaktor> {
             long redaktorId  = resultSet.getLong("redaktor_id");
             String imie = resultSet.getString("imie");
             String nazwisko = resultSet.getString("nazwisko");
-            long sekcjaId = resultSet.getLong("sekcja_id");
+            String sekcjaNazwa = resultSet.getString("nazwa");
 
-            Redaktor redaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaId);
+            Redaktor redaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaNazwa);
             redactors.add(redaktor);
         }
 

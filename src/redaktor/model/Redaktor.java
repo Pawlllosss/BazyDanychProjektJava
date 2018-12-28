@@ -5,13 +5,13 @@ public class Redaktor {
     private long redaktorId;
     private String imie;
     private String nazwisko;
-    private long sekcjaId;
+    private String sekcjaNazwa;
 
-    public Redaktor(long redaktorId, String imie, String nazwisko, long sekcjaId) {
+    public Redaktor(long redaktorId, String imie, String nazwisko, String sekcjaNazwa) {
         this.redaktorId = redaktorId;
         this.imie = imie;
         this.nazwisko = nazwisko;
-        this.sekcjaId = sekcjaId;
+        this.sekcjaNazwa = sekcjaNazwa;
     }
 
     public long getRedaktorId() {
@@ -38,11 +38,11 @@ public class Redaktor {
         this.nazwisko = nazwisko;
     }
 
-    public long getSekcjaId() {
-        return sekcjaId;
+    public String getSekcjaNazwa() {
+        return sekcjaNazwa;
     }
 
-    public void setSekcjaId(long sekcjaId) {
-        this.sekcjaId = sekcjaId;
+    public void setSekcjaNazwa(String sekcjaNazwa) {
+        this.sekcjaNazwa = sekcjaNazwa;
     }
 }

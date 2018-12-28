@@ -1,5 +1,7 @@
 package redaktor.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -10,6 +12,7 @@ import redaktor.DAO.RedaktorDAO;
 import redaktor.model.Redaktor;
 
 import java.util.List;
+import java.util.Observable;
 
 public class RedactorController {
 
@@ -28,19 +31,19 @@ public class RedactorController {
     @FXML
     public void showRedactors() {
         List<Redaktor> redactors = redaktorDAO.getAll();
+        ObservableList<Redaktor> redaktorObservableList = createRedactorsObservableList(redactors);
+
+        System.out.println("showRedactors Clicked");
+
+        redaktorTableView.setItems(redaktorObservableList);
     }
 
     private void initializeTableView() {
         //TODO: move to some kind of factory?
-//        TableColumn<Redaktor, Long> redaktorIdColumn = new TableColumn<>("Id redaktora");
-//        TableColumn<Redaktor, String> imieColumn = new TableColumn<>("Imie");
-//        TableColumn<Redaktor, String> nazwiskoColumn = new TableColumn<>("Nazwisko");
-//        TableColumn<Redaktor, Long> sekcjaIdColumn = new TableColumn<>("Id sekcji");
         TableColumn<Redaktor, Long> redaktorIdColumn = createColumn("Id redaktora", "redaktorId", 80);
         TableColumn<Redaktor, String> imieColumn = createColumn("Imie", "imie", 50);
         TableColumn<Redaktor, String> nazwiskoColumn = createColumn("Nazwisko", "nazwisko", 50);
-        TableColumn<Redaktor, Long> sekcjaIdColumn = createColumn("Id sekcji", "sekcjaId", 50);
-
+        TableColumn<Redaktor, String> sekcjaIdColumn = createColumn("Nazwa sekcji", "sekcjaNazwa", 50);
 
         redaktorTableView.getColumns().addAll(redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaIdColumn);
     }
@@ -51,5 +54,11 @@ public class RedactorController {
         tableColumn.setCellValueFactory(new PropertyValueFactory<Redaktor, T>(fieldName));
 
         return tableColumn;
+    }
+
+    private ObservableList<Redaktor> createRedactorsObservableList(List<Redaktor> redactors) {
+        ObservableList<Redaktor> redactorsObservable = FXCollections.observableList(redactors);
+
+        return redactorsObservable;
     }
 }
