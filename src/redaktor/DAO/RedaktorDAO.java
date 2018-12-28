@@ -3,6 +3,7 @@ package redaktor.DAO;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Redaktor;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -10,11 +11,11 @@ import java.util.List;
 
 public class RedaktorDAO implements DAO<Redaktor> {
 
-    private static RedaktorDAO redactorQueryExecutor = new RedaktorDAO();
+    private static DAO<Redaktor> redaktorDAO = new RedaktorDAO();
     private ConnectionHandler connectionHandler;
 
-    public static RedaktorDAO getInstance() {
-        return redactorQueryExecutor;
+    public static DAO<Redaktor> getInstance() {
+        return redaktorDAO;
     }
 
     private RedaktorDAO() {
@@ -33,7 +34,7 @@ public class RedaktorDAO implements DAO<Redaktor> {
                 "join redaktor.sekcja s USING(sekcja_id);";
 
         ResultSet resultSet = connectionHandler.executeSelectQuery(REDACTOR_SELECT_QUERY);
-        List<Redaktor> redactors = new LinkedList<>();
+        List<Redaktor> redactors = null;
 
         try {
             redactors = getRedactorsFromResultSet(resultSet);
@@ -47,7 +48,19 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public void save(Redaktor redaktor) {
+        String redactorInsertQuery = "INSERT INTO redaktor.redaktor(imie, nazwisko, sekcja_id) " +
+                "VALUES (?, ?, ?);";
 
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(redactorInsertQuery);
+
+        try {
+            preparedStatement.setString(1, redaktor.getImie());
+            preparedStatement.setString(2, redaktor.getNazwisko());
+            preparedStatement.setLong(3, redaktor.getSekcjaId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
