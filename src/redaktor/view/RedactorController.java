@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.StringConverter;
 import redaktor.DAO.DAO;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
@@ -15,6 +16,9 @@ import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
 import java.util.List;
+
+//TODO: create tabs
+//TODO: refresh redactor list automatically
 
 public class RedactorController {
 
@@ -25,7 +29,7 @@ public class RedactorController {
     private TableView<Redaktor> redaktorTableView;
     
     @FXML
-    private ChoiceBox<String> sekcjaChoiceBox;
+    private ChoiceBox<Sekcja> sekcjaChoiceBox;
 
     @FXML
     private TextField imieTextField;
@@ -38,17 +42,29 @@ public class RedactorController {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = (SekcjaDAO)SekcjaDAO.getInstance();
 
+        sekcjaChoiceBox.setConverter(new StringConverter<Sekcja>() {
+            @Override
+            public String toString(Sekcja sekcja) {
+                return sekcja.getNazwa();
+            }
+
+            @Override
+            public Sekcja fromString(String s) {
+                return null;
+            }
+        });
+
         initializeRedaktorTableView();
         updateSekcjaChoiceBox();
     }
 
     @FXML
     public void addRedactor() {
-        String sekcjaNazwa = sekcjaChoiceBox.getValue();
+        Sekcja sekcja = sekcjaChoiceBox.getValue();
         String imie = imieTextField.getText();
         String nazwisko =  nazwiskoTextField.getText();
 
-        Sekcja sekcja = sekcjaDAO.getByNazwa(sekcjaNazwa);
+//        Sekcja sekcja = sekcjaDAO.getByNazwa(sekcjaNazwa);
         long sekcjaId = sekcja.getSekcjaId();
 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
@@ -85,8 +101,11 @@ public class RedactorController {
     }
 
     private void updateSekcjaChoiceBox() {
-        List<String> sections = sekcjaDAO.getAllNazwa();
-        ObservableList<String> sekcjaNazwaObservableList = createObservableListFromList(sections);
+//        List<Sekcja> sections = sekcjaDAO.getAllNazwa();
+//        ObservableList<String> sekcjaNazwaObservableList = createObservableListFromList(sections);
+
+        List<Sekcja> sections = sekcjaDAO.getAll();
+        ObservableList<Sekcja> sekcjaNazwaObservableList = createObservableListFromList(sections);
 
         System.out.println("showRedactors Clicked");
 
