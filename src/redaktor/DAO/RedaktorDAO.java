@@ -11,10 +11,10 @@ import java.util.List;
 
 public class RedaktorDAO implements DAO<Redaktor> {
 
-    private static DAO<Redaktor> redaktorDAO = new RedaktorDAO();
+    private static RedaktorDAO redaktorDAO = new RedaktorDAO();
     private ConnectionHandler connectionHandler;
 
-    public static DAO<Redaktor> getInstance() {
+    public static RedaktorDAO getInstance() {
         return redaktorDAO;
     }
 

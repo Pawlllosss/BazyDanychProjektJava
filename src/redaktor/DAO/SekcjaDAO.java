@@ -11,10 +11,10 @@ import java.util.List;
 
 public class SekcjaDAO implements DAO<Sekcja> {
 
-    private static DAO<Sekcja> sekcjaDAO = new SekcjaDAO();
+    private static SekcjaDAO sekcjaDAO = new SekcjaDAO();
     private ConnectionHandler connectionHandler;
 
-    public static DAO<Sekcja> getInstance() {
+    public static SekcjaDAO getInstance() {
         return sekcjaDAO;
     }
 
