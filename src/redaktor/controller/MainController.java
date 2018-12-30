@@ -11,21 +11,12 @@ public class MainController {
     //TODO: move it to some wrapper?
     private static LinkedList<ValueObjectController> valueObjectControllers;
 
-//    @FXML
-//    private RedaktorzyTabController redaktorzyTabController;
-//    @FXML
-//    private SekcjeTabController sekcjeTabController;
 
     //it's called after all childs FXML where processed
     @FXML
     private void initialize() {
         System.out.println("MainController initialized");
-
-        for(ValueObjectController valueObjectController : valueObjectControllers) {
-            valueObjectController.setItemsFromOtherControllers();
-        }
-
-        //perform queue
+        performAfterInitializeActionOnChildControllers();
     }
 
     //it's called at the beginning
@@ -36,5 +27,12 @@ public class MainController {
     //TODO: in Java8 I could use interface with static method
     public static <T> void addValueObjectController(ValueObjectController<T> valueObjectController) {
         valueObjectControllers.add(valueObjectController);
+    }
+
+    private void performAfterInitializeActionOnChildControllers() {
+
+        for(ValueObjectController valueObjectController : valueObjectControllers) {
+            valueObjectController.setItemsFromOtherControllers();
+        }
     }
 }

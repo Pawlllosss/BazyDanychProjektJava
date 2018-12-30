@@ -14,11 +14,9 @@ import redaktor.DAO.SekcjaDAO;
 import redaktor.initialize.DisplayNameRetriever;
 import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
-import redaktor.initialize.ObservableListCreator;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
-import javax.annotation.PostConstruct;
 
 
 public class RedaktorzyTabController implements ValueObjectController<Redaktor> {
@@ -105,7 +103,4 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableListWrapper.getObservableList());
     }
 
-    private void updateSekcjaChoiceBox() {
-        ObservableListCreator.updateChoiceBox(sekcjaChoiceBox, sekcjaDAO);
-    }
 }

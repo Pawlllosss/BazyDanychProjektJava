@@ -30,8 +30,6 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public List<Redaktor> getAll() {
-//        final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, s.nazwa from redaktor.redaktor r\n" +
-//                "join redaktor.sekcja s USING(sekcja_id);";
         final String REDACTOR_SELECT_QUERY = "select r.redaktor_id, r.imie, r.nazwisko, r.sekcja_id from redaktor.redaktor r;";
 
         ResultSet resultSet = connectionHandler.executeSelectQuery(REDACTOR_SELECT_QUERY);
