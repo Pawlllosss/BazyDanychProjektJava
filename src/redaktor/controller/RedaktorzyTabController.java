@@ -14,9 +14,11 @@ import redaktor.DAO.SekcjaDAO;
 import redaktor.initialize.DisplayNameRetriever;
 import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
-import redaktor.initialize.ViewUpdater;
+import redaktor.initialize.ObservableListCreator;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
+
+import javax.annotation.PostConstruct;
 
 
 public class RedaktorzyTabController implements ValueObjectController<Redaktor> {
@@ -24,7 +26,7 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private ObservableListWrapper<Redaktor> redaktorObservableListWrapper;
+    private static ObservableListWrapper<Redaktor> redaktorObservableListWrapper;
 
     @FXML
     private TableView<Redaktor> redaktorTableView;
@@ -35,13 +37,10 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
     @FXML
     private TextField nazwiskoTextField;
 
-    @Override
-    public ObservableList<Redaktor> getObservableList() {
-        return redaktorObservableListWrapper.getObservableList();
-    }
-
     @FXML
     private void initialize() {
+        System.out.println("r");
+
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
         redaktorObservableListWrapper = new ObservableListWrapper<>(redaktorDAO);
@@ -55,9 +54,20 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
             }
         });
 
-//        updateRedactorTableView();
-        //TODO: remove it when sekcja will be refactored
-        updateSekcjaChoiceBox();
+        MainController.addValueObjectController(this);
+    }
+
+
+    @Override
+    public void setItemsFromOtherControllers() {
+        ObservableList<Sekcja> sekcjaObservableList = SekcjeTabController.getObservableList();
+        sekcjaChoiceBox.setItems(sekcjaObservableList);
+    }
+
+    //TODO: wait for Java8...
+//    @Override
+    public static ObservableList<Redaktor> getObservableList() {
+        return redaktorObservableListWrapper.getObservableList();
     }
 
     @FXML
@@ -71,10 +81,6 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
         redaktorDAO.save(redaktor);
         redaktorObservableListWrapper.updateObservableList();
-        //updating creates new ref(redaktorObservableListWrapper.getObservableList());
-
-        //TODO: use observer pattern
-//        updateRedactorTableView();
     }
 
     private void initializeRedaktorTableView() {
@@ -99,11 +105,7 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableListWrapper.getObservableList());
     }
 
-    private void updateRedactorTableView() {
-        ViewUpdater.updateTableView(redaktorTableView, redaktorDAO);
-    }
-
     private void updateSekcjaChoiceBox() {
-        ViewUpdater.updateChoiceBox(sekcjaChoiceBox, sekcjaDAO);
+        ObservableListCreator.updateChoiceBox(sekcjaChoiceBox, sekcjaDAO);
     }
 }

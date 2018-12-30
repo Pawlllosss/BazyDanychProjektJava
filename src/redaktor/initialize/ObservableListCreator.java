@@ -8,13 +8,7 @@ import redaktor.DAO.DAO;
 
 import java.util.List;
 
-public class ViewUpdater {
-
-    public static <T> void updateTableView(TableView<T> tableView, DAO<T> dao) {
-        List<T> DTOs = dao.getAll();
-        ObservableList<T> DTOsObservableList = createObservableListFromList(DTOs);
-        tableView.setItems(DTOsObservableList);
-    }
+public class ObservableListCreator {
 
     public static <T> void updateChoiceBox(ChoiceBox<T> choiceBox, DAO<T> dao) {
         //TODO: add some interface to provide method for retrieved data

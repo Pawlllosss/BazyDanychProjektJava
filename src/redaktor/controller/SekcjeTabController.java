@@ -1,5 +1,6 @@
 package redaktor.controller;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
@@ -8,16 +9,19 @@ import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.initialize.DisplayNameRetriever;
+import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
-import redaktor.initialize.ViewUpdater;
+import redaktor.initialize.ObservableListCreator;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
 
-public class SekcjeTabController {
+public class SekcjeTabController implements ValueObjectController<Sekcja> {
 
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
+
+    private static ObservableListWrapper<Sekcja> sekcjaObservableListWrapper;
 
     @FXML
     private TableView<Sekcja> sekcjaTableView;
@@ -26,11 +30,15 @@ public class SekcjeTabController {
     @FXML
     private TextField nazwaTextField;
 
+    public SekcjeTabController() {
+        System.out.println("Sekcjetab constr");
+    }
 
     @FXML
     private void initialize() {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
+        sekcjaObservableListWrapper = new ObservableListWrapper<>(sekcjaDAO);
 
         initializeSekcjaTableView();
         ViewInitializer.initializeChoiceBox(szefChoiceBox, new DisplayNameRetriever<Redaktor>() {
@@ -41,8 +49,19 @@ public class SekcjeTabController {
             }
         });
 
-        updateSekcjaTableView();
-        updateSzefChoiceBox();
+        MainController.addValueObjectController(this);
+    }
+
+    @Override
+    public void setItemsFromOtherControllers() {
+        ObservableList<Redaktor> redaktorObservableList = RedaktorzyTabController.getObservableList();
+        szefChoiceBox.setItems(redaktorObservableList);
+    }
+
+    //TODO: wait for Java8...
+//    @Override
+    public static ObservableList<Sekcja> getObservableList() {
+        return sekcjaObservableListWrapper.getObservableList();
     }
 
     @FXML
@@ -53,9 +72,7 @@ public class SekcjeTabController {
 
         Sekcja sekcja = new Sekcja(0, nazwa, szefId);
         sekcjaDAO.save(sekcja);
-
-        //TODO: use observer pattern
-        updateSekcjaTableView();
+        sekcjaObservableListWrapper.updateObservableList();
     }
 
     private void initializeSekcjaTableView() {
@@ -63,15 +80,11 @@ public class SekcjeTabController {
         TableColumn<Sekcja, String> nazwaColumn = ViewInitializer.createColumn("Nazwa", "nazwa", 50);
 
         ViewInitializer.addColumnsToTableView(sekcjaTableView, sekcjaIdColumn, nazwaColumn);
-    }
-
-
-    private void updateSekcjaTableView() {
-        ViewUpdater.updateTableView(sekcjaTableView, sekcjaDAO);
+        ViewInitializer.setObservableListToTableView(sekcjaTableView, sekcjaObservableListWrapper.getObservableList());
     }
 
     private void updateSzefChoiceBox() {
-        ViewUpdater.updateChoiceBox(szefChoiceBox, redaktorDAO);
+        ObservableListCreator.updateChoiceBox(szefChoiceBox, redaktorDAO);
     }
 
 }

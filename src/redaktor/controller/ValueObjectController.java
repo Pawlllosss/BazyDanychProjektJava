@@ -3,5 +3,7 @@ package redaktor.controller;
 import javafx.collections.ObservableList;
 
 public interface ValueObjectController<T> {
-    ObservableList<T> getObservableList();
+    //TODO: need Java8...
+//    static <T> ObservableList<T> getObservableList();
+    void setItemsFromOtherControllers();
 }

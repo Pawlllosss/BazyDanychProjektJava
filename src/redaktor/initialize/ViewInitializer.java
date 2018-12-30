@@ -11,21 +11,6 @@ import redaktor.model.Sekcja;
 
 public class ViewInitializer {
 
-    //TODO: in Java8 I could use functional interface...
-    public static <T> void initializeChoiceBox(ChoiceBox<T> choiceBox, final DisplayNameRetriever displayNameRetriever) {
-        choiceBox.setConverter(new StringConverter<T>() {
-            @Override
-            public String toString(T choiceBoxStoredType) {
-                return displayNameRetriever.getName(choiceBoxStoredType);
-            }
-
-            @Override
-            public T fromString(String s) {
-                return null;
-            }
-        });
-    }
-
     public static <T1, T2> TableColumn<T1, T2> createColumn(String columnName, String fieldName, int width) {
         TableColumn<T1, T2> tableColumn = new TableColumn<>(columnName);
         tableColumn.setMinWidth(width);
@@ -42,4 +27,21 @@ public class ViewInitializer {
         tableView.setItems(observableList);
     }
 
+
+    //TODO: in Java8 I could use functional interface...
+    public static <T> void initializeChoiceBox(ChoiceBox<T> choiceBox, final DisplayNameRetriever displayNameRetriever) {
+        choiceBox.setConverter(new StringConverter<T>() {
+            @Override
+            public String toString(T choiceBoxStoredType) {
+                return displayNameRetriever.getName(choiceBoxStoredType);
+            }
+
+            @Override
+            public T fromString(String s) {
+                return null;
+            }
+        });
+
+
+    }
 }
