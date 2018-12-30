@@ -1,5 +1,6 @@
 package redaktor.initialize;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -35,6 +36,10 @@ public class ViewInitializer {
 
     public static <T> void addColumnsToTableView(TableView<T> tableView, TableColumn<T, ?> ... tableColumns) {
         tableView.getColumns().addAll(tableColumns);
+    }
+
+    public static <T> void setObservableListToTableView(TableView<T> tableView, ObservableList<T> observableList) {
+        tableView.setItems(observableList);
     }
 
 }

@@ -1,5 +1,5 @@
 package redaktor.initialize;
 
 public interface DisplayNameRetriever<T> {
-    String getName(T DTO);
+    String getName(T valueObject);
 }

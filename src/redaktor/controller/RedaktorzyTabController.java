@@ -2,6 +2,7 @@ package redaktor.controller;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
@@ -11,16 +12,19 @@ import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.initialize.DisplayNameRetriever;
+import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.ViewUpdater;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
 
-public class RedaktorzyTabController {
+public class RedaktorzyTabController implements ValueObjectController<Redaktor> {
 
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
+
+    private ObservableListWrapper<Redaktor> redaktorObservableListWrapper;
 
     @FXML
     private TableView<Redaktor> redaktorTableView;
@@ -31,10 +35,16 @@ public class RedaktorzyTabController {
     @FXML
     private TextField nazwiskoTextField;
 
+    @Override
+    public ObservableList<Redaktor> getObservableList() {
+        return redaktorObservableListWrapper.getObservableList();
+    }
+
     @FXML
     private void initialize() {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
+        redaktorObservableListWrapper = new ObservableListWrapper<>(redaktorDAO);
 
         initializeRedaktorTableView();
         //TODO: in Java8 I could use lamba and functional features...
@@ -45,7 +55,8 @@ public class RedaktorzyTabController {
             }
         });
 
-        updateRedactorTableView();
+//        updateRedactorTableView();
+        //TODO: remove it when sekcja will be refactored
         updateSekcjaChoiceBox();
     }
 
@@ -59,9 +70,11 @@ public class RedaktorzyTabController {
 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
         redaktorDAO.save(redaktor);
+        redaktorObservableListWrapper.updateObservableList();
+        //updating creates new ref(redaktorObservableListWrapper.getObservableList());
 
         //TODO: use observer pattern
-        updateRedactorTableView();
+//        updateRedactorTableView();
     }
 
     private void initializeRedaktorTableView() {
@@ -83,6 +96,7 @@ public class RedaktorzyTabController {
         });
 
         ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
+        ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableListWrapper.getObservableList());
     }
 
     private void updateRedactorTableView() {
