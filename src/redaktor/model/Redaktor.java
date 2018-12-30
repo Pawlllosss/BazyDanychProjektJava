@@ -5,7 +5,6 @@ public class Redaktor {
     private long redaktorId;
     private String imie;
     private String nazwisko;
-//    private String sekcjaNazwa;
     private long sekcjaId;
 
 //    public Redaktor(long redaktorId, String imie, String nazwisko, String sekcjaNazwa) {

@@ -10,11 +10,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<AnchorPane fx:id="SekcjaTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="SekcjaTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.SekcjeTabController">
    <children>
-      <TableView fx:id="sekcjaTableView" layoutX="74.0" layoutY="54.0" prefHeight="210.0" prefWidth="254.0" />
-      <GridPane layoutX="356.0" layoutY="93.0" prefHeight="113.0" prefWidth="200.0">
+      <TableView fx:id="sekcjaTableView" layoutX="84.0" layoutY="64.0" prefHeight="210.0" prefWidth="254.0" />
+      <GridPane layoutX="366.0" layoutY="103.0" prefHeight="113.0" prefWidth="200.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

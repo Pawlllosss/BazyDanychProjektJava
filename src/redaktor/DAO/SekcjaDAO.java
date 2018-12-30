@@ -102,7 +102,17 @@ public class SekcjaDAO implements DAO<Sekcja> {
 
     @Override
     public void save(Sekcja sekcja) {
+        String sekcjaInsertQuery = "INSERT INTO redaktor.sekcja(nazwa, szef_id) VALUES (?, ?);";
 
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(sekcjaInsertQuery);
+
+        try {
+            preparedStatement.setString(1, sekcja.getNazwa());
+            preparedStatement.setLong(2, sekcja.getSzefId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -116,8 +126,9 @@ public class SekcjaDAO implements DAO<Sekcja> {
         while(resultSet.next()) {
             long sekcjaId  = resultSet.getLong("sekcja_id");
             String nazwa = resultSet.getString("nazwa");
-            
-            Sekcja sekcja = new Sekcja(sekcjaId, nazwa);
+            long szefId  = resultSet.getLong("szef_id");
+
+            Sekcja sekcja = new Sekcja(sekcjaId, nazwa, szefId);
             sections.add(sekcja);
         }
 

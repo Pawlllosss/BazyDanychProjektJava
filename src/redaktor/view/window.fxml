@@ -4,7 +4,6 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.MainController">
    <children>
       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
@@ -14,7 +13,10 @@
                   <fx:include source="RedaktorzyTab.fxml" />
                </content>
             </Tab>
-          <Tab fx:id="SekcjeTab" text="Sekcje" />
+          <Tab fx:id="SekcjeTab" text="Sekcje">
+               <content>
+                  <fx:include source="SekcjeTab.fxml" />
+               </content></Tab>
         </tabs>
       </TabPane>
    </children>

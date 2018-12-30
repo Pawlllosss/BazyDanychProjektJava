@@ -17,6 +17,7 @@ public class ViewUpdater {
     }
 
     public static <T> void updateChoiceBox(ChoiceBox<T> choiceBox, DAO<T> dao) {
+        //TODO: add some interface to provide method for retrieved data
         List<T> DTOs = dao.getAll();
         ObservableList<T> DTOsObservableList = createObservableListFromList(DTOs);
         choiceBox.setItems(DTOsObservableList);

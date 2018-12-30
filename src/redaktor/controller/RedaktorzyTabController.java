@@ -55,7 +55,6 @@ public class RedaktorzyTabController {
         Sekcja sekcja = sekcjaChoiceBox.getValue();
         String imie = imieTextField.getText();
         String nazwisko =  nazwiskoTextField.getText();
-
         long sekcjaId = sekcja.getSekcjaId();
 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);

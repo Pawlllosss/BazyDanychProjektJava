@@ -25,10 +25,10 @@ public class ViewInitializer {
         });
     }
 
-    public static <T> TableColumn<Redaktor, T> createColumn(String columnName, String fieldName, int width) {
-        TableColumn<Redaktor, T> tableColumn = new TableColumn<>(columnName);
+    public static <T1, T2> TableColumn<T1, T2> createColumn(String columnName, String fieldName, int width) {
+        TableColumn<T1, T2> tableColumn = new TableColumn<>(columnName);
         tableColumn.setMinWidth(width);
-        tableColumn.setCellValueFactory(new PropertyValueFactory<Redaktor, T>(fieldName));
+        tableColumn.setCellValueFactory(new PropertyValueFactory<T1, T2>(fieldName));
 
         return tableColumn;
     }
