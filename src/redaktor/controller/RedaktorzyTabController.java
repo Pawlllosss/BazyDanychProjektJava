@@ -11,9 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.initialize.DisplayNameRetriever;
+import redaktor.initialize.display.ChoiceBoxValueDisplayNameRetriever;
 import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
+import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
@@ -37,7 +38,6 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
 
     @FXML
     private void initialize() {
-        System.out.println("r");
 
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
@@ -45,12 +45,7 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
 
         initializeRedaktorTableView();
         //TODO: in Java8 I could use lamba and functional features...
-        ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new DisplayNameRetriever<Sekcja>() {
-            @Override
-            public String getName(Sekcja sekcja) {
-                return sekcja.getNazwa();
-            }
-        });
+        ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new SekcjaChoiceBoxDisplayNameRetriever());
 
         MainController.addValueObjectController(this);
     }

@@ -6,17 +6,26 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.MainController">
    <children>
-      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="150.0">
         <tabs>
+          <Tab fx:id="SekcjeTab" text="Sekcje">
+               <content>
+                  <fx:include source="SekcjeTab.fxml" />
+               </content></Tab>
           <Tab fx:id="RedaktorzyTab" text="Redaktorzy">
                <content>
                   <fx:include source="RedaktorzyTab.fxml" />
                </content>
             </Tab>
-          <Tab fx:id="SekcjeTab" text="Sekcje">
+            <Tab text="ProgramTab">
                <content>
-                  <fx:include source="SekcjeTab.fxml" />
-               </content></Tab>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <fx:include source="ProgramTab.fxml" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
         </tabs>
       </TabPane>
    </children>

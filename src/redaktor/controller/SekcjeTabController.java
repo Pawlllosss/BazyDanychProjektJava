@@ -8,9 +8,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.initialize.DisplayNameRetriever;
+import redaktor.initialize.display.ChoiceBoxValueDisplayNameRetriever;
 import redaktor.initialize.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
+import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
@@ -40,13 +41,7 @@ public class SekcjeTabController implements ValueObjectController<Sekcja> {
         sekcjaObservableListWrapper = new ObservableListWrapper<>(sekcjaDAO);
 
         initializeSekcjaTableView();
-        ViewInitializer.initializeChoiceBox(szefChoiceBox, new DisplayNameRetriever<Redaktor>() {
-            @Override
-            public String getName(Redaktor redaktor) {
-                String redaktorName = redaktor.getImie() + " " + redaktor.getNazwisko();
-                return redaktorName;
-            }
-        });
+        ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
 
         MainController.addValueObjectController(this);
     }

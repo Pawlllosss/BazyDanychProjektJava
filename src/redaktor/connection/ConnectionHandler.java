@@ -44,6 +44,9 @@ public class ConnectionHandler {
             connection = DriverManager
                     .getConnection("jdbc:postgresql://localhost:5432/Redaktor",
                             "postgres", "123");
+//            connection = DriverManager
+//                    .getConnection("jdbc:postgresql://pascal.fis.agh.edu.pl:5432/u6oczadly",
+//                            "u6oczadly", "6oczadly");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());
