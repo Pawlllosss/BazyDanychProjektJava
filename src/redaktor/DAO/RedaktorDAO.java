@@ -64,7 +64,16 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public void delete(long id) {
+        String redaktorDeleteQuery = "DELETE FROM redaktor.redaktor WHERE redaktor_id = ?";
 
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(redaktorDeleteQuery);
+
+        try {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Redaktor> getRedactorsFromResultSet(ResultSet resultSet) throws SQLException {

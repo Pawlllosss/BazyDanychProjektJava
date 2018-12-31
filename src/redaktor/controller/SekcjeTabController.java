@@ -8,8 +8,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.initialize.display.ChoiceBoxValueDisplayNameRetriever;
-import redaktor.initialize.ObservableListWrapper;
+import redaktor.controller.helper.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
@@ -60,6 +59,7 @@ public class SekcjeTabController implements ValueObjectController<Sekcja> {
 
     @FXML
     private void addSekcja() {
+        //TODO: it must also provide option to add without szef
         Redaktor szef = szefChoiceBox.getValue();
         String nazwa =  nazwaTextField.getText();
         long szefId = szef.getRedaktorId();
@@ -69,6 +69,7 @@ public class SekcjeTabController implements ValueObjectController<Sekcja> {
         sekcjaObservableListWrapper.updateObservableList();
     }
 
+    //TODO: handle redactors
     private void initializeSekcjaTableView() {
         TableColumn<Sekcja, Long> sekcjaIdColumn = ViewInitializer.createColumn("Id sekcja", "sekcjaId", 80);
         TableColumn<Sekcja, String> nazwaColumn = ViewInitializer.createColumn("Nazwa", "nazwa", 50);

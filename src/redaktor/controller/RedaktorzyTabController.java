@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.initialize.display.ChoiceBoxValueDisplayNameRetriever;
-import redaktor.initialize.ObservableListWrapper;
+import redaktor.controller.helper.ObservableListWrapper;
+import redaktor.controller.helper.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
@@ -74,6 +74,18 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
         redaktorDAO.save(redaktor);
         redaktorObservableListWrapper.updateObservableList();
+    }
+
+    @FXML
+    private void deleteRedaktor() {
+        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
+
+        if(redaktor != null) {
+            long redaktorId = redaktor.getRedaktorId();
+            redaktorDAO.delete(redaktorId);
+
+            redaktorObservableListWrapper.updateObservableList();
+        }
     }
 
     private void initializeRedaktorTableView() {

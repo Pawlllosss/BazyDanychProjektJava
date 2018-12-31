@@ -12,7 +12,7 @@ import javafx.util.Callback;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.initialize.ObservableListWrapper;
+import redaktor.controller.helper.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;

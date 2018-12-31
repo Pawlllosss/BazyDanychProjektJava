@@ -1,4 +1,4 @@
-package redaktor.initialize;
+package redaktor.controller.helper;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
