@@ -116,6 +116,11 @@ public class SekcjaDAO implements DAO<Sekcja> {
     }
 
     @Override
+    public void update(Sekcja sekcja, Sekcja edited) {
+
+    }
+
+    @Override
     public void delete(long id) {
 
     }

@@ -1,5 +1,6 @@
 package redaktor.DAO;
 
+import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Redaktor;
 
@@ -8,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class RedaktorDAO implements DAO<Redaktor> {
 
@@ -60,6 +62,17 @@ public class RedaktorDAO implements DAO<Redaktor> {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void update(Redaktor originalRedaktor, Redaktor editedRedaktor) {
+
+        RedaktorUpdateQueryBuilder redaktorUpdateQueryBuilder = new RedaktorUpdateQueryBuilder();
+        final String UPDATE_QUERY = redaktorUpdateQueryBuilder.buildUpdateQuery(originalRedaktor, editedRedaktor);
+
+        System.out.println(UPDATE_QUERY);
+
+        connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }
 
     @Override

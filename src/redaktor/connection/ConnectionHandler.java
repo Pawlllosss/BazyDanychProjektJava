@@ -25,6 +25,17 @@ public class ConnectionHandler {
         return resultSet;
     }
 
+    public void executeUpdateQuery(String queryString) {
+
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(queryString);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public PreparedStatement prepareStatement(String queryString) {
         PreparedStatement preparedStatement = null;
 

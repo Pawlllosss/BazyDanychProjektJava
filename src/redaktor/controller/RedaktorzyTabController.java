@@ -17,7 +17,9 @@ import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
+import redaktor.view.AlertBox;
 
+import java.util.Map;
 
 
 public class RedaktorzyTabController implements ValueObjectController<Redaktor> {
@@ -65,10 +67,12 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
 
     @FXML
     private void addRedactor() {
+        RedaktorFormValues redaktorFormValues = readRedaktorForm();
+
         //TODO: add some field validation and maybe triggers?
-        Sekcja sekcja = sekcjaChoiceBox.getValue();
-        String imie = imieTextField.getText();
-        String nazwisko =  nazwiskoTextField.getText();
+        Sekcja sekcja = redaktorFormValues.sekcja;
+        String imie = redaktorFormValues.imie;
+        String nazwisko =  redaktorFormValues.nazwisko;
         long sekcjaId = sekcja.getSekcjaId();
 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
@@ -85,6 +89,72 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
             redaktorDAO.delete(redaktorId);
 
             redaktorObservableListWrapper.updateObservableList();
+        }
+        else {
+            //TODO: in java8 I could use Alert
+            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
+            alertBox.show();
+        }
+    }
+
+    @FXML
+    private void editRedaktor() {
+
+        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
+
+        if(redaktor != null) {
+            long redaktorId = redaktor.getRedaktorId();
+
+            RedaktorFormValues redaktorFormValues = readRedaktorForm();
+
+            //TODO: validate
+            if(!checkIfAnyFieldWasEdited(redaktor, redaktorFormValues)) {
+                AlertBox alertBox = new AlertBox("Nie zmodyfikowano żadnych pól!");
+                alertBox.show();
+            }
+            else {
+                String imie = redaktorFormValues.imie;
+                String nazwisko = redaktorFormValues.nazwisko;
+                long sekcjaId = redaktorFormValues.sekcja.getSekcjaId();
+                Redaktor editedRedaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaId);
+
+                redaktorDAO.update(redaktor, editedRedaktor);
+                redaktorObservableListWrapper.updateObservableList();
+            }
+
+        }
+        else {
+            //TODO: in java8 I could use Alert
+            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
+            alertBox.show();
+        }
+    }
+
+    @FXML
+    private void loadRedaktorEditForm() {
+
+        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
+
+        if(redaktor != null) {
+            String imie = redaktor.getImie();
+            String nazwisko = redaktor.getNazwisko();
+            long sekcjaId = redaktor.getSekcjaId();
+            Sekcja sekcja = sekcjaDAO.get(sekcjaId);
+
+            imieTextField.setText(imie);
+            nazwiskoTextField.setText(nazwisko);
+
+
+            //TODO: what if section was deleted?
+            //TODO: doesn't work....
+            sekcjaChoiceBox.setValue(sekcja);
+
+            redaktorObservableListWrapper.updateObservableList();
+        }
+        else {
+            //TODO: in java8 I could use Alert
+            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
+            alertBox.show();
         }
     }
 
@@ -108,6 +178,51 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
 
         ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
         ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableListWrapper.getObservableList());
+    }
+
+    private boolean checkIfAnyFieldWasEdited(Redaktor redaktor, RedaktorFormValues redaktorFormValues) {
+        boolean wasEdited = false;
+
+        if(redaktor.getImie().equals(redaktorFormValues.imie)) {
+            wasEdited = true;
+        }
+        else if (redaktor.getNazwisko().equals(redaktorFormValues.nazwisko)) {
+            wasEdited = true;
+        }
+        else if (redaktor.getSekcjaId() == redaktorFormValues.sekcja.getSekcjaId()) {
+            wasEdited = true;
+        }
+
+        return wasEdited;
+    }
+
+    private <T> void compareValuesWithEquealsAndAddIfDiffers(T valueOld, T valueNew, String fieldName, Map<String, Object> map) {
+        if(!valueOld.equals(valueNew)) {
+            map.put(fieldName, valueNew);
+        }
+    }
+
+    private <T> void compareValuesAndAddIfDiffers(T valueOld, T valueNew, String fieldName, Map<String, Object> map) {
+        if(valueOld != valueNew) {
+            map.put(fieldName, valueNew);
+        }
+    }
+
+    private RedaktorFormValues readRedaktorForm() {
+
+        RedaktorFormValues redaktorFormValues = new RedaktorFormValues();
+
+        redaktorFormValues.imie = imieTextField.getText();
+        redaktorFormValues.nazwisko = nazwiskoTextField.getText();
+        redaktorFormValues.sekcja = sekcjaChoiceBox.getValue();
+
+        return redaktorFormValues;
+    }
+
+    class RedaktorFormValues {
+        private String imie;
+        private String nazwisko;
+        private Sekcja sekcja;
     }
 
 }
