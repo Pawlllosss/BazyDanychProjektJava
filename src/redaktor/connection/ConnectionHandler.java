@@ -53,7 +53,8 @@ public class ConnectionHandler {
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/Redaktor",
+//                    .getConnection("jdbc:postgresql://localhost:5432/Redaktor",
+                    .getConnection("jdbc:postgresql://localhost:5432/RedaktorMod",
                             "postgres", "123");
 //            connection = DriverManager
 //                    .getConnection("jdbc:postgresql://pascal.fis.agh.edu.pl:5432/u6oczadly",

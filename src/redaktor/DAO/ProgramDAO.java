@@ -2,6 +2,7 @@ package redaktor.DAO;
 
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Program;
+import redaktor.model.Redaktor;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,13 +63,27 @@ public class ProgramDAO implements DAO<Program> {
     }
 
     @Override
-    public void update(Program program, Program edited) {
+    public void update(Program originalEntity, Program editedEntity) {
 
     }
 
     @Override
     public void delete(long id) {
 
+    }
+
+    public void saveRedaktorProgramRelation(long redaktorId, long progamId) {
+        String redaktorProgramRelationInsertQuery = "INSERT INTO redaktor.redaktor_program(redaktor_id, program_id) VALUES (?, ?);";
+
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(redaktorProgramRelationInsertQuery);
+
+        try {
+            preparedStatement.setLong(1, redaktorId);
+            preparedStatement.setLong(2, progamId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Program> getProgramyFromResultSet(ResultSet resultSet) throws SQLException {

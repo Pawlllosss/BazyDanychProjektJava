@@ -13,14 +13,16 @@ import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.helper.ObservableListWrapper;
+import redaktor.controller.helper.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Program;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
+import redaktor.view.AlertBox;
 
-public class ProgramTabController implements ValueObjectController<Program> {
+public class ProgramTabController implements EntityController<Program> {
 
     private ProgramDAO programDAO;
     private RedaktorDAO redaktorDAO;
@@ -53,7 +55,7 @@ public class ProgramTabController implements ValueObjectController<Program> {
 
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new SekcjaChoiceBoxDisplayNameRetriever());
 
-        MainController.addValueObjectController(this);
+        MainController.addEntityController(this);
     }
 
 
@@ -107,6 +109,16 @@ public class ProgramTabController implements ValueObjectController<Program> {
 
     @FXML
     private void assignRedaktorToProgram() {
+        Redaktor assignedRedaktor = redaktorChoiceBox.getValue();
+        Program chosenProgram = TableViewHelper.getSelectedItem(programTableView);
 
+        if(assignedRedaktor != null && chosenProgram != null) {
+            long redaktorId = assignedRedaktor.getRedaktorId();
+            long programId = chosenProgram.getProgramId();
+            programDAO.saveRedaktorProgramRelation(redaktorId, programId);
+        } else {
+            AlertBox alertBox = new AlertBox("Nie wybrano redaktora lub programu!");
+            alertBox.show();
+        }
     }
 }

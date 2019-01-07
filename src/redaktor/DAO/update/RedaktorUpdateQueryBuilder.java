@@ -20,7 +20,7 @@ public class RedaktorUpdateQueryBuilder extends UpdateQueryBuilder<Redaktor>{
 
     @Override
     protected void appendWhereIdOfModifiedObject(Redaktor originalRedaktor) {
-        queryStringBuilder.append("WHERE redaktor_id = " + originalRedaktor.getRedaktorId() + ";");
+        queryStringBuilder.append("WHERE " + ID_FIELD + " = " + originalRedaktor.getRedaktorId() + ";");
     }
 
     @Override

@@ -19,10 +19,8 @@ import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 import redaktor.view.AlertBox;
 
-import java.util.Map;
 
-
-public class RedaktorzyTabController implements ValueObjectController<Redaktor> {
+public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
@@ -49,7 +47,7 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         //TODO: in Java8 I could use lamba and functional features...
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new SekcjaChoiceBoxDisplayNameRetriever());
 
-        MainController.addValueObjectController(this);
+        MainController.addEntityController(this);
     }
 
 
@@ -194,18 +192,6 @@ public class RedaktorzyTabController implements ValueObjectController<Redaktor> 
         }
 
         return wasEdited;
-    }
-
-    private <T> void compareValuesWithEquealsAndAddIfDiffers(T valueOld, T valueNew, String fieldName, Map<String, Object> map) {
-        if(!valueOld.equals(valueNew)) {
-            map.put(fieldName, valueNew);
-        }
-    }
-
-    private <T> void compareValuesAndAddIfDiffers(T valueOld, T valueNew, String fieldName, Map<String, Object> map) {
-        if(valueOld != valueNew) {
-            map.put(fieldName, valueNew);
-        }
     }
 
     private RedaktorFormValues readRedaktorForm() {

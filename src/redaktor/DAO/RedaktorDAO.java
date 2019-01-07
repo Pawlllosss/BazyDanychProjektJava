@@ -1,8 +1,10 @@
 package redaktor.DAO;
 
 import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
+import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Redaktor;
+import redaktor.model.Sekcja;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +29,25 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
     @Override
     public Redaktor get(long id) {
-        return null;
+        String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.redaktor r WHERE r.redaktor_id = ?;";
+
+        List<Redaktor> redaktors = new LinkedList<>();
+        Redaktor redaktor = null;
+
+        PreparedStatement selectByRedaktorIdStatement = connectionHandler.prepareStatement(sekcjaSelectBySekcjaIdQuery);
+        try {
+            selectByRedaktorIdStatement.setLong(1, id);
+            ResultSet resultSet = selectByRedaktorIdStatement.executeQuery();
+            redaktors = getRedactorsFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if(!redaktors.isEmpty()) {
+            redaktor = redaktors.get(0);
+        }
+
+        return redaktor;
     }
 
     @Override
@@ -65,12 +85,9 @@ public class RedaktorDAO implements DAO<Redaktor> {
     }
 
     @Override
-    public void update(Redaktor originalRedaktor, Redaktor editedRedaktor) {
-
+    public void update(Redaktor originalEntity, Redaktor editedEntity) {
         RedaktorUpdateQueryBuilder redaktorUpdateQueryBuilder = new RedaktorUpdateQueryBuilder();
-        final String UPDATE_QUERY = redaktorUpdateQueryBuilder.buildUpdateQuery(originalRedaktor, editedRedaktor);
-
-        System.out.println(UPDATE_QUERY);
+        final String UPDATE_QUERY = redaktorUpdateQueryBuilder.buildUpdateQuery(originalEntity, editedEntity);
 
         connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }

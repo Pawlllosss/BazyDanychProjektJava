@@ -9,7 +9,7 @@ import java.util.LinkedList;
 public class MainController {
 
     //TODO: move it to some wrapper?
-    private static LinkedList<ValueObjectController> valueObjectControllers;
+    private static LinkedList<EntityController> entityControllers;
 
 
     //it's called after all childs FXML where processed
@@ -21,18 +21,18 @@ public class MainController {
 
     //it's called at the beginning
     public MainController() {
-        valueObjectControllers = new LinkedList<>();
+        entityControllers = new LinkedList<>();
     }
 
     //TODO: in Java8 I could use interface with static method
-    public static <T> void addValueObjectController(ValueObjectController<T> valueObjectController) {
-        valueObjectControllers.add(valueObjectController);
+    public static <T> void addEntityController(EntityController<T> entityController) {
+        entityControllers.add(entityController);
     }
 
     private void performAfterInitializeActionOnChildControllers() {
 
-        for(ValueObjectController valueObjectController : valueObjectControllers) {
-            valueObjectController.setItemsFromOtherControllers();
+        for(EntityController entityController : entityControllers) {
+            entityController.setItemsFromOtherControllers();
         }
     }
 }

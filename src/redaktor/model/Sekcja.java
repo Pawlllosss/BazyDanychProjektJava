@@ -1,17 +1,17 @@
 package redaktor.model;
 
 public class Sekcja {
-    private long sekcjaId;
+    private Long sekcjaId;
     private String nazwa;
-    private long szefId;
+    private Long szefId;
 
-    public Sekcja(long sekcjaId, String nazwa, long szefId) {
+    public Sekcja(Long sekcjaId, String nazwa, Long szefId) {
         this.sekcjaId = sekcjaId;
         this.nazwa = nazwa;
         this.szefId = szefId;
     }
 
-    public long getSekcjaId() {
+    public Long getSekcjaId() {
         return sekcjaId;
     }
 
@@ -27,7 +27,7 @@ public class Sekcja {
         this.nazwa = nazwa;
     }
 
-    public long getSzefId() {
+    public Long getSzefId() {
         return szefId;
     }
 

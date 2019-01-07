@@ -1,5 +1,8 @@
 package redaktor.DAO;
 
+import redaktor.DAO.statement.PreparedStatementSetter;
+import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
+import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Sekcja;
 
@@ -108,7 +111,9 @@ public class SekcjaDAO implements DAO<Sekcja> {
 
         try {
             preparedStatement.setString(1, sekcja.getNazwa());
-            preparedStatement.setLong(2, sekcja.getSzefId());
+            Long szefId = sekcja.getSzefId();
+            PreparedStatementSetter.setForeignKey(preparedStatement, 2, szefId);
+
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,13 +121,27 @@ public class SekcjaDAO implements DAO<Sekcja> {
     }
 
     @Override
-    public void update(Sekcja sekcja, Sekcja edited) {
+    public void update(Sekcja originalEntity, Sekcja editedEntity) {
+        SekcjaUpdateQueryBuilder sekcjaUpdateQueryBuilder = new SekcjaUpdateQueryBuilder();
+        final String UPDATE_QUERY = sekcjaUpdateQueryBuilder.buildUpdateQuery(originalEntity, editedEntity);
 
+        System.out.println(UPDATE_QUERY);
+
+        connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }
 
     @Override
     public void delete(long id) {
+        String sekcjaDeleteQuery = "DELETE FROM redaktor.sekcja WHERE sekcja_id = ?";
 
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(sekcjaDeleteQuery);
+
+        try {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private List<Sekcja> getSectionsFromResultSet(ResultSet resultSet) throws SQLException {
