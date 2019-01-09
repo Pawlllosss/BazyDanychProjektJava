@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.controller.helper.ObservableListWrapper;
-import redaktor.controller.helper.TableViewHelper;
+import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
@@ -25,7 +25,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private static ObservableListWrapper<Redaktor> redaktorObservableListWrapper;
+    private static ObservableEntityListWrapper<Redaktor> redaktorObservableEntityListWrapper;
 
     @FXML
     private TableView<Redaktor> redaktorTableView;
@@ -41,7 +41,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        redaktorObservableListWrapper = new ObservableListWrapper<>(redaktorDAO);
+        redaktorObservableEntityListWrapper = new ObservableEntityListWrapper<>(redaktorDAO);
 
         initializeRedaktorTableView();
         //TODO: in Java8 I could use lamba and functional features...
@@ -60,14 +60,14 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     //TODO: wait for Java8...
 //    @Override
     public static ObservableList<Redaktor> getObservableList() {
-        return redaktorObservableListWrapper.getObservableList();
+        return redaktorObservableEntityListWrapper.getObservableList();
     }
 
     @FXML
     private void addRedactor() {
         RedaktorFormValues redaktorFormValues = readRedaktorForm();
 
-        //TODO: add some field validation and maybe triggers?
+        //TODO: add some field validation and maybe triggers? BLOCK WITHOUT SECTION
         Sekcja sekcja = redaktorFormValues.sekcja;
         String imie = redaktorFormValues.imie;
         String nazwisko =  redaktorFormValues.nazwisko;
@@ -75,7 +75,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
         Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
         redaktorDAO.save(redaktor);
-        redaktorObservableListWrapper.updateObservableList();
+        redaktorObservableEntityListWrapper.updateObservableList();
     }
 
     @FXML
@@ -86,7 +86,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
             long redaktorId = redaktor.getRedaktorId();
             redaktorDAO.delete(redaktorId);
 
-            redaktorObservableListWrapper.updateObservableList();
+            redaktorObservableEntityListWrapper.updateObservableList();
         }
         else {
             //TODO: in java8 I could use Alert
@@ -117,7 +117,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
                 Redaktor editedRedaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaId);
 
                 redaktorDAO.update(redaktor, editedRedaktor);
-                redaktorObservableListWrapper.updateObservableList();
+                redaktorObservableEntityListWrapper.updateObservableList();
             }
 
         }
@@ -147,7 +147,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
             //TODO: doesn't work....
             sekcjaChoiceBox.setValue(sekcja);
 
-            redaktorObservableListWrapper.updateObservableList();
+            redaktorObservableEntityListWrapper.updateObservableList();
         }
         else {
             //TODO: in java8 I could use Alert
@@ -175,19 +175,19 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         });
 
         ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
-        ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableListWrapper.getObservableList());
+        ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableEntityListWrapper.getObservableList());
     }
 
     private boolean checkIfAnyFieldWasEdited(Redaktor redaktor, RedaktorFormValues redaktorFormValues) {
         boolean wasEdited = false;
 
-        if(redaktor.getImie().equals(redaktorFormValues.imie)) {
+        if(!redaktor.getImie().equals(redaktorFormValues.imie)) {
             wasEdited = true;
         }
-        else if (redaktor.getNazwisko().equals(redaktorFormValues.nazwisko)) {
+        else if (!redaktor.getNazwisko().equals(redaktorFormValues.nazwisko)) {
             wasEdited = true;
         }
-        else if (redaktor.getSekcjaId() == redaktorFormValues.sekcja.getSekcjaId()) {
+        else if (redaktor.getSekcjaId() != redaktorFormValues.sekcja.getSekcjaId()) {
             wasEdited = true;
         }
 

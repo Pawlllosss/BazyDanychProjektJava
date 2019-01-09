@@ -50,8 +50,8 @@
                   <TextField fx:id="imieTextField" GridPane.columnIndex="1" />
                   <TextField fx:id="nazwiskoTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <ChoiceBox fx:id="sekcjaChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Button mnemonicParsing="false" onAction="#addRedactor" prefHeight="26.0" prefWidth="139.0" text="Dodaj Redaktora" GridPane.rowIndex="3" />
-                  <Button mnemonicParsing="false" onAction="#editRedaktor" text="Wyślij edycję" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button mnemonicParsing="false" onAction="#addRedactor" prefHeight="26.0" prefWidth="139.0" text="Dodaj Redaktora" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Button mnemonicParsing="false" onAction="#editRedaktor" text="Wyślij edycję" GridPane.rowIndex="3" />
                </children>
             </GridPane>
          </children>

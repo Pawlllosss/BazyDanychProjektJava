@@ -1,6 +1,6 @@
 package redaktor.initialize.display;
 
-import redaktor.model.Program;
+import redaktor.model.program.Program;
 
 public class ProgramChoiceBoxDisplayNameRetriever implements ChoiceBoxValueDisplayNameRetriever<Program> {
     @Override

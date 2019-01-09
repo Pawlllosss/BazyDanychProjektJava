@@ -1,4 +1,4 @@
-package redaktor.model;
+package redaktor.model.program;
 
 public class Program {
 

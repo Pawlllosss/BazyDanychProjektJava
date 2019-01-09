@@ -1,4 +1,4 @@
-package redaktor.controller.helper;
+package redaktor.controller.helper.table;
 
 import javafx.scene.control.TableView;
 

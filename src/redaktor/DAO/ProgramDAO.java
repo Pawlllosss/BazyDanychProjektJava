@@ -1,8 +1,8 @@
 package redaktor.DAO;
 
 import redaktor.connection.ConnectionHandler;
-import redaktor.model.Program;
-import redaktor.model.Redaktor;
+import redaktor.model.program.Program;
+import redaktor.model.program.view.ProgramRedaktorCount;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,7 +31,6 @@ public class ProgramDAO implements DAO<Program> {
     @Override
     public List<Program> getAll() {
         final String PROGRAM_SELECT_QUERY = "SELECT * FROM redaktor.program;";
-
 
         ResultSet resultSet = connectionHandler.executeSelectQuery(PROGRAM_SELECT_QUERY);
         List<Program> programy = null;
@@ -72,6 +71,22 @@ public class ProgramDAO implements DAO<Program> {
 
     }
 
+    public List<ProgramRedaktorCount> getProgramRedaktorCount() {
+        final String PROGRAM_REDAKTOR_COUNT_SELECT_QUERY = "SELECT * FROM redaktor.program_redaktor_count;";
+
+        ResultSet resultSet = connectionHandler.executeSelectQuery(PROGRAM_REDAKTOR_COUNT_SELECT_QUERY);
+        List<ProgramRedaktorCount> programRedaktorCounts = null;
+
+        try {
+            programRedaktorCounts = getProgramRedaktorCountFromResultSet(resultSet);
+        }
+        catch(SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return programRedaktorCounts;
+    }
+
     public void saveRedaktorProgramRelation(long redaktorId, long progamId) {
         String redaktorProgramRelationInsertQuery = "INSERT INTO redaktor.redaktor_program(redaktor_id, program_id) VALUES (?, ?);";
 
@@ -87,7 +102,7 @@ public class ProgramDAO implements DAO<Program> {
     }
 
     private List<Program> getProgramyFromResultSet(ResultSet resultSet) throws SQLException {
-        List<Program> sections = new LinkedList<>();
+        List<Program> programs = new LinkedList<>();
 
         while(resultSet.next()) {
             long programId  = resultSet.getLong("program_id");
@@ -96,9 +111,24 @@ public class ProgramDAO implements DAO<Program> {
             long sekcjaId  = resultSet.getLong("sekcja_id");
 
             Program program = new Program(programId, nazwa, opis, sekcjaId);
-            sections.add(program);
+            programs.add(program);
         }
 
-        return sections;
+        return programs;
+    }
+
+    private List<ProgramRedaktorCount> getProgramRedaktorCountFromResultSet(ResultSet resultSet) throws SQLException {
+        List<ProgramRedaktorCount> programRedaktorCounts = new LinkedList<>();
+
+        while(resultSet.next()) {
+            Long programId  = resultSet.getLong("program_id");
+            String nazwa = resultSet.getString("nazwa");
+            long redaktorCount = resultSet.getLong("redaktor_count");
+
+            ProgramRedaktorCount programRedaktorCount = new ProgramRedaktorCount(programId, nazwa, redaktorCount);
+            programRedaktorCounts.add(programRedaktorCount);
+        }
+
+        return programRedaktorCounts;
     }
 }

@@ -10,28 +10,33 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import redaktor.DAO.ProgramDAO;
-import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.controller.helper.ObservableListWrapper;
-import redaktor.controller.helper.TableViewHelper;
+import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.table.TableViewHelper;
+import redaktor.controller.helper.observable.ObservableViewListWrapper;
+import redaktor.controller.helper.observable.update.ObservableListUpdater;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
-import redaktor.model.Program;
+import redaktor.model.program.Program;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
+import redaktor.model.program.view.ProgramRedaktorCount;
 import redaktor.view.AlertBox;
+
+import java.util.List;
 
 public class ProgramTabController implements EntityController<Program> {
 
     private ProgramDAO programDAO;
-    private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private static ObservableListWrapper<Program> programObservableListWrapper;
+    private ObservableViewListWrapper<ProgramRedaktorCount> programRedaktorCountObservableViewListWrapper;
 
     @FXML
     private TableView<Program> programTableView;
+    @FXML
+    private TableView<ProgramRedaktorCount> programRedaktorCountTableView;
     @FXML
     private ChoiceBox<Redaktor> redaktorChoiceBox;
     @FXML
@@ -41,18 +46,25 @@ public class ProgramTabController implements EntityController<Program> {
     @FXML
     private ChoiceBox<Sekcja> sekcjaChoiceBox;
 
+    private static ObservableEntityListWrapper<Program> programObservableEntityListWrapper;
+
     @FXML
     private void initialize() {
 
         programDAO = ProgramDAO.getInstance();
-        redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        programObservableListWrapper= new ObservableListWrapper<>(programDAO);
+        programObservableEntityListWrapper = new ObservableEntityListWrapper<>(programDAO);
+        programRedaktorCountObservableViewListWrapper = new ObservableViewListWrapper<>(new ObservableListUpdater<ProgramRedaktorCount>() {
+            @Override
+            public void executeUpdate(ObservableList<ProgramRedaktorCount> observableList) {
+                List<ProgramRedaktorCount> programRedaktorCountList = programDAO.getProgramRedaktorCount();
+                observableList.setAll(programRedaktorCountList);
+            }
+        });
 
         initializeProgramTableView();
         //TODO: in Java8 I could use lamba and functional features...
         ViewInitializer.initializeChoiceBox(redaktorChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
-
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new SekcjaChoiceBoxDisplayNameRetriever());
 
         MainController.addEntityController(this);
@@ -68,8 +80,9 @@ public class ProgramTabController implements EntityController<Program> {
         redaktorChoiceBox.setItems(redaktorObservableList);
     }
 
+    //TODO: static in interface?
     public static ObservableList<Program> getObservableList() {
-        return programObservableListWrapper.getObservableList();
+        return programObservableEntityListWrapper.getObservableList();
     }
 
 
@@ -92,7 +105,7 @@ public class ProgramTabController implements EntityController<Program> {
         });
 
         ViewInitializer.addColumnsToTableView(programTableView, programIdColumn, nazwaColumn, opisColumn, sekcjaNazwaColumn);
-        ViewInitializer.setObservableListToTableView(programTableView, programObservableListWrapper.getObservableList());
+        ViewInitializer.setObservableListToTableView(programTableView, programObservableEntityListWrapper.getObservableList());
     }
 
     @FXML
@@ -104,11 +117,15 @@ public class ProgramTabController implements EntityController<Program> {
 
         Program program = new Program(0, nazwa, opis, sekcjaId);
         programDAO.save(program);
-        programObservableListWrapper.updateObservableList();
+        programObservableEntityListWrapper.updateObservableList();
     }
 
     @FXML
+    //TODO: view with assigned redaktors
     private void assignRedaktorToProgram() {
+
+        //TODO: check if redaktor is already assigned
+
         Redaktor assignedRedaktor = redaktorChoiceBox.getValue();
         Program chosenProgram = TableViewHelper.getSelectedItem(programTableView);
 
@@ -116,6 +133,7 @@ public class ProgramTabController implements EntityController<Program> {
             long redaktorId = assignedRedaktor.getRedaktorId();
             long programId = chosenProgram.getProgramId();
             programDAO.saveRedaktorProgramRelation(redaktorId, programId);
+            programRedaktorCountObservableViewListWrapper.updateObservableList();
         } else {
             AlertBox alertBox = new AlertBox("Nie wybrano redaktora lub programu!");
             alertBox.show();

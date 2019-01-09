@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.controller.helper.ObservableListWrapper;
-import redaktor.controller.helper.TableViewHelper;
+import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
@@ -25,7 +25,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private static ObservableListWrapper<Sekcja> sekcjaObservableListWrapper;
+    private static ObservableEntityListWrapper<Sekcja> sekcjaObservableEntityListWrapper;
 
     @FXML
     private TableView<Sekcja> sekcjaTableView;
@@ -42,7 +42,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     private void initialize() {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        sekcjaObservableListWrapper = new ObservableListWrapper<>(sekcjaDAO);
+        sekcjaObservableEntityListWrapper = new ObservableEntityListWrapper<>(sekcjaDAO);
 
         initializeSekcjaTableView();
         ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
@@ -59,7 +59,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     //TODO: wait for Java8...
 //    @Override
     public static ObservableList<Sekcja> getObservableList() {
-        return sekcjaObservableListWrapper.getObservableList();
+        return sekcjaObservableEntityListWrapper.getObservableList();
     }
 
     @FXML
@@ -72,12 +72,12 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
         Long szefId = null;
         if(szef != null) {
-            szef.getRedaktorId();
+            szefId = szef.getRedaktorId();
         }
 
         Sekcja sekcja = new Sekcja(0L, nazwa, szefId);
         sekcjaDAO.save(sekcja);
-        sekcjaObservableListWrapper.updateObservableList();
+        sekcjaObservableEntityListWrapper.updateObservableList();
     }
 
     //TODO: add on cascade delete to database
@@ -90,7 +90,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
             long sekcjaId = sekcja.getSekcjaId();
             sekcjaDAO.delete(sekcjaId);
 
-            sekcjaObservableListWrapper.updateObservableList();
+            sekcjaObservableEntityListWrapper.updateObservableList();
         }
         else {
             //TODO: in java8 I could use Alert
@@ -117,11 +117,11 @@ public class SekcjeTabController implements EntityController<Sekcja> {
             }
             else {
                 String nazwa = sekcjaFormValues.nazwa;
-                Long szefId = sekcjaFormValues.szef.getSekcjaId();
+                Long szefId = sekcjaFormValues.szef.getRedaktorId();
                 Sekcja editedSekcja = new Sekcja(sekcjaId, nazwa, szefId);
 
                 sekcjaDAO.update(sekcja, editedSekcja);
-                sekcjaObservableListWrapper.updateObservableList();
+                sekcjaObservableEntityListWrapper.updateObservableList();
             }
 
         }
@@ -142,12 +142,9 @@ public class SekcjeTabController implements EntityController<Sekcja> {
             Redaktor szef = redaktorDAO.get(szefId);
 
             nazwaTextField.setText(nazwa);
-
-            //TODO: what if redaktor was deleted?
-            //TODO: doesn't work....
             szefChoiceBox.setValue(szef);
 
-            sekcjaObservableListWrapper.updateObservableList();
+            sekcjaObservableEntityListWrapper.updateObservableList();
         }
         else {
             //TODO: in java8 I could use Alert
@@ -198,16 +195,16 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         });
 
         ViewInitializer.addColumnsToTableView(sekcjaTableView, sekcjaIdColumn, nazwaColumn, szefIdColumn, szefImieColumn, szefNazwiskoColumn);
-        ViewInitializer.setObservableListToTableView(sekcjaTableView, sekcjaObservableListWrapper.getObservableList());
+        ViewInitializer.setObservableListToTableView(sekcjaTableView, sekcjaObservableEntityListWrapper.getObservableList());
     }
 
     private boolean checkIfAnyFieldWasEdited(Sekcja sekcja, SekcjaFormValues sekcjaFormValues) {
         boolean wasEdited = false;
 
-        if(sekcja.getNazwa().equals(sekcjaFormValues.nazwa)) {
+        if(!sekcja.getNazwa().equals(sekcjaFormValues.nazwa)) {
             wasEdited = true;
         }
-        else if (sekcja.getSzefId() == sekcjaFormValues.szef.getRedaktorId()) {
+        else if (sekcja.getSzefId() != sekcjaFormValues.szef.getRedaktorId()) {
             wasEdited = true;
         }
 

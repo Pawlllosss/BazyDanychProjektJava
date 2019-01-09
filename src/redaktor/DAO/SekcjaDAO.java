@@ -105,7 +105,7 @@ public class SekcjaDAO implements DAO<Sekcja> {
 
     @Override
     public void save(Sekcja sekcja) {
-        String sekcjaInsertQuery = "INSERT INTO redaktor.sekcja(nazwa, szef_id) VALUES (?, ?);";
+        String sekcjaInsertQuery = "INSERT INTO redaktor.sekcja(nazwa, redaktor_id) VALUES (?, ?);";
 
         PreparedStatement preparedStatement = connectionHandler.prepareStatement(sekcjaInsertQuery);
 
@@ -150,7 +150,7 @@ public class SekcjaDAO implements DAO<Sekcja> {
         while(resultSet.next()) {
             long sekcjaId  = resultSet.getLong("sekcja_id");
             String nazwa = resultSet.getString("nazwa");
-            long szefId  = resultSet.getLong("szef_id");
+            long szefId  = resultSet.getLong("redaktor_id");
 
             Sekcja sekcja = new Sekcja(sekcjaId, nazwa, szefId);
             sections.add(sekcja);
