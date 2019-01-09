@@ -6,7 +6,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
-import redaktor.initialize.display.ChoiceBoxValueDisplayNameRetriever;
+
+import java.util.function.Function;
 
 public class ViewInitializer {
 
@@ -27,12 +28,11 @@ public class ViewInitializer {
     }
 
 
-    //TODO: in Java8 I could use functional interface...
-    public static <T> void initializeChoiceBox(ChoiceBox<T> choiceBox, final ChoiceBoxValueDisplayNameRetriever choiceBoxValueDisplayNameRetriever) {
+    public static <T> void initializeChoiceBox(ChoiceBox<T> choiceBox, Function<T, String> choiceBoxDisplayNameRetriever) {
         choiceBox.setConverter(new StringConverter<T>() {
             @Override
             public String toString(T choiceBoxStoredType) {
-                return choiceBoxValueDisplayNameRetriever.getName(choiceBoxStoredType);
+                return choiceBoxDisplayNameRetriever.apply(choiceBoxStoredType);
             }
 
             @Override

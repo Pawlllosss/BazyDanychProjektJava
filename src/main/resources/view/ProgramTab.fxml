@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root fx:id="ProgramTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" type="AnchorPane" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.ProgramTabController">
+<AnchorPane fx:id="ProgramTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.ProgramTabController">
    <children>
       <HBox prefHeight="472.0" prefWidth="779.0" AnchorPane.bottomAnchor="-72.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-179.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -59,4 +59,4 @@
          </children>
       </HBox>
    </children>
-</fx:root>
+</AnchorPane>

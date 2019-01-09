@@ -2,9 +2,12 @@ package redaktor.initialize.display;
 
 import redaktor.model.Redaktor;
 
-public class RedaktorChoiceBoxDisplayNameRetriever implements ChoiceBoxValueDisplayNameRetriever<Redaktor> {
+import java.util.function.Function;
+
+public class RedaktorChoiceBoxDisplayNameRetriever implements Function<Redaktor, String> {
+
     @Override
-    public String getName(Redaktor redaktor) {
+    public String apply(Redaktor redaktor) {
         String redaktorName = redaktor.getImie() + " " + redaktor.getNazwisko();
         return redaktorName;
     }

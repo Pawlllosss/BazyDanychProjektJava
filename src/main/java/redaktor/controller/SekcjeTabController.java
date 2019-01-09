@@ -1,23 +1,21 @@
 package redaktor.controller;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.util.Callback;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
+import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
-import redaktor.view.AlertBox;
 
 
 public class SekcjeTabController implements EntityController<Sekcja> {
@@ -33,10 +31,6 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     private ChoiceBox<Redaktor> szefChoiceBox;
     @FXML
     private TextField nazwaTextField;
-
-    public SekcjeTabController() {
-        System.out.println("Sekcjetab constr");
-    }
 
     @FXML
     private void initialize() {
@@ -56,7 +50,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         szefChoiceBox.setItems(redaktorObservableList);
     }
 
-    //TODO: wait for Java8...
+    //TODO: wait for Java8... (update: NOPE, maybe use abstract class)
 //    @Override
     public static ObservableList<Sekcja> getObservableList() {
         return sekcjaObservableEntityListWrapper.getObservableList();
@@ -69,7 +63,6 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         String nazwa =  nazwaTextField.getText();
 
         //TODO: maybe null special case would be better?
-
         Long szefId = null;
         if(szef != null) {
             szefId = szef.getRedaktorId();
@@ -80,7 +73,6 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         sekcjaObservableEntityListWrapper.updateObservableList();
     }
 
-    //TODO: add on cascade delete to database
     @FXML
     private void deleteSekcja() {
 
@@ -89,13 +81,11 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         if(sekcja != null) {
             long sekcjaId = sekcja.getSekcjaId();
             sekcjaDAO.delete(sekcjaId);
-
             sekcjaObservableEntityListWrapper.updateObservableList();
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano sekcji!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
+            warningAlert.showAndWait();
         }
 
     }
@@ -112,8 +102,8 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
             //TODO: validate
             if(!checkIfAnyFieldWasEdited(sekcja, sekcjaFormValues)) {
-                AlertBox alertBox = new AlertBox("Nie zmodyfikowano żadnych pól!");
-                alertBox.show();
+                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
+                warningAlert.showAndWait();
             }
             else {
                 String nazwa = sekcjaFormValues.nazwa;
@@ -126,9 +116,8 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano sekcji!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
+            warningAlert.showAndWait();
         }
     }
 
@@ -137,19 +126,17 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         Sekcja sekcja = TableViewHelper.getSelectedItem(sekcjaTableView);
 
         if(sekcja != null) {
-            String nazwa = sekcja.getNazwa();
             long szefId = sekcja.getSekcjaId();
             Redaktor szef = redaktorDAO.get(szefId);
 
-            nazwaTextField.setText(nazwa);
+            nazwaTextField.setText(sekcja.getNazwa());
             szefChoiceBox.setValue(szef);
 
             sekcjaObservableEntityListWrapper.updateObservableList();
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano sekcji!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
+            warningAlert.showAndWait();
         }
     }
 
@@ -161,37 +148,31 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         TableColumn<Sekcja, String> szefImieColumn = new TableColumn<>("Imie szefa");
         TableColumn<Sekcja, String> szefNazwiskoColumn = new TableColumn<>("Nazwisko szefa");
 
-        szefImieColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Sekcja, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Sekcja, String> szefStringCellDataFeatures) {
-                Sekcja sekcja = szefStringCellDataFeatures.getValue();
-                Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
+        szefImieColumn.setCellValueFactory(szefStringCellDataFeatures -> {
+            Sekcja sekcja = szefStringCellDataFeatures.getValue();
+            Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
 
-                String szefImie = "";
+            String szefImie = "";
 
-                //TODO: use optionals
-                if(szef != null) {
-                    szefImie = szef.getImie();
-                }
-
-                return new SimpleStringProperty(szefImie);
+            //TODO: use optionals
+            if(szef != null) {
+                szefImie = szef.getImie();
             }
+
+            return new SimpleStringProperty(szefImie);
         });
 
-        szefNazwiskoColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Sekcja, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Sekcja, String> szefStringCellDataFeatures) {
-                Sekcja sekcja = szefStringCellDataFeatures.getValue();
-                Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
-                String szefNazwisko = "";
+        szefNazwiskoColumn.setCellValueFactory(szefStringCellDataFeatures -> {
+            Sekcja sekcja = szefStringCellDataFeatures.getValue();
+            Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
+            String szefNazwisko = "";
 
-                //TODO: use optionals
-                if(szef != null) {
-                    szefNazwisko = szef.getNazwisko();
-                }
-
-                return new SimpleStringProperty(szefNazwisko);
+            //TODO: use optionals
+            if(szef != null) {
+                szefNazwisko = szef.getNazwisko();
             }
+
+            return new SimpleStringProperty(szefNazwisko);
         });
 
         ViewInitializer.addColumnsToTableView(sekcjaTableView, sekcjaIdColumn, nazwaColumn, szefIdColumn, szefImieColumn, szefNazwiskoColumn);

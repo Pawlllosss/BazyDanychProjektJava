@@ -1,23 +1,17 @@
 package redaktor.controller;
 
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.util.Callback;
+import javafx.scene.control.*;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
+import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
-import redaktor.initialize.display.SekcjaChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
-import redaktor.view.AlertBox;
 
 
 public class RedaktorzyTabController implements EntityController<Redaktor> {
@@ -44,8 +38,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         redaktorObservableEntityListWrapper = new ObservableEntityListWrapper<>(redaktorDAO);
 
         initializeRedaktorTableView();
-        //TODO: in Java8 I could use lamba and functional features...
-        ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, new SekcjaChoiceBoxDisplayNameRetriever());
+        ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, sekcja -> sekcja.getNazwa());
 
         MainController.addEntityController(this);
     }
@@ -89,9 +82,8 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
             redaktorObservableEntityListWrapper.updateObservableList();
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
+            warningAlert.showAndWait();
         }
     }
 
@@ -105,10 +97,9 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
             RedaktorFormValues redaktorFormValues = readRedaktorForm();
 
-            //TODO: validate
             if(!checkIfAnyFieldWasEdited(redaktor, redaktorFormValues)) {
-                AlertBox alertBox = new AlertBox("Nie zmodyfikowano żadnych pól!");
-                alertBox.show();
+                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
+                warningAlert.showAndWait();
             }
             else {
                 String imie = redaktorFormValues.imie;
@@ -122,9 +113,8 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
+            warningAlert.showAndWait();
         }
     }
 
@@ -134,25 +124,17 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
 
         if(redaktor != null) {
-            String imie = redaktor.getImie();
-            String nazwisko = redaktor.getNazwisko();
-            long sekcjaId = redaktor.getSekcjaId();
+            Long sekcjaId = redaktor.getSekcjaId();
             Sekcja sekcja = sekcjaDAO.get(sekcjaId);
 
-            imieTextField.setText(imie);
-            nazwiskoTextField.setText(nazwisko);
-
-
-            //TODO: what if section was deleted?
-            //TODO: doesn't work....
+            imieTextField.setText(redaktor.getImie());
+            nazwiskoTextField.setText(redaktor.getNazwisko());
             sekcjaChoiceBox.setValue(sekcja);
-
             redaktorObservableEntityListWrapper.updateObservableList();
         }
         else {
-            //TODO: in java8 I could use Alert
-            AlertBox alertBox = new AlertBox("Nie wybrano redaktora!");
-            alertBox.show();
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
+            warningAlert.showAndWait();
         }
     }
 
@@ -162,16 +144,12 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         TableColumn<Redaktor, String> nazwiskoColumn = ViewInitializer.createColumn("Nazwisko", "nazwisko", 50);
         TableColumn<Redaktor, String> sekcjaNazwaColumn = new TableColumn<>("Nazwa sekcji");
 
-        //TODO: java7 doesn't have lambdas...
-        sekcjaNazwaColumn.setCellValueFactory(new Callback<TableColumn.CellDataFeatures<Redaktor, String>, ObservableValue<String>>() {
-            @Override
-            public ObservableValue<String> call(TableColumn.CellDataFeatures<Redaktor, String> redaktorStringCellDataFeatures) {
-                Redaktor redaktor = redaktorStringCellDataFeatures.getValue();
-                Sekcja sekcja = sekcjaDAO.get(redaktor.getSekcjaId());
-                String sekcjaNazwa = sekcja.getNazwa();
+        sekcjaNazwaColumn.setCellValueFactory(redaktorStringCellDataFeatures -> {
+            Redaktor redaktor = redaktorStringCellDataFeatures.getValue();
+            Sekcja sekcja = sekcjaDAO.get(redaktor.getSekcjaId());
+            String sekcjaNazwa = sekcja.getNazwa();
 
-                return new SimpleStringProperty(sekcjaNazwa);
-            }
+            return new SimpleStringProperty(sekcjaNazwa);
         });
 
         ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);

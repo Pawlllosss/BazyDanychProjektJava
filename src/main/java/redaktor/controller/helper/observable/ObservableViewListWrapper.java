@@ -1,12 +1,14 @@
 package redaktor.controller.helper.observable;
 
-import redaktor.controller.helper.observable.update.ObservableListUpdater;
+import javafx.collections.ObservableList;
+
+import java.util.function.Consumer;
 
 public class ObservableViewListWrapper<T> extends ObservableListWrapper<T> {
 
-    private ObservableListUpdater<T> observableListUpdater;
+    private Consumer<ObservableList<T>> observableListUpdater;
 
-    public ObservableViewListWrapper(ObservableListUpdater<T> observableListUpdater) {
+    public ObservableViewListWrapper(Consumer<ObservableList<T>> observableListUpdater) {
         super();
         this.observableListUpdater = observableListUpdater;
 
@@ -15,6 +17,6 @@ public class ObservableViewListWrapper<T> extends ObservableListWrapper<T> {
 
     @Override
     public void updateObservableList() {
-        observableListUpdater.executeUpdate(observableList);
+        observableListUpdater.accept(observableList);
     }
 }
