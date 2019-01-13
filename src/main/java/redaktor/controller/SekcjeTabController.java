@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.sekcja.SekcjaForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
@@ -25,7 +26,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private static ObservableEntityListWrapper<Sekcja> sekcjaObservableEntityListWrapper;
+    private SekcjaForm sekcjaForm;
 
     @FXML
     private TableView<Sekcja> sekcjaTableView;
@@ -33,6 +34,8 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     private ChoiceBox<Redaktor> szefChoiceBox;
     @FXML
     private TextField nazwaTextField;
+
+    private static ObservableEntityListWrapper<Sekcja> sekcjaObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
@@ -43,6 +46,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         initializeSekcjaTableView();
         ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
 
+        sekcjaForm = new SekcjaForm(this);
         MainController.addEntityController(this);
     }
 
@@ -60,19 +64,15 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
     @FXML
     private void addSekcja() {
-        //TODO: it must also provide option to add without szef
-        Redaktor szef = szefChoiceBox.getValue();
-        String nazwa =  nazwaTextField.getText();
-
-        //TODO: maybe null special case would be better?
-        Long szefId = null;
-        if(szef != null) {
-            szefId = szef.getRedaktorId();
+        if(sekcjaForm.isFormCorrectlyFilled()) {
+            Sekcja sekcja = sekcjaForm.readForm();
+            sekcjaDAO.save(sekcja);
+            sekcjaObservableEntityListWrapper.updateObservableList();
         }
-
-        Sekcja sekcja = new Sekcja(0L, nazwa, szefId);
-        sekcjaDAO.save(sekcja);
-        sekcjaObservableEntityListWrapper.updateObservableList();
+        else {
+            WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
+            warningAlert.showAndWait();
+        }
     }
 
     @FXML
@@ -94,28 +94,28 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
     @FXML
     private void editSekcja() {
+        Sekcja sekcjaToEdit = TableViewHelper.getSelectedItem(sekcjaTableView);
 
-        Sekcja sekcja = TableViewHelper.getSelectedItem(sekcjaTableView);
+        if(sekcjaToEdit != null) {
 
-        if(sekcja != null) {
-            Long sekcjaId = sekcja.getSekcjaId();
+            if(!sekcjaForm.isFormCorrectlyFilled()) {
+                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
+                warningAlert.showAndWait();
+                return;
+            }
 
-            SekcjaFormValues sekcjaFormValues = readSekcjaForm();
-
-            //TODO: validate
-            if(!checkIfAnyFieldWasEdited(sekcja, sekcjaFormValues)) {
+            if(!sekcjaForm.isFormDifferentFromEntity(sekcjaToEdit)) {
                 WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
                 warningAlert.showAndWait();
             }
             else {
-                String nazwa = sekcjaFormValues.nazwa;
-                Long szefId = sekcjaFormValues.szef.getRedaktorId();
-                Sekcja editedSekcja = new Sekcja(sekcjaId, nazwa, szefId);
+                Long editedSekcjaId = sekcjaToEdit.getSekcjaId();
+                Sekcja editedSekcja = sekcjaForm.readForm();
+                editedSekcja.setSekcjaId(editedSekcjaId);
 
-                sekcjaDAO.update(sekcja, editedSekcja);
+                sekcjaDAO.update(sekcjaToEdit, editedSekcja);
                 sekcjaObservableEntityListWrapper.updateObservableList();
             }
-
         }
         else {
             WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
@@ -128,13 +128,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         Sekcja sekcja = TableViewHelper.getSelectedItem(sekcjaTableView);
 
         if(sekcja != null) {
-            long szefId = sekcja.getSekcjaId();
-            Optional<Redaktor> szef = redaktorDAO.get(szefId);
-
-            nazwaTextField.setText(sekcja.getNazwa());
-            szefChoiceBox.setValue(szef.orElse(null));
-
-            sekcjaObservableEntityListWrapper.updateObservableList();
+            sekcjaForm.loadValuesIntoForm(sekcja);
         }
         else {
             WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
@@ -158,7 +152,6 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         szefChoiceBox.setValue(szef);
     }
 
-    //TODO: handle redactors
     private void initializeSekcjaTableView() {
         TableColumn<Sekcja, Long> sekcjaIdColumn = ViewInitializer.createColumn("Id sekcja", "sekcjaId", 80);
         TableColumn<Sekcja, String> nazwaColumn = ViewInitializer.createColumn("Nazwa", "nazwa", 50);
@@ -184,33 +177,5 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
         ViewInitializer.addColumnsToTableView(sekcjaTableView, sekcjaIdColumn, nazwaColumn, szefIdColumn, szefImieColumn, szefNazwiskoColumn);
         ViewInitializer.setObservableListToTableView(sekcjaTableView, sekcjaObservableEntityListWrapper.getObservableList());
-    }
-
-    private boolean checkIfAnyFieldWasEdited(Sekcja sekcja, SekcjaFormValues sekcjaFormValues) {
-        boolean wasEdited = false;
-
-        if(!sekcja.getNazwa().equals(sekcjaFormValues.nazwa)) {
-            wasEdited = true;
-        }
-        else if (sekcja.getSzefId() != sekcjaFormValues.szef.getRedaktorId()) {
-            wasEdited = true;
-        }
-
-        return wasEdited;
-    }
-
-    private SekcjaFormValues readSekcjaForm() {
-
-        SekcjaFormValues sekcjaFormValues = new SekcjaFormValues();
-
-        sekcjaFormValues.nazwa = nazwaTextField.getText();
-        sekcjaFormValues.szef = szefChoiceBox.getValue();
-
-        return sekcjaFormValues;
-    }
-
-    class SekcjaFormValues {
-        private String nazwa;
-        private Redaktor szef;
     }
 }

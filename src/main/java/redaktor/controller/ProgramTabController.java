@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.program.ProgramForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.controller.helper.observable.ObservableViewListWrapper;
@@ -27,7 +28,7 @@ public class ProgramTabController implements EntityController<Program> {
     private ProgramDAO programDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private ObservableViewListWrapper<ProgramRedaktorCount> programRedaktorCountObservableViewListWrapper;
+    private ProgramForm programForm;
 
     @FXML
     private TableView<Program> programTableView;
@@ -42,11 +43,12 @@ public class ProgramTabController implements EntityController<Program> {
     @FXML
     private ChoiceBox<Sekcja> sekcjaChoiceBox;
 
+    private ObservableViewListWrapper<ProgramRedaktorCount> programRedaktorCountObservableViewListWrapper;
+
     private static ObservableEntityListWrapper<Program> programObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
-
         programDAO = ProgramDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
         programObservableEntityListWrapper = new ObservableEntityListWrapper<>(programDAO);
@@ -56,6 +58,7 @@ public class ProgramTabController implements EntityController<Program> {
         ViewInitializer.initializeChoiceBox(redaktorChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, s -> s.getNazwa());
 
+        programForm = new ProgramForm(this);
         MainController.addEntityController(this);
     }
 
@@ -74,6 +77,58 @@ public class ProgramTabController implements EntityController<Program> {
         return programObservableEntityListWrapper.getObservableList();
     }
 
+    @FXML
+    private void addProgram() {
+        if(programForm.isFormCorrectlyFilled()) {
+            Program program = programForm.readForm();
+            programDAO.save(program);
+            programObservableEntityListWrapper.updateObservableList();
+        }
+        else {
+            WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
+            warningAlert.showAndWait();
+        }
+    }
+
+    @FXML
+    //TODO: view with assigned redaktors
+    private void assignRedaktorToProgram() {
+        //TODO: check if redaktor is already assigned
+        Redaktor assignedRedaktor = redaktorChoiceBox.getValue();
+        Program chosenProgram = TableViewHelper.getSelectedItem(programTableView);
+
+        if(assignedRedaktor != null && chosenProgram != null) {
+            programDAO.saveRedaktorProgramRelation(assignedRedaktor.getRedaktorId(), chosenProgram.getProgramId());
+            programRedaktorCountObservableViewListWrapper.updateObservableList();
+        } else {
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora lub programu!");
+            warningAlert.showAndWait();
+        }
+    }
+
+    public String getNazwaFromTextField() {
+        return nazwaTextField.getText();
+    }
+
+    public void setNawaToTextField(String nazwa) {
+        nazwaTextField.setText(nazwa);
+    }
+
+    public String getOpisFromTextField() {
+        return opisTextField.getText();
+    }
+
+    public void setOpisToTextField(String opis) {
+        opisTextField.setText(opis);
+    }
+
+    public Optional<Sekcja> getSekcjaFromChoiceBox() {
+        return Optional.ofNullable(sekcjaChoiceBox.getValue());
+    }
+
+    public void setSekcjaToChoiceBox(Sekcja sekcja) {
+        sekcjaChoiceBox.setValue(sekcja);
+    }
 
     private void initializeProgramTableView() {
         TableColumn<Program, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 120);
@@ -91,35 +146,5 @@ public class ProgramTabController implements EntityController<Program> {
 
         ViewInitializer.addColumnsToTableView(programTableView, programIdColumn, nazwaColumn, opisColumn, sekcjaNazwaColumn);
         ViewInitializer.setObservableListToTableView(programTableView, programObservableEntityListWrapper.getObservableList());
-    }
-
-    @FXML
-    private void addProgram() {
-        Sekcja sekcja = sekcjaChoiceBox.getValue();
-        String nazwa = nazwaTextField.getText();
-        String opis =  opisTextField.getText();
-        long sekcjaId = sekcja.getSekcjaId();
-
-        Program program = new Program(0, nazwa, opis, sekcjaId);
-        programDAO.save(program);
-        programObservableEntityListWrapper.updateObservableList();
-    }
-
-    @FXML
-    //TODO: view with assigned redaktors
-    private void assignRedaktorToProgram() {
-
-        //TODO: check if redaktor is already assigned
-
-        Redaktor assignedRedaktor = redaktorChoiceBox.getValue();
-        Program chosenProgram = TableViewHelper.getSelectedItem(programTableView);
-
-        if(assignedRedaktor != null && chosenProgram != null) {
-            programDAO.saveRedaktorProgramRelation(assignedRedaktor.getRedaktorId(), chosenProgram.getProgramId());
-            programRedaktorCountObservableViewListWrapper.updateObservableList();
-        } else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora lub programu!");
-            warningAlert.showAndWait();
-        }
     }
 }
