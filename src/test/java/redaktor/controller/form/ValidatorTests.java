@@ -15,78 +15,78 @@ public class ValidatorTests {
     }
 
     @Nested
-    @DisplayName("Tests for method isStringEmptyOrNull")
+    @DisplayName("Tests for method isTextFieldEmptyOrNull")
     class TestsOfMethodisStringEmptyOrNull {
         @Test
         void shouldReturnTrueIfStringIsNull() {
-            boolean result = validator.isStringEmptyOrNull(null);
+            boolean result = validator.isTextFieldEmptyOrNull(null);
             assertTrue(result);
         }
 
         @Test
         void shouldReturnTrueIfStringIsEmpty() {
-            boolean result = validator.isStringEmptyOrNull("");
+            boolean result = validator.isTextFieldEmptyOrNull("");
             assertTrue(result);
         }
 
         @Test
         void shouldReturnTrueIfStringContainsOnlyWhitespaceCharactes() {
-            boolean result = validator.isStringEmptyOrNull("   ");
+            boolean result = validator.isTextFieldEmptyOrNull("   ");
             assertTrue(result);
 
-            result = validator.isStringEmptyOrNull("  \t   ");
+            result = validator.isTextFieldEmptyOrNull("  \t   ");
             assertTrue(result);
 
-            result = validator.isStringEmptyOrNull("  \r\f   ");
+            result = validator.isTextFieldEmptyOrNull("  \r\f   ");
             assertTrue(result);
 
-            result = validator.isStringEmptyOrNull("  \n   ");
+            result = validator.isTextFieldEmptyOrNull("  \n   ");
             assertTrue(result);
         }
 
         @Test
         void shouldReturnFalseIfStringIsNotEmptyAndNull() {
-            boolean result = validator.isStringEmptyOrNull("MyTest");
+            boolean result = validator.isTextFieldEmptyOrNull("MyTest");
             assertFalse(result);
         }
     }
 
     @Nested
-    @DisplayName("Tests for method isNameStringProper")
+    @DisplayName("Tests for method isTextFieldContainingAllowedCharacters")
     class TestsOfMethodCheckIfStringContainsOnlyCharactersAndSpaces {
         @Test
         void shouldReturnTrueIfStringContainsOnlyCharactersAndSpaces() {
-            boolean result = validator.isNameStringProper("Sasa Zazaz");
+            boolean result = validator.isTextFieldContainingAllowedCharacters("Sasa Zazaz");
             assertTrue(result);
         }
 
         @Test
         void shouldReturnTrueIfStringContainsDiacriticMarks() {
-            boolean result = validator.isNameStringProper("Człowiek");
+            boolean result = validator.isTextFieldContainingAllowedCharacters("Człowiek");
             assertTrue(result);
 
-            result = validator.isNameStringProper("ęąłżźćó");
+            result = validator.isTextFieldContainingAllowedCharacters("ęąłżźćó");
             assertTrue(result);
         }
 
         @Test
         void shouldReturnFalseIfStringContainsSymbols() {
-            boolean result = validator.isNameStringProper("€");
+            boolean result = validator.isTextFieldContainingAllowedCharacters("€");
             assertFalse(result);
 
-            result = validator.isNameStringProper("$€");
+            result = validator.isTextFieldContainingAllowedCharacters("$€");
             assertFalse(result);
         }
 
         @Test
         void shouldReturnFalseIfStringContainsDigits() {
-            boolean result = validator.isNameStringProper(" 232 1");
+            boolean result = validator.isTextFieldContainingAllowedCharacters(" 232 1");
             assertFalse(result);
 
-            result = validator.isNameStringProper("Andrzej2");
+            result = validator.isTextFieldContainingAllowedCharacters("Andrzej2");
             assertFalse(result);
 
-            result = validator.isNameStringProper("97Stefan");
+            result = validator.isTextFieldContainingAllowedCharacters("97Stefan");
             assertFalse(result);
         }
     }

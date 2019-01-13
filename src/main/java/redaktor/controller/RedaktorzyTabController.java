@@ -103,7 +103,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
                 return;
             }
 
-            if(!redaktorForm.isFormDiffersFromEntity(redaktorToEdit)) {
+            if(!redaktorForm.isFormDifferentFromEntity(redaktorToEdit)) {
                 WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
                 warningAlert.showAndWait();
             }

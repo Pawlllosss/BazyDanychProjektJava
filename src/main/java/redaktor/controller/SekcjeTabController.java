@@ -142,6 +142,22 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         }
     }
 
+    public String getNazwaFromTextField() {
+        return nazwaTextField.getText();
+    }
+
+    public void setNazwaToTextField(String nazwa) {
+        nazwaTextField.setText(nazwa);
+    }
+
+    public Optional<Redaktor> getSzefFromChoiceBox() {
+        return Optional.ofNullable(szefChoiceBox.getValue());
+    }
+
+    public void setSzefToChoiceBox(Redaktor szef) {
+        szefChoiceBox.setValue(szef);
+    }
+
     //TODO: handle redactors
     private void initializeSekcjaTableView() {
         TableColumn<Sekcja, Long> sekcjaIdColumn = ViewInitializer.createColumn("Id sekcja", "sekcjaId", 80);

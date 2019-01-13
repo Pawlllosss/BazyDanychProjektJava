@@ -44,8 +44,8 @@ public class RedaktorForm implements FormWithValidation<Redaktor> {
     }
 
     @Override
-    public boolean isFormDiffersFromEntity(Redaktor redaktorToCheck) {
-        return redaktorFormValidator.isFormDiffersFromEntity(getValuesFromForm(), redaktorToCheck);
+    public boolean isFormDifferentFromEntity(Redaktor redaktorToCheck) {
+        return redaktorFormValidator.isFormDifferentFromEntity(getValuesFromForm(), redaktorToCheck);
     }
 
     @Override
