@@ -1,27 +1,19 @@
 package redaktor.model;
 
 public class Redaktor {
-    //TODO: I need to use polish variables in project...
-    private long redaktorId;
+    private Long redaktorId;
     private String imie;
     private String nazwisko;
-    private long sekcjaId;
+    private Long sekcjaId;
 
-//    public Redaktor(long redaktorId, String imie, String nazwisko, String sekcjaNazwa) {
-//        this.redaktorId = redaktorId;
-//        this.imie = imie;
-//        this.nazwisko = nazwisko;
-//        this.sekcjaNazwa = sekcjaNazwa;
-//    }
-
-    public Redaktor(long redaktorId, String imie, String nazwisko, long sekcjaId) {
+    public Redaktor(long redaktorId, String imie, String nazwisko, Long sekcjaId) {
         this.redaktorId = redaktorId;
         this.imie = imie;
         this.nazwisko = nazwisko;
         this.sekcjaId = sekcjaId;
     }
 
-    public long getRedaktorId() {
+    public Long getRedaktorId() {
         return redaktorId;
     }
 
@@ -45,15 +37,7 @@ public class Redaktor {
         this.nazwisko = nazwisko;
     }
 
-//    public String getSekcjaNazwa() {
-//        return sekcjaNazwa;
-//    }
-//
-//    public void setSekcjaNazwa(String sekcjaNazwa) {
-//        this.sekcjaNazwa = sekcjaNazwa;
-//    }
-
-    public long getSekcjaId() {
+    public Long getSekcjaId() {
         return sekcjaId;
     }
 

@@ -1,7 +1,6 @@
 package redaktor.DAO;
 
 import redaktor.DAO.statement.PreparedStatementSetter;
-import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
 import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Sekcja;
@@ -11,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class SekcjaDAO implements DAO<Sekcja> {
 
@@ -25,7 +25,7 @@ public class SekcjaDAO implements DAO<Sekcja> {
         connectionHandler = ConnectionHandler.getInstance();
     }
     @Override
-    public Sekcja get(long id) {
+    public Optional<Sekcja> get(long id) {
         String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.sekcja s WHERE s.sekcja_id = ?;";
 
         List<Sekcja> sections = new LinkedList<>();
@@ -44,30 +44,30 @@ public class SekcjaDAO implements DAO<Sekcja> {
             sekcja = sections.get(0);
         }
 
-        return sekcja;
+        return Optional.ofNullable(sekcja);
     }
 
-    public Sekcja getByNazwa(String nazwa) {
-        //TODO: check while adding if section with name already exists
-        String sekcjaSelectByNazwaQuery = "SELECT * FROM redaktor.sekcja s WHERE s.nazwa = ?;";
-        List<Sekcja> sections = new LinkedList<>();
-        Sekcja sekcja = null;
-
-        PreparedStatement selectByNazwaStatement = connectionHandler.prepareStatement(sekcjaSelectByNazwaQuery);
-        try {
-            selectByNazwaStatement.setString(1, nazwa);
-            ResultSet resultSet = selectByNazwaStatement.executeQuery();
-            sections = getSectionsFromResultSet(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if(!sections.isEmpty()) {
-            sekcja = sections.get(0);
-        }
-
-        return sekcja;
-    }
+//    public Sekcja getByNazwa(String nazwa) {
+//        //TODO: check while adding if section with name already exists
+//        String sekcjaSelectByNazwaQuery = "SELECT * FROM redaktor.sekcja s WHERE s.nazwa = ?;";
+//        List<Sekcja> sections = new LinkedList<>();
+//        Sekcja sekcja = null;
+//
+//        PreparedStatement selectByNazwaStatement = connectionHandler.prepareStatement(sekcjaSelectByNazwaQuery);
+//        try {
+//            selectByNazwaStatement.setString(1, nazwa);
+//            ResultSet resultSet = selectByNazwaStatement.executeQuery();
+//            sections = getSectionsFromResultSet(resultSet);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//        if(!sections.isEmpty()) {
+//            sekcja = sections.get(0);
+//        }
+//
+//        return sekcja;
+//    }
 
     @Override
     public List<Sekcja> getAll() {

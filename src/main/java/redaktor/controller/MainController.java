@@ -24,7 +24,6 @@ public class MainController {
         entityControllers = new LinkedList<>();
     }
 
-    //TODO: in Java8 I could use interface with static method
     public static <T> void addEntityController(EntityController<T> entityController) {
         entityControllers.add(entityController);
     }

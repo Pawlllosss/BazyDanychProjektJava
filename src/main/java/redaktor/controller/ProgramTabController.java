@@ -20,6 +20,8 @@ import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 import redaktor.model.program.view.ProgramRedaktorCount;
 
+import java.util.Optional;
+
 public class ProgramTabController implements EntityController<Program> {
 
     private ProgramDAO programDAO;
@@ -81,8 +83,8 @@ public class ProgramTabController implements EntityController<Program> {
 
         sekcjaNazwaColumn.setCellValueFactory(programStringCellDataFeatures -> {
             Program program = programStringCellDataFeatures.getValue();
-            Sekcja sekcja = sekcjaDAO.get(program.getSekcjaId());
-            String sekcjaNazwa = sekcja.getNazwa();
+            Optional<Sekcja> sekcja = sekcjaDAO.get(program.getSekcjaId());
+            String sekcjaNazwa = sekcja.map(sekcjaLambda -> sekcjaLambda.getNazwa()).orElse("");
 
             return new SimpleStringProperty(sekcjaNazwa);
         });

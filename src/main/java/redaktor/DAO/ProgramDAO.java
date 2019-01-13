@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ProgramDAO implements DAO<Program> {
 
@@ -24,8 +25,8 @@ public class ProgramDAO implements DAO<Program> {
     }
 
     @Override
-    public Program get(long id) {
-        return null;
+    public Optional<Program> get(long id) {
+        return Optional.ofNullable(null);
     }
 
     @Override

@@ -7,11 +7,14 @@ import javafx.scene.control.*;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.redaktor.RedaktorForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
+
+import java.util.Optional;
 
 
 public class RedaktorzyTabController implements EntityController<Redaktor> {
@@ -19,7 +22,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
-    private static ObservableEntityListWrapper<Redaktor> redaktorObservableEntityListWrapper;
+    private RedaktorForm redaktorForm;
 
     @FXML
     private TableView<Redaktor> redaktorTableView;
@@ -29,6 +32,8 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     private TextField imieTextField;
     @FXML
     private TextField nazwiskoTextField;
+
+    private static ObservableEntityListWrapper<Redaktor> redaktorObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
@@ -40,6 +45,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         initializeRedaktorTableView();
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, sekcja -> sekcja.getNazwa());
 
+        redaktorForm = new RedaktorForm(this);
         MainController.addEntityController(this);
     }
 
@@ -50,7 +56,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         sekcjaChoiceBox.setItems(sekcjaObservableList);
     }
 
-    //TODO: wait for Java8...
+    //TODO: maybe create abstract class?
 //    @Override
     public static ObservableList<Redaktor> getObservableList() {
         return redaktorObservableEntityListWrapper.getObservableList();
@@ -58,17 +64,15 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     @FXML
     private void addRedactor() {
-        RedaktorFormValues redaktorFormValues = readRedaktorForm();
-
-        //TODO: add some field validation and maybe triggers? BLOCK WITHOUT SECTION
-        Sekcja sekcja = redaktorFormValues.sekcja;
-        String imie = redaktorFormValues.imie;
-        String nazwisko =  redaktorFormValues.nazwisko;
-        long sekcjaId = sekcja.getSekcjaId();
-
-        Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
-        redaktorDAO.save(redaktor);
-        redaktorObservableEntityListWrapper.updateObservableList();
+        if(redaktorForm.isFormCorrectlyFilled()) {
+            Redaktor redaktor = redaktorForm.readForm();
+            redaktorDAO.save(redaktor);
+            redaktorObservableEntityListWrapper.updateObservableList();
+        }
+        else {
+            WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
+            warningAlert.showAndWait();
+        }
     }
 
     @FXML
@@ -78,7 +82,6 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         if(redaktor != null) {
             long redaktorId = redaktor.getRedaktorId();
             redaktorDAO.delete(redaktorId);
-
             redaktorObservableEntityListWrapper.updateObservableList();
         }
         else {
@@ -90,24 +93,26 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     @FXML
     private void editRedaktor() {
 
-        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
+        Redaktor redaktorToEdit = TableViewHelper.getSelectedItem(redaktorTableView);
 
-        if(redaktor != null) {
-            long redaktorId = redaktor.getRedaktorId();
+        if(redaktorToEdit != null) {
 
-            RedaktorFormValues redaktorFormValues = readRedaktorForm();
+            if(!redaktorForm.isFormCorrectlyFilled()) {
+                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
+                warningAlert.showAndWait();
+                return;
+            }
 
-            if(!checkIfAnyFieldWasEdited(redaktor, redaktorFormValues)) {
+            if(!redaktorForm.isFormDiffersFromEntity(redaktorToEdit)) {
                 WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
                 warningAlert.showAndWait();
             }
             else {
-                String imie = redaktorFormValues.imie;
-                String nazwisko = redaktorFormValues.nazwisko;
-                long sekcjaId = redaktorFormValues.sekcja.getSekcjaId();
-                Redaktor editedRedaktor = new Redaktor(redaktorId, imie, nazwisko, sekcjaId);
+                long editedRedaktorId = redaktorToEdit.getRedaktorId();
+                Redaktor editedRedaktor = redaktorForm.readForm();
+                editedRedaktor.setRedaktorId(editedRedaktorId);
 
-                redaktorDAO.update(redaktor, editedRedaktor);
+                redaktorDAO.update(redaktorToEdit, editedRedaktor);
                 redaktorObservableEntityListWrapper.updateObservableList();
             }
 
@@ -124,18 +129,36 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
 
         if(redaktor != null) {
-            Long sekcjaId = redaktor.getSekcjaId();
-            Sekcja sekcja = sekcjaDAO.get(sekcjaId);
-
-            imieTextField.setText(redaktor.getImie());
-            nazwiskoTextField.setText(redaktor.getNazwisko());
-            sekcjaChoiceBox.setValue(sekcja);
-            redaktorObservableEntityListWrapper.updateObservableList();
+            redaktorForm.loadValuesIntoForm(redaktor);
         }
         else {
             WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
             warningAlert.showAndWait();
         }
+    }
+
+    public String getImieFromTextField() {
+        return imieTextField.getText();
+    }
+
+    public void setImieToTextField(String imie) {
+        imieTextField.setText(imie);
+    }
+
+    public String getNazwiskoFromTextField() {
+        return nazwiskoTextField.getText();
+    }
+
+    public void setNazwiskoToTextField(String nazwisko) {
+        imieTextField.setText(nazwisko);
+    }
+
+    public Optional<Sekcja> getSekcjaFromChoiceBox() {
+        return Optional.ofNullable(sekcjaChoiceBox.getValue());
+    }
+
+    public void setSekcjaToChoiceBox(Sekcja sekcja) {
+        sekcjaChoiceBox.setValue(sekcja);
     }
 
     private void initializeRedaktorTableView() {
@@ -146,8 +169,8 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
         sekcjaNazwaColumn.setCellValueFactory(redaktorStringCellDataFeatures -> {
             Redaktor redaktor = redaktorStringCellDataFeatures.getValue();
-            Sekcja sekcja = sekcjaDAO.get(redaktor.getSekcjaId());
-            String sekcjaNazwa = sekcja.getNazwa();
+            Optional<Sekcja> sekcja = sekcjaDAO.get(redaktor.getSekcjaId());
+            String sekcjaNazwa = sekcja.map(sekcjaLambda -> sekcjaLambda.getNazwa()).orElse(null);
 
             return new SimpleStringProperty(sekcjaNazwa);
         });
@@ -155,38 +178,4 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
         ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableEntityListWrapper.getObservableList());
     }
-
-    private boolean checkIfAnyFieldWasEdited(Redaktor redaktor, RedaktorFormValues redaktorFormValues) {
-        boolean wasEdited = false;
-
-        if(!redaktor.getImie().equals(redaktorFormValues.imie)) {
-            wasEdited = true;
-        }
-        else if (!redaktor.getNazwisko().equals(redaktorFormValues.nazwisko)) {
-            wasEdited = true;
-        }
-        else if (redaktor.getSekcjaId() != redaktorFormValues.sekcja.getSekcjaId()) {
-            wasEdited = true;
-        }
-
-        return wasEdited;
-    }
-
-    private RedaktorFormValues readRedaktorForm() {
-
-        RedaktorFormValues redaktorFormValues = new RedaktorFormValues();
-
-        redaktorFormValues.imie = imieTextField.getText();
-        redaktorFormValues.nazwisko = nazwiskoTextField.getText();
-        redaktorFormValues.sekcja = sekcjaChoiceBox.getValue();
-
-        return redaktorFormValues;
-    }
-
-    class RedaktorFormValues {
-        private String imie;
-        private String nazwisko;
-        private Sekcja sekcja;
-    }
-
 }

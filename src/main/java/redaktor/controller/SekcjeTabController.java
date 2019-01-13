@@ -17,6 +17,8 @@ import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 
+import java.util.Optional;
+
 
 public class SekcjeTabController implements EntityController<Sekcja> {
 
@@ -127,10 +129,10 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
         if(sekcja != null) {
             long szefId = sekcja.getSekcjaId();
-            Redaktor szef = redaktorDAO.get(szefId);
+            Optional<Redaktor> szef = redaktorDAO.get(szefId);
 
             nazwaTextField.setText(sekcja.getNazwa());
-            szefChoiceBox.setValue(szef);
+            szefChoiceBox.setValue(szef.orElse(null));
 
             sekcjaObservableEntityListWrapper.updateObservableList();
         }
@@ -150,27 +152,16 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
         szefImieColumn.setCellValueFactory(szefStringCellDataFeatures -> {
             Sekcja sekcja = szefStringCellDataFeatures.getValue();
-            Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
-
-            String szefImie = "";
-
-            //TODO: use optionals
-            if(szef != null) {
-                szefImie = szef.getImie();
-            }
+            Optional<Redaktor> szef = redaktorDAO.get(sekcja.getSzefId());
+            String szefImie = szef.map(szefLambda -> szefLambda.getImie()).orElse("");
 
             return new SimpleStringProperty(szefImie);
         });
 
         szefNazwiskoColumn.setCellValueFactory(szefStringCellDataFeatures -> {
             Sekcja sekcja = szefStringCellDataFeatures.getValue();
-            Redaktor szef = redaktorDAO.get(sekcja.getSzefId());
-            String szefNazwisko = "";
-
-            //TODO: use optionals
-            if(szef != null) {
-                szefNazwisko = szef.getNazwisko();
-            }
+            Optional<Redaktor> szef = redaktorDAO.get(sekcja.getSzefId());
+            String szefNazwisko = szef.map(szefLambda -> szefLambda.getNazwisko()).orElse("");
 
             return new SimpleStringProperty(szefNazwisko);
         });

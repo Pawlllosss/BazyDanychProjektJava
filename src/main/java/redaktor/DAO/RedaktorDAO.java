@@ -1,5 +1,6 @@
 package redaktor.DAO;
 
+import redaktor.DAO.statement.PreparedStatementSetter;
 import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
 import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
@@ -12,6 +13,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public class RedaktorDAO implements DAO<Redaktor> {
 
@@ -28,7 +30,7 @@ public class RedaktorDAO implements DAO<Redaktor> {
 
 
     @Override
-    public Redaktor get(long id) {
+    public Optional<Redaktor> get(long id) {
         String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.redaktor r WHERE r.redaktor_id = ?;";
 
         List<Redaktor> redaktors = new LinkedList<>();
@@ -47,7 +49,7 @@ public class RedaktorDAO implements DAO<Redaktor> {
             redaktor = redaktors.get(0);
         }
 
-        return redaktor;
+        return Optional.ofNullable(redaktor);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class RedaktorDAO implements DAO<Redaktor> {
         try {
             preparedStatement.setString(1, redaktor.getImie());
             preparedStatement.setString(2, redaktor.getNazwisko());
-            preparedStatement.setLong(3, redaktor.getSekcjaId());
+            PreparedStatementSetter.setForeignKey(preparedStatement, 3, redaktor.getSekcjaId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
