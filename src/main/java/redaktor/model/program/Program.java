@@ -2,10 +2,10 @@ package redaktor.model.program;
 
 public class Program {
 
-    private long programId;
+    private Long programId;
     private String nazwa;
     private String opis;
-    private long sekcjaId;
+    private Long sekcjaId;
 
     public Program(long programId, String nazwa, String opis, long sekcjaId) {
         this.programId = programId;
@@ -14,7 +14,7 @@ public class Program {
         this.sekcjaId = sekcjaId;
     }
 
-    public long getProgramId() {
+    public Long getProgramId() {
         return programId;
     }
 
@@ -38,7 +38,7 @@ public class Program {
         this.opis = opis;
     }
 
-    public long getSekcjaId() {
+    public Long getSekcjaId() {
         return sekcjaId;
     }
 

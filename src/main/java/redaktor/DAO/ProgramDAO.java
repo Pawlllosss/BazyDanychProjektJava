@@ -1,7 +1,10 @@
 package redaktor.DAO;
 
+import redaktor.DAO.query.DeleteQueryExecutor;
+import redaktor.DAO.update.ProgramUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.program.Program;
+import redaktor.model.program.view.ProgramPrzypisanyRedaktor;
 import redaktor.model.program.view.ProgramRedaktorCount;
 
 import java.sql.PreparedStatement;
@@ -64,12 +67,18 @@ public class ProgramDAO implements DAO<Program> {
 
     @Override
     public void update(Program originalEntity, Program editedEntity) {
+        ProgramUpdateQueryBuilder programUpdateQueryBuilder = new ProgramUpdateQueryBuilder();
+        final String UPDATE_QUERY = programUpdateQueryBuilder.buildUpdateQuery(originalEntity, editedEntity);
 
+        connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }
 
     @Override
     public void delete(long id) {
+        String programDeleteQuery = "DELETE FROM redaktor.program WHERE program_id = ?";
 
+        DeleteQueryExecutor deleteQueryExecutor = new DeleteQueryExecutor(programDeleteQuery, id);
+        deleteQueryExecutor.executeDeleteQuery();
     }
 
     public List<ProgramRedaktorCount> getProgramRedaktorCount() {
@@ -88,6 +97,22 @@ public class ProgramDAO implements DAO<Program> {
         return programRedaktorCounts;
     }
 
+    public List<ProgramPrzypisanyRedaktor> getProgramPrzypisanyRedaktor() {
+        final String PROGRAM_REDAKTOR_COUNT_SELECT_QUERY = "SELECT * FROM redaktor.program_przypisany_redaktor;";
+
+        ResultSet resultSet = connectionHandler.executeSelectQuery(PROGRAM_REDAKTOR_COUNT_SELECT_QUERY);
+        List<ProgramPrzypisanyRedaktor> programPrzypisanyRedaktors = null;
+
+        try {
+            programPrzypisanyRedaktors = getProgramPrzypisanyRedaktorFromResultSet(resultSet);
+        }
+        catch(SQLException exception) {
+            exception.printStackTrace();
+        }
+
+        return programPrzypisanyRedaktors;
+    }
+
     public void saveRedaktorProgramRelation(long redaktorId, long progamId) {
         String redaktorProgramRelationInsertQuery = "INSERT INTO redaktor.redaktor_program(redaktor_id, program_id) VALUES (?, ?);";
 
@@ -96,6 +121,20 @@ public class ProgramDAO implements DAO<Program> {
         try {
             preparedStatement.setLong(1, redaktorId);
             preparedStatement.setLong(2, progamId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteRedaktorProgramRelation(long programId, long redaktorId) {
+        String redaktorProgramRelationDeleteQuery = "DELETE FROM redaktor.redaktor_program WHERE program_id = ? AND redaktor_id = ?";
+
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(redaktorProgramRelationDeleteQuery);
+
+        try {
+            preparedStatement.setLong(1, programId);
+            preparedStatement.setLong(2, redaktorId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,5 +170,21 @@ public class ProgramDAO implements DAO<Program> {
         }
 
         return programRedaktorCounts;
+    }
+
+    private List<ProgramPrzypisanyRedaktor> getProgramPrzypisanyRedaktorFromResultSet(ResultSet resultSet) throws SQLException {
+        List<ProgramPrzypisanyRedaktor> progamPrzypisanyRedaktors = new LinkedList<>();
+
+        while(resultSet.next()) {
+            Long programId  = resultSet.getLong("program_id");
+            String prgramNazwa = resultSet.getString("program_nazwa");
+            String imieNazwisko = resultSet.getString("imie_nazwisko");
+            long redaktorId = resultSet.getLong("redaktor_id");
+
+            ProgramPrzypisanyRedaktor programPrzypisanyRedaktor = new ProgramPrzypisanyRedaktor(programId, redaktorId, prgramNazwa, imieNazwisko);
+            progamPrzypisanyRedaktors.add(programPrzypisanyRedaktor);
+        }
+
+        return progamPrzypisanyRedaktors;
     }
 }

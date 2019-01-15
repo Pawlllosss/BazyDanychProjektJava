@@ -10,7 +10,7 @@ public class RedaktorUpdateQueryBuilder extends UpdateQueryBuilder<Redaktor>{
     protected void appendModifiedFieldsToQuery(Redaktor originalRedaktor, Redaktor editedRedaktor) {
         compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getImie(), editedRedaktor.getImie(), "imie");
         compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getNazwisko(), editedRedaktor.getNazwisko(), "nazwisko");
-        compareValuesAndAppendToQueryIfDiffers(originalRedaktor.getSekcjaId(), editedRedaktor.getSekcjaId(), "sekcja_id");
+        compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getSekcjaId(), editedRedaktor.getSekcjaId(), "sekcja_id");
     }
 
     @Override

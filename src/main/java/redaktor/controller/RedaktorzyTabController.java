@@ -125,7 +125,6 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     @FXML
     private void loadRedaktorEditForm() {
-
         Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
 
         if(redaktor != null) {

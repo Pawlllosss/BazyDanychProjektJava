@@ -4,9 +4,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="506.0" prefWidth="1052.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.MainController">
+<AnchorPane prefHeight="635.0" prefWidth="1301.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.MainController">
    <children>
-      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="506.0" prefWidth="1052.0" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="150.0">
+      <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="635.0" prefWidth="1392.0" tabClosingPolicy="UNAVAILABLE" tabMaxWidth="150.0">
         <tabs>
           <Tab fx:id="SekcjeTab" text="Sekcje">
                <content>

@@ -1,14 +1,13 @@
 package redaktor.model.program.view;
 
 public class ProgramRedaktorCount {
-
     private Long programId;
-    private String nazwa;
+    private String programNazwa;
     private Long redaktorCount;
 
-    public ProgramRedaktorCount(Long programId, String nazwa, Long redaktorCount) {
+    public ProgramRedaktorCount(Long programId, String programNazwa, Long redaktorCount) {
         this.programId = programId;
-        this.nazwa = nazwa;
+        this.programNazwa = programNazwa;
         this.redaktorCount = redaktorCount;
     }
 
@@ -16,8 +15,8 @@ public class ProgramRedaktorCount {
         return programId;
     }
 
-    public String getNazwa() {
-        return nazwa;
+    public String getProgramNazwa() {
+        return programNazwa;
     }
 
     public Long getRedaktorCount() {

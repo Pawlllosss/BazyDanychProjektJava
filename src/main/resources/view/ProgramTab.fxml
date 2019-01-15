@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -14,31 +15,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="ProgramTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.ProgramTabController">
+<AnchorPane fx:id="ProgramTab" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="547.0" prefWidth="1116.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.ProgramTabController">
    <children>
-      <HBox prefHeight="472.0" prefWidth="779.0" AnchorPane.bottomAnchor="-72.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-179.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="547.0" prefWidth="1007.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="310.0" prefWidth="367.0">
-               <children>
-                  <TableView fx:id="programTableView" prefHeight="182.0" prefWidth="254.0" />
-                  <HBox prefHeight="37.0" prefWidth="254.0">
-                     <children>
-                        <Label text="Redaktor" />
-                        <Separator prefHeight="29.0" prefWidth="86.0" />
-                        <ChoiceBox fx:id="redaktorChoiceBox" prefWidth="100.0" />
-                     </children>
-                  </HBox>
-                  <Button mnemonicParsing="false" onAction="#assignRedaktorToProgram" text="Przypisz redaktora">
-                     <VBox.margin>
-                        <Insets left="50.0" />
-                     </VBox.margin>
-                  </Button>
-               </children>
-            </VBox>
-            <GridPane prefHeight="113.0" prefWidth="200.0">
+            <GridPane prefHeight="533.0" prefWidth="240.0">
                <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="10.0" prefWidth="69.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="131.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="123.0" minWidth="10.0" prefWidth="109.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="131.0" minWidth="10.0" prefWidth="120.0" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -54,9 +38,58 @@
                   <Button mnemonicParsing="false" onAction="#addProgram" prefHeight="26.0" prefWidth="132.0" text="Dodaj Program" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Opis:" GridPane.rowIndex="1" />
                   <TextField fx:id="opisTextField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Button mnemonicParsing="false" onAction="#editProgram" text="Wyślij edycję" GridPane.rowIndex="3" />
                </children>
             </GridPane>
+            <Separator prefHeight="6.0" prefWidth="45.0" />
+            <VBox prefHeight="310.0" prefWidth="367.0">
+               <children>
+                  <TableView fx:id="programTableView" prefHeight="182.0" prefWidth="254.0" />
+                  <ButtonBar prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button mnemonicParsing="false" onAction="#deleteProgram" text="Usuń" />
+                        <Separator prefHeight="4.0" prefWidth="200.0" />
+                        <Button mnemonicParsing="false" onAction="#loadProgramEditForm" text="Edytuj" />
+                    </buttons>
+                  </ButtonBar>
+                  <HBox prefHeight="37.0" prefWidth="254.0">
+                     <children>
+                        <Label text="Redaktor" />
+                        <Separator prefHeight="29.0" prefWidth="86.0" />
+                        <ChoiceBox fx:id="redaktorChoiceBox" prefWidth="100.0" />
+                     </children>
+                  </HBox>
+                  <Button mnemonicParsing="false" onAction="#assignRedaktorToProgram" text="Przypisz redaktora">
+                     <VBox.margin>
+                        <Insets left="110.0" />
+                     </VBox.margin>
+                  </Button>
+                  <Separator orientation="VERTICAL" prefHeight="41.0" prefWidth="0.0" />
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Liczba redaktorów prowadzących program:" />
+                  <TableView fx:id="programRedaktorCountTableView" prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
+            <Separator prefHeight="5.0" prefWidth="42.0" />
+            <VBox>
+               <children>
+                  <TableView fx:id="programPrzypisanyRedaktorTableView" prefHeight="547.0" prefWidth="354.0">
+                     <padding>
+                        <Insets bottom="5.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
+                  </TableView>
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#unassignRedaktorFromProgram" prefHeight="26.0" prefWidth="346.0" text="Oddeleguj redaktora" />
+               </children>
+            </VBox>
          </children>
       </HBox>
    </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
 </AnchorPane>

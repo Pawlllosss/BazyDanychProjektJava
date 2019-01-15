@@ -24,6 +24,7 @@ public class SekcjaDAO implements DAO<Sekcja> {
     private SekcjaDAO() {
         connectionHandler = ConnectionHandler.getInstance();
     }
+
     @Override
     public Optional<Sekcja> get(long id) {
         String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.sekcja s WHERE s.sekcja_id = ?;";
@@ -40,34 +41,12 @@ public class SekcjaDAO implements DAO<Sekcja> {
             e.printStackTrace();
         }
 
-        if(!sections.isEmpty()) {
+        if (!sections.isEmpty()) {
             sekcja = sections.get(0);
         }
 
         return Optional.ofNullable(sekcja);
     }
-
-//    public Sekcja getByNazwa(String nazwa) {
-//        //TODO: check while adding if section with name already exists
-//        String sekcjaSelectByNazwaQuery = "SELECT * FROM redaktor.sekcja s WHERE s.nazwa = ?;";
-//        List<Sekcja> sections = new LinkedList<>();
-//        Sekcja sekcja = null;
-//
-//        PreparedStatement selectByNazwaStatement = connectionHandler.prepareStatement(sekcjaSelectByNazwaQuery);
-//        try {
-//            selectByNazwaStatement.setString(1, nazwa);
-//            ResultSet resultSet = selectByNazwaStatement.executeQuery();
-//            sections = getSectionsFromResultSet(resultSet);
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        if(!sections.isEmpty()) {
-//            sekcja = sections.get(0);
-//        }
-//
-//        return sekcja;
-//    }
 
     @Override
     public List<Sekcja> getAll() {
@@ -78,29 +57,11 @@ public class SekcjaDAO implements DAO<Sekcja> {
 
         try {
             sections = getSectionsFromResultSet(resultSet);
-        }
-        catch(SQLException exception) {
+        } catch (SQLException exception) {
             exception.printStackTrace();
         }
 
         return sections;
-    }
-
-    public List<String> getAllNazwa() {
-        final String SEKCJA_NAZWA_SELECT_QUERY = "select s.nazwa from redaktor.sekcja s;";
-
-        ResultSet resultSet = connectionHandler.executeSelectQuery(SEKCJA_NAZWA_SELECT_QUERY);
-        List<String> sectionsName = null;
-
-        try {
-            sectionsName = getSectionsNameFromResultSet(resultSet);
-        }
-        catch(SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return sectionsName;
-
     }
 
     @Override
@@ -139,7 +100,7 @@ public class SekcjaDAO implements DAO<Sekcja> {
         try {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -147,26 +108,15 @@ public class SekcjaDAO implements DAO<Sekcja> {
     private List<Sekcja> getSectionsFromResultSet(ResultSet resultSet) throws SQLException {
         List<Sekcja> sections = new LinkedList<>();
 
-        while(resultSet.next()) {
-            long sekcjaId  = resultSet.getLong("sekcja_id");
+        while (resultSet.next()) {
+            long sekcjaId = resultSet.getLong("sekcja_id");
             String nazwa = resultSet.getString("nazwa");
-            long szefId  = resultSet.getLong("redaktor_id");
+            long szefId = resultSet.getLong("redaktor_id");
 
             Sekcja sekcja = new Sekcja(sekcjaId, nazwa, szefId);
             sections.add(sekcja);
         }
 
         return sections;
-    }
-
-    private List<String> getSectionsNameFromResultSet(ResultSet resultSet) throws SQLException {
-        List<String> sekcjaNazwa = new LinkedList<>();
-
-        while(resultSet.next()) {
-            String nazwa = resultSet.getString("nazwa");
-            sekcjaNazwa.add(nazwa);
-        }
-
-        return sekcjaNazwa;
     }
 }

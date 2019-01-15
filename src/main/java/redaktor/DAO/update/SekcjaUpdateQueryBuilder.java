@@ -9,7 +9,7 @@ public class SekcjaUpdateQueryBuilder extends UpdateQueryBuilder<Sekcja>{
     @Override
     protected void appendModifiedFieldsToQuery(Sekcja originalSekcja, Sekcja editedSekcja) {
         compareValuesWithEquealsAndAppendToQueryDiffers(originalSekcja.getNazwa(), editedSekcja.getNazwa(), "nazwa");
-        compareValuesAndAppendToQueryIfDiffers(originalSekcja.getSzefId(), editedSekcja.getSzefId(), "redaktor_id");
+        compareValuesWithEquealsAndAppendToQueryDiffers(originalSekcja.getSzefId(), editedSekcja.getSzefId(), "redaktor_id");
     }
 
     @Override
