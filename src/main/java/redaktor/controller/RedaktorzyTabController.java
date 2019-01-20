@@ -7,6 +7,7 @@ import javafx.scene.control.*;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.redaktor.RedaktorForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
@@ -125,15 +126,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     @FXML
     private void loadRedaktorEditForm() {
-        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
-
-        if(redaktor != null) {
-            redaktorForm.loadValuesIntoForm(redaktor);
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
-            warningAlert.showAndWait();
-        }
+        FormLoader.tryToLoadValuesIntoForm(redaktorTableView, redaktorForm, "Nie wybrano redaktora!");
     }
 
     public String getImieFromTextField() {

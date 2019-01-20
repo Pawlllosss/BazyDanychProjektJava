@@ -1,10 +1,12 @@
-package redaktor.controller.form.redaktor;
+package redaktor.controller.form;
 
 import org.junit.jupiter.api.*;
+import redaktor.controller.form.redaktor.RedaktorFormValidator;
+import redaktor.controller.form.redaktor.RedaktorFormValues;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RedaktorFormValidatorTests {
+public class RedaktorFormValidatorItTests {
 
     RedaktorFormValidator redaktorFormValidator;
 

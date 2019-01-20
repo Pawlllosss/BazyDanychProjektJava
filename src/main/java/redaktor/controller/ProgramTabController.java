@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.program.ProgramForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.observable.listener.ObservableListWrapperUpdateListener;
@@ -156,15 +157,7 @@ public class ProgramTabController implements EntityController<Program> {
 
     @FXML
     private void loadProgramEditForm() {
-        Program program = TableViewHelper.getSelectedItem(programTableView);
-
-        if(program != null) {
-            programForm.loadValuesIntoForm(program);
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano programu!");
-            warningAlert.showAndWait();
-        }
+        FormLoader.tryToLoadValuesIntoForm(programTableView, programForm, "Nie wybrano programu!");
     }
 
     @FXML

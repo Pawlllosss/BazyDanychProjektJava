@@ -8,9 +8,9 @@ public class ProgramUpdateQueryBuilder extends UpdateQueryBuilder<Program> {
 
     @Override
     protected void appendModifiedFieldsToQuery(Program originalProgram, Program editedProgram) {
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalProgram.getNazwa(), editedProgram.getNazwa(), "nazwa");
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalProgram.getOpis(), editedProgram.getOpis(), "opis");
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalProgram.getSekcjaId(), editedProgram.getSekcjaId(), "sekcja_id");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalProgram.getNazwa(), editedProgram.getNazwa(), "nazwa");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalProgram.getOpis(), editedProgram.getOpis(), "opis");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalProgram.getSekcjaId(), editedProgram.getSekcjaId(), "sekcja_id");
     }
 
     @Override

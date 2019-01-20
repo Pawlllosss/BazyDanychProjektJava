@@ -10,6 +10,7 @@ import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.sekcja.SekcjaForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.table.TableViewHelper;
@@ -125,15 +126,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
 
     @FXML
     private void loadSekcjaEditForm() {
-        Sekcja sekcja = TableViewHelper.getSelectedItem(sekcjaTableView);
-
-        if(sekcja != null) {
-            sekcjaForm.loadValuesIntoForm(sekcja);
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
-            warningAlert.showAndWait();
-        }
+        FormLoader.tryToLoadValuesIntoForm(sekcjaTableView, sekcjaForm, "Nie wybrano sekcji!");
     }
 
     public String getNazwaFromTextField() {

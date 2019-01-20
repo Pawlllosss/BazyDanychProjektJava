@@ -8,9 +8,9 @@ public class RedaktorUpdateQueryBuilder extends UpdateQueryBuilder<Redaktor>{
 
     @Override
     protected void appendModifiedFieldsToQuery(Redaktor originalRedaktor, Redaktor editedRedaktor) {
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getImie(), editedRedaktor.getImie(), "imie");
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getNazwisko(), editedRedaktor.getNazwisko(), "nazwisko");
-        compareValuesWithEquealsAndAppendToQueryDiffers(originalRedaktor.getSekcjaId(), editedRedaktor.getSekcjaId(), "sekcja_id");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalRedaktor.getImie(), editedRedaktor.getImie(), "imie");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalRedaktor.getNazwisko(), editedRedaktor.getNazwisko(), "nazwisko");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalRedaktor.getSekcjaId(), editedRedaktor.getSekcjaId(), "sekcja_id");
     }
 
     @Override

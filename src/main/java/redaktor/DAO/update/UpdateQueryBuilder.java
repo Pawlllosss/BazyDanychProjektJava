@@ -52,7 +52,7 @@ public abstract class UpdateQueryBuilder<T> {
         return updateQueryPart;
     }
 
-    protected <T> void compareValuesWithEquealsAndAppendToQueryDiffers(T valueOld, T valueNew, String fieldName) {
+    protected <T> void compareValuesWithEqualsAndAppendToQueryDiffers(T valueOld, T valueNew, String fieldName) {
         if(!valueOld.equals(valueNew)) {
             String updateQueryPart = createFieldUpdateQueryPart(fieldName, valueNew);
             queryStringBuilder.append(updateQueryPart);
