@@ -1,4 +1,4 @@
-package redaktor.DAO.query;
+package redaktor.DAO.delete;
 
 import redaktor.connection.ConnectionHandler;
 

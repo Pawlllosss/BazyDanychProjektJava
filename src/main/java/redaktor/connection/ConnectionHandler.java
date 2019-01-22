@@ -11,7 +11,6 @@ public class ConnectionHandler {
     }
 
     public ResultSet executeSelectQuery(String queryString) {
-        //TODO: in java 8 I could use Optional...
         ResultSet resultSet = null;
 
         try {
@@ -48,12 +47,13 @@ public class ConnectionHandler {
         return preparedStatement;
     }
 
+    //TODO: connection from some configuration file
     private ConnectionHandler() {
         connection = null;
         try {
             Class.forName("org.postgresql.Driver");
             connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/RedaktorMod",
+                    .getConnection("jdbc:postgresql://localhost:5432/RedaktorMod2",
                             "postgres", "123");
 //            connection = DriverManager
 //                    .getConnection("jdbc:postgresql://pascal.fis.agh.edu.pl:5432/u6oczadly",

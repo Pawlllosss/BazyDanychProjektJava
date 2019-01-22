@@ -117,7 +117,7 @@ public class ProgramTabController implements EntityController<Program> {
             observableListWrapperUpdateListener.updateLists();
         }
         else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano prgramu!");
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano programu!");
             warningAlert.showAndWait();
         }
     }
@@ -161,7 +161,6 @@ public class ProgramTabController implements EntityController<Program> {
     }
 
     @FXML
-    //TODO: view with assigned redaktors
     private void assignRedaktorToProgram() {
         //TODO: check if redaktor is already assigned
         Redaktor assignedRedaktor = redaktorChoiceBox.getValue();

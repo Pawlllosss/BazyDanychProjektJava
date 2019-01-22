@@ -1,6 +1,6 @@
 package redaktor.DAO;
 
-import redaktor.DAO.query.DeleteQueryExecutor;
+import redaktor.DAO.delete.DeleteQueryExecutor;
 import redaktor.DAO.update.ProgramUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.program.Program;
