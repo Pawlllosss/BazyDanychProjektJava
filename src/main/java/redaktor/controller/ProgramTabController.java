@@ -14,7 +14,7 @@ import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.program.ProgramForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.observable.listener.ObservableListWrapperUpdateListener;
-import redaktor.controller.helper.table.TableViewHelper;
+import redaktor.controller.table.TableViewHelper;
 import redaktor.controller.helper.observable.ObservableViewListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;

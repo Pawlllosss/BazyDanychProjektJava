@@ -10,7 +10,7 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.redaktor.RedaktorForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
-import redaktor.controller.helper.table.TableViewHelper;
+import redaktor.controller.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;

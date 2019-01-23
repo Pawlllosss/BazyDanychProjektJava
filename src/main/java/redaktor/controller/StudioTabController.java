@@ -1,5 +1,7 @@
 package redaktor.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -10,8 +12,7 @@ import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.studio.StudioForm;
 import redaktor.controller.helper.crud.EntityAdder;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
-import redaktor.controller.helper.table.StudioTableViewWrapper;
-import redaktor.controller.helper.table.TableViewHelper;
+import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.model.Studio;
 
 //TODO: only numbers for nrPokoju
@@ -38,6 +39,12 @@ public class StudioTabController implements EntityController<Studio> {
         studioTableViewWrapper = new StudioTableViewWrapper(studioTableView);
         studioTableViewWrapper.initialize(studioObservableEntityListWrapper);
 
+        nrPokojuTextField.textProperty().addListener((observableValue, oldString, newString) -> {
+            if (!newString.matches("\\d*")) {
+                nrPokojuTextField.setText(oldString);
+            }
+        });
+
 
         studioForm = new StudioForm(this);
         MainController.addEntityController(this);
@@ -60,7 +67,7 @@ public class StudioTabController implements EntityController<Studio> {
 
     @FXML
     private void deleteStudio() {
-        Studio studio = TableViewHelper.getSelectedItem(studioTableView);
+        Studio studio = studioTableViewWrapper.getSelectedItem();
 
         if(studio != null) {
             long studioId = studio.getStudioId();
@@ -75,7 +82,7 @@ public class StudioTabController implements EntityController<Studio> {
 
     @FXML
     private void editStudio() {
-        Studio studioToEdit = TableViewHelper.getSelectedItem(studioTableView);
+        Studio studioToEdit = studioTableViewWrapper.getSelectedItem();
 
         if(studioToEdit != null) {
             if(!studioForm.isFormCorrectlyFilled()) {

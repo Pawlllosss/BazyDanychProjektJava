@@ -2,11 +2,8 @@ package redaktor.DAO;
 
 import redaktor.DAO.delete.DeleteQueryExecutor;
 import redaktor.DAO.get.GetExecutor;
-import redaktor.DAO.statement.PreparedStatementSetter;
-import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
 import redaktor.DAO.update.StudioUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
-import redaktor.model.Redaktor;
 import redaktor.model.Studio;
 
 import java.sql.PreparedStatement;

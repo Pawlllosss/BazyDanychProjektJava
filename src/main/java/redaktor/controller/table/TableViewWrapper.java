@@ -1,4 +1,4 @@
-package redaktor.controller.helper.table;
+package redaktor.controller.table;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;

@@ -1,8 +1,10 @@
 package redaktor.DAO;
 
 import redaktor.DAO.delete.DeleteQueryExecutor;
+import redaktor.DAO.get.GetExecutor;
 import redaktor.DAO.update.ProgramUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
+import redaktor.model.Studio;
 import redaktor.model.program.Program;
 import redaktor.model.program.view.ProgramPrzypisanyRedaktor;
 import redaktor.model.program.view.ProgramRedaktorCount;
@@ -18,6 +20,8 @@ public class ProgramDAO implements DAO<Program> {
 
     private static ProgramDAO programDAO = new ProgramDAO();
     private ConnectionHandler connectionHandler;
+    private GetExecutor<Program> getExecutor;
+
 
     public static ProgramDAO getInstance() {
         return programDAO;
@@ -25,11 +29,13 @@ public class ProgramDAO implements DAO<Program> {
 
     private ProgramDAO() {
         connectionHandler = ConnectionHandler.getInstance();
+        getExecutor = new GetExecutor<>("program", "program_id", ProgramDAO::getProgramyFromResultSet);
     }
 
     @Override
     public Optional<Program> get(long id) {
-        return Optional.ofNullable(null);
+        Program program = getExecutor.execute(id);
+        return Optional.ofNullable(program);
     }
 
     @Override
@@ -141,7 +147,7 @@ public class ProgramDAO implements DAO<Program> {
         }
     }
 
-    private List<Program> getProgramyFromResultSet(ResultSet resultSet) throws SQLException {
+    public static List<Program> getProgramyFromResultSet(ResultSet resultSet) throws SQLException {
         List<Program> programs = new LinkedList<>();
 
         while(resultSet.next()) {
