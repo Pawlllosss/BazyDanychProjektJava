@@ -213,7 +213,7 @@ public class ProgramTabController implements EntityController<Program> {
     }
 
     private void initializeProgramTableView() {
-        TableColumn<Program, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 120);
+        TableColumn<Program, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 50);
         TableColumn<Program, String> nazwaColumn = ViewInitializer.createColumn("Nazwa", "nazwa", 50);
         TableColumn<Program, String> opisColumn = ViewInitializer.createColumn("Opis", "opis", 50);
         TableColumn<Program, String> sekcjaNazwaColumn = new TableColumn<>("Nazwa sekcji");
@@ -231,7 +231,7 @@ public class ProgramTabController implements EntityController<Program> {
     }
 
     private void initializeProgramRedaktorCountTableView() {
-        TableColumn<ProgramRedaktorCount, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 120);
+        TableColumn<ProgramRedaktorCount, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 50);
         TableColumn<ProgramRedaktorCount, String> programNazwaColumn = ViewInitializer.createColumn("Nazwa programu", "programNazwa", 120);
         TableColumn<ProgramRedaktorCount, Long> redaktorCountColumn = ViewInitializer.createColumn("Liczba redaktorów", "redaktorCount", 120);
 
@@ -240,10 +240,10 @@ public class ProgramTabController implements EntityController<Program> {
     }
 
     private void initializeProgramPrzypisanyRedaktorTableView() {
-        TableColumn<ProgramPrzypisanyRedaktor, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 120);
+        TableColumn<ProgramPrzypisanyRedaktor, Long> programIdColumn = ViewInitializer.createColumn("Id programu", "programId", 50);
         TableColumn<ProgramPrzypisanyRedaktor, String> programNazwaColumn = ViewInitializer.createColumn("Nazwa programu", "programNazwa", 120);
         TableColumn<ProgramPrzypisanyRedaktor, String> imieNazwiskoColumn = ViewInitializer.createColumn("Imie nazwisko", "imieNazwisko", 120);
-        TableColumn<ProgramPrzypisanyRedaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 120);
+        TableColumn<ProgramPrzypisanyRedaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 50);
 
         ViewInitializer.addColumnsToTableView(programPrzypisanyRedaktorTableView, programIdColumn, programNazwaColumn, imieNazwiskoColumn, redaktorIdColumn);
         ViewInitializer.setObservableListToTableView(programPrzypisanyRedaktorTableView, programPrzypisanyRedaktorObservableViewListWrapper.getObservableList());

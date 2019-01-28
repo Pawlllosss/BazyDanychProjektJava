@@ -1,33 +1,32 @@
 package redaktor.controller.form.audycja;
 
-import redaktor.DAO.SekcjaDAO;
+import redaktor.DAO.ProgramDAO;
+import redaktor.DAO.StudioDAO;
 import redaktor.controller.AudycjaTabController;
 import redaktor.controller.form.FormWithValidation;
 import redaktor.model.Audycja;
-import redaktor.model.Redaktor;
-import redaktor.model.Sekcja;
 import redaktor.model.Studio;
 import redaktor.model.program.Program;
 
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 public class AudycjaForm implements FormWithValidation<Audycja> {
 
     private AudycjaTabController controller;
-    private SekcjaDAO sekcjaDAO;
+    private ProgramDAO programDAO;
+    private StudioDAO studioDAO;
     private AudycjaFormValidator audycjaFormValidator;
 
     public AudycjaForm(AudycjaTabController controller) {
         this.controller = controller;
         this.audycjaFormValidator = new AudycjaFormValidator();
-        sekcjaDAO = SekcjaDAO.getInstance();
+        programDAO = ProgramDAO.getInstance();
+        studioDAO = StudioDAO.getInstance();
     }
 
     @Override
@@ -49,14 +48,6 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
         czasTrwania += ":00";
 
         Time czasTrwaniaTime = Time.valueOf(czasTrwania);
-//        DateFormat dateFormat = new SimpleDateFormat("HH:mm");
-//
-//        try {
-//            Date date = dateFormat.parse(dataPoczatekGodzina);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-
 
         Audycja audycja = new Audycja(0L, dataPoczatek, czasTrwaniaTime, programId, studioId);
 
@@ -65,13 +56,27 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
 
     @Override
     public void loadValuesIntoForm(Audycja audycja) {
-//        Long sekcjaId = redaktor.getSekcjaId();
-//        Optional<Sekcja> sekcja = sekcjaDAO.get(sekcjaId);
-//
-//        controller.setImieToTextField(redaktor.getImie());
-//
-//        controller.setNazwiskoToTextField(redaktor.getNazwisko());
-//        controller.setSekcjaToChoiceBox(sekcja.orElse(null));
+        Long programId = audycja.getProgramId();
+        Optional<Program> program = programDAO.get(programId);
+        controller.setProgramToChoiceBox(program.orElse(null));
+
+        Long studioId = audycja.getStudioId();
+        Optional<Studio> studio = studioDAO.get(studioId);
+        controller.setStudioToChoiceBox(studio.orElse(null));
+
+        //TODO: to separate function
+        Timestamp audycjaTimestamp = audycja.getDataPoczatek();
+        LocalDateTime audycjaLocalDateTime = audycjaTimestamp.toLocalDateTime();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String audycjaPoczatekGodzina = audycjaLocalDateTime.format(formatter);
+
+        controller.setDataPoczatekDzienToDatePicker(audycjaLocalDateTime.toLocalDate());
+        controller.setDataPoczatekGodzinaToTextField(audycjaPoczatekGodzina);
+
+        Time czasTrwania = audycja.getCzasTrwania();
+        String czasTrwaniaString = czasTrwania.toLocalTime().format(formatter);
+        controller.setCzasTrwaniaToTextField(czasTrwaniaString);
+
     }
 
     @Override

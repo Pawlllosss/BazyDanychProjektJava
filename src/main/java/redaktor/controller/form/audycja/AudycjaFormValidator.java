@@ -9,6 +9,8 @@ public class AudycjaFormValidator extends Validator {
     public boolean isFormDifferentFromEntity(AudycjaFormValues audycjaFormValues, Audycja audycjaToCheck) {
         boolean wasEdited = false;
 
+        wasEdited = true;
+
 //        if(checkIfValuesAreNotEqual(audycjaToCheck.getImie(), audycjaFormValues.imie)) {
 //            wasEdited = true;
 //        }

@@ -1,7 +1,5 @@
 package redaktor.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
@@ -15,7 +13,6 @@ import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.model.Studio;
 
-//TODO: only numbers for nrPokoju
 public class StudioTabController implements EntityController<Studio> {
 
     private StudioDAO studioDAO;
@@ -39,6 +36,7 @@ public class StudioTabController implements EntityController<Studio> {
         studioTableViewWrapper = new StudioTableViewWrapper(studioTableView);
         studioTableViewWrapper.initialize(studioObservableEntityListWrapper);
 
+        //TODO: move to separate function, or class?
         nrPokojuTextField.textProperty().addListener((observableValue, oldString, newString) -> {
             if (!newString.matches("\\d*")) {
                 nrPokojuTextField.setText(oldString);

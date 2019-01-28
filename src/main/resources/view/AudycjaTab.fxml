@@ -14,13 +14,13 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="422.0" prefWidth="823.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.AudycjaTabController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="459.0" prefWidth="1140.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.AudycjaTabController">
    <children>
-      <HBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="459.0" prefWidth="1140.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox prefHeight="428.0" prefWidth="437.0">
+            <VBox prefHeight="454.0" prefWidth="573.0">
                <children>
-                  <TableView fx:id="audycjaTableView" prefHeight="211.0" prefWidth="321.0" />
+                  <TableView fx:id="audycjaTableView" prefHeight="211.0" prefWidth="513.0" />
                   <Separator orientation="VERTICAL" prefHeight="83.0" prefWidth="63.0" />
                   <HBox>
                      <children>

@@ -10,6 +10,8 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.redaktor.RedaktorForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.table.RedaktorTableViewWrapper;
+import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.controller.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
@@ -22,8 +24,8 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
-
     private RedaktorForm redaktorForm;
+    private RedaktorTableViewWrapper redaktorTableViewWrapper;
 
     @FXML
     private TableView<Redaktor> redaktorTableView;
@@ -38,12 +40,13 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
     @FXML
     private void initialize() {
-
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
         redaktorObservableEntityListWrapper = new ObservableEntityListWrapper<>(redaktorDAO);
 
-        initializeRedaktorTableView();
+        redaktorTableViewWrapper = new RedaktorTableViewWrapper(redaktorTableView);
+        redaktorTableViewWrapper.initialize(redaktorObservableEntityListWrapper);
+
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, sekcja -> sekcja.getNazwa());
 
         redaktorForm = new RedaktorForm(this);
@@ -153,21 +156,4 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         sekcjaChoiceBox.setValue(sekcja);
     }
 
-    private void initializeRedaktorTableView() {
-        TableColumn<Redaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 80);
-        TableColumn<Redaktor, String> imieColumn = ViewInitializer.createColumn("Imie", "imie", 50);
-        TableColumn<Redaktor, String> nazwiskoColumn = ViewInitializer.createColumn("Nazwisko", "nazwisko", 50);
-        TableColumn<Redaktor, String> sekcjaNazwaColumn = new TableColumn<>("Nazwa sekcji");
-
-        sekcjaNazwaColumn.setCellValueFactory(redaktorStringCellDataFeatures -> {
-            Redaktor redaktor = redaktorStringCellDataFeatures.getValue();
-            Optional<Sekcja> sekcja = sekcjaDAO.get(redaktor.getSekcjaId());
-            String sekcjaNazwa = sekcja.map(sekcjaLambda -> sekcjaLambda.getNazwa()).orElse(null);
-
-            return new SimpleStringProperty(sekcjaNazwa);
-        });
-
-        ViewInitializer.addColumnsToTableView(redaktorTableView, redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
-        ViewInitializer.setObservableListToTableView(redaktorTableView, redaktorObservableEntityListWrapper.getObservableList());
-    }
 }

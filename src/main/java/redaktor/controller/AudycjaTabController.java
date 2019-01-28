@@ -155,7 +155,7 @@ public class AudycjaTabController implements EntityController<Audycja> {
         return dataPoczatekGodzinaTextField.getText();
     }
 
-    public void setDataPoczatekGodzinaToDatePicker(String dataPoczatekGodzina) {
+    public void setDataPoczatekGodzinaToTextField(String dataPoczatekGodzina) {
         dataPoczatekGodzinaTextField.setText(dataPoczatekGodzina);
     }
 

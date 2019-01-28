@@ -1,4 +1,4 @@
-package redaktor.controller.form.DAO.update;
+package redaktor.DAO.update;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
