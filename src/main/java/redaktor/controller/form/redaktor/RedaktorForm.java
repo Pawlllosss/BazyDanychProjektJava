@@ -14,10 +14,10 @@ public class RedaktorForm implements FormWithValidation<Redaktor> {
     private SekcjaDAO sekcjaDAO;
     private RedaktorFormValidator redaktorFormValidator;
 
-    public RedaktorForm(RedaktorzyTabController controller) {
+    public RedaktorForm(RedaktorzyTabController controller, SekcjaDAO sekcjaDAO) {
         this.controller = controller;
         this.redaktorFormValidator = new RedaktorFormValidator();
-        sekcjaDAO = SekcjaDAO.getInstance();
+        this.sekcjaDAO = sekcjaDAO;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class RedaktorForm implements FormWithValidation<Redaktor> {
         Optional<Sekcja> sekcja = controller.getSekcjaFromChoiceBox();
         Long sekcjaId = sekcja.map(sekcjaL -> sekcjaL.getSekcjaId()).orElse(null);
 
-        Redaktor redaktor = new Redaktor(0, imie, nazwisko, sekcjaId);
+        Redaktor redaktor = new Redaktor(0L, imie, nazwisko, sekcjaId);
 
         return redaktor;
     }

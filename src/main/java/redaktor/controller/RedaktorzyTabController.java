@@ -49,7 +49,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
 
         ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, sekcja -> sekcja.getNazwa());
 
-        redaktorForm = new RedaktorForm(this);
+        redaktorForm = new RedaktorForm(this, sekcjaDAO);
         MainController.addEntityController(this);
     }
 
@@ -145,7 +145,7 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     }
 
     public void setNazwiskoToTextField(String nazwisko) {
-        imieTextField.setText(nazwisko);
+        nazwiskoTextField.setText(nazwisko);
     }
 
     public Optional<Sekcja> getSekcjaFromChoiceBox() {

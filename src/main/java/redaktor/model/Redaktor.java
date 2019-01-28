@@ -6,7 +6,7 @@ public class Redaktor {
     private String nazwisko;
     private Long sekcjaId;
 
-    public Redaktor(long redaktorId, String imie, String nazwisko, Long sekcjaId) {
+    public Redaktor(Long redaktorId, String imie, String nazwisko, Long sekcjaId) {
         this.redaktorId = redaktorId;
         this.imie = imie;
         this.nazwisko = nazwisko;
@@ -17,7 +17,7 @@ public class Redaktor {
         return redaktorId;
     }
 
-    public void setRedaktorId(long redaktorId) {
+    public void setRedaktorId(Long redaktorId) {
         this.redaktorId = redaktorId;
     }
 
@@ -41,7 +41,7 @@ public class Redaktor {
         return sekcjaId;
     }
 
-    public void setSekcjaId(long sekcjaId) {
+    public void setSekcjaId(Long sekcjaId) {
         this.sekcjaId = sekcjaId;
     }
 }

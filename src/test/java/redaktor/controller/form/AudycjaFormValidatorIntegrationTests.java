@@ -6,7 +6,7 @@ import redaktor.controller.form.redaktor.RedaktorFormValues;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AudycjaFormValidatorItTests {
+public class AudycjaFormValidatorIntegrationTests {
 
     RedaktorFormValidator redaktorFormValidator;
 

@@ -12,6 +12,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
@@ -37,17 +38,13 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
         Optional<Studio> studio = controller.getStudioFromChoiceBox();
         Long studioId = studio.map(studioL -> studioL.getStudioId()).orElse(null);
 
-        LocalDate localDate = controller.getDataPoczatekDzienFromDatePicker();
-        Timestamp dataPoczatekDzien = Timestamp.valueOf(localDate.atStartOfDay());
+        LocalDate datePoczatekDzien = controller.getDataPoczatekDzienFromDatePicker();
         String dataPoczatekGodzina = controller.getDataPoczatekGodzinaFromTextField();
-        dataPoczatekGodzina += ":00";
-        Time time = Time.valueOf(dataPoczatekGodzina);
-        Timestamp dataPoczatek = new Timestamp(dataPoczatekDzien.getTime() + time.getTime());
+
+        Timestamp dataPoczatek = createDataPoczatekTimestampFromLocalDateAndHourMinutesString(datePoczatekDzien, dataPoczatekGodzina);
 
         String czasTrwania = controller.getCzasTrwaniaFromTextField();
-        czasTrwania += ":00";
-
-        Time czasTrwaniaTime = Time.valueOf(czasTrwania);
+        Time czasTrwaniaTime = createCzasTrwaniaTimestampFromHourMinutesString(czasTrwania);
 
         Audycja audycja = new Audycja(0L, dataPoczatek, czasTrwaniaTime, programId, studioId);
 
@@ -64,19 +61,16 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
         Optional<Studio> studio = studioDAO.get(studioId);
         controller.setStudioToChoiceBox(studio.orElse(null));
 
-        //TODO: to separate function
         Timestamp audycjaTimestamp = audycja.getDataPoczatek();
         LocalDateTime audycjaLocalDateTime = audycjaTimestamp.toLocalDateTime();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        String audycjaPoczatekGodzina = audycjaLocalDateTime.format(formatter);
+        String audycjaPoczatekGodzina = getHourMinutesStringFromTimestamp(audycjaLocalDateTime);
 
         controller.setDataPoczatekDzienToDatePicker(audycjaLocalDateTime.toLocalDate());
         controller.setDataPoczatekGodzinaToTextField(audycjaPoczatekGodzina);
 
         Time czasTrwania = audycja.getCzasTrwania();
-        String czasTrwaniaString = czasTrwania.toLocalTime().format(formatter);
+        String czasTrwaniaString = getHourMinutesStringFromTime(czasTrwania);
         controller.setCzasTrwaniaToTextField(czasTrwaniaString);
-
     }
 
     @Override
@@ -89,7 +83,39 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
         return audycjaFormValidator.isFormCorrectlyFilled(getValuesFromForm());
     }
 
-    protected AudycjaFormValues getValuesFromForm() {
+    private Timestamp createDataPoczatekTimestampFromLocalDateAndHourMinutesString(LocalDate localDate, String hourMinutes) {
+        Timestamp dateTimestamp = Timestamp.valueOf(localDate.atStartOfDay());
+        hourMinutes += ":00";
+        Time time = Time.valueOf(hourMinutes);
+        Timestamp dataPoczatekTimestamp = new Timestamp(dateTimestamp.getTime() + time.getTime());
+
+        return dataPoczatekTimestamp;
+
+    }
+
+    private Time createCzasTrwaniaTimestampFromHourMinutesString(String hourMinutes) {
+        hourMinutes += ":00";
+        Time czasTrwaniaTime = Time.valueOf(hourMinutes);
+
+        return czasTrwaniaTime;
+    }
+
+    private String getHourMinutesStringFromTimestamp(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        String hourMinutesString = localDateTime.format(formatter);
+
+        return hourMinutesString;
+    }
+
+    private String getHourMinutesStringFromTime(Time time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime localTime = time.toLocalTime();
+        String hourMinutesString = localTime.format(formatter);
+
+        return hourMinutesString;
+    }
+
+    private AudycjaFormValues getValuesFromForm() {
         AudycjaFormValues audycjaFormValues = new AudycjaFormValues();
 
         audycjaFormValues.program = controller.getProgramFromChoiceBox().orElse(null);

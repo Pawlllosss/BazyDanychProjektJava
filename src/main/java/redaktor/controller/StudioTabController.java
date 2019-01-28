@@ -36,13 +36,7 @@ public class StudioTabController implements EntityController<Studio> {
         studioTableViewWrapper = new StudioTableViewWrapper(studioTableView);
         studioTableViewWrapper.initialize(studioObservableEntityListWrapper);
 
-        //TODO: move to separate function, or class?
-        nrPokojuTextField.textProperty().addListener((observableValue, oldString, newString) -> {
-            if (!newString.matches("\\d*")) {
-                nrPokojuTextField.setText(oldString);
-            }
-        });
-
+        addInputCorrectionCheckForNrPokojuTextField();
 
         studioForm = new StudioForm(this);
         MainController.addEntityController(this);
@@ -113,6 +107,15 @@ public class StudioTabController implements EntityController<Studio> {
     private void loadStudioEditForm() {
         FormLoader.tryToLoadValuesIntoForm(studioTableView, studioForm, "Nie wybrano studia!");
     }
+
+    private void addInputCorrectionCheckForNrPokojuTextField() {
+        nrPokojuTextField.textProperty().addListener((observableValue, oldString, newString) -> {
+            if (!newString.matches("\\d*")) {
+                nrPokojuTextField.setText(oldString);
+            }
+        });
+    }
+
 
     public String getNazwaFromTextField() {
         return nazwaTextField.getText();

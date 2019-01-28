@@ -18,7 +18,6 @@ import redaktor.model.program.Program;
 import java.time.LocalDate;
 import java.util.Optional;
 
-//TODO: hour format validator
 public class AudycjaTabController implements EntityController<Audycja> {
 
     private AudycjaDAO audycjaDAO;
@@ -52,20 +51,9 @@ public class AudycjaTabController implements EntityController<Audycja> {
         ViewInitializer.initializeChoiceBox(programChoiceBox, p -> p.getNazwa());
         ViewInitializer.initializeChoiceBox(studioChoiceBox, s -> s.getNazwa());
 
-        //TODO: move to separate function
-        dataPoczatekGodzinaTextField.textProperty().addListener((observableValue, oldString, newString) -> {
-            if (!newString.matches("(\\d{0,2}:?){0,2}")) {
-                dataPoczatekGodzinaTextField.setText(oldString);
-            }
-        });
 
-        //TODO: this as well
-        czasTrwaniaTextField.textProperty().addListener((observableValue, oldString, newString) -> {
-            if (!newString.matches("(\\d{0,2}:?){0,2}")) {
-                czasTrwaniaTextField.setText(oldString);
-            }
-        });
-
+        addTimeCorrectionCheckForTextField(dataPoczatekGodzinaTextField);
+        addTimeCorrectionCheckForTextField(czasTrwaniaTextField);
 
         audycjaForm = new AudycjaForm(this);
         MainController.addEntityController(this);
@@ -143,7 +131,15 @@ public class AudycjaTabController implements EntityController<Audycja> {
         FormLoader.tryToLoadValuesIntoForm(audycjaTableView, audycjaForm, "Nie wybrano audycji!");
     }
 
-   public LocalDate getDataPoczatekDzienFromDatePicker() {
+    private void addTimeCorrectionCheckForTextField(TextField textField) {
+        textField.textProperty().addListener((observableValue, oldString, newString) -> {
+            if (!newString.matches("(\\d{0,2}:?){0,2}")) {
+                dataPoczatekGodzinaTextField.setText(oldString);
+            }
+        });
+    }
+
+    public LocalDate getDataPoczatekDzienFromDatePicker() {
         return dataPoczatekDzienDatePicker.getValue();
     }
 
