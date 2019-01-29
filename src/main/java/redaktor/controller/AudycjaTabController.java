@@ -36,7 +36,9 @@ public class AudycjaTabController implements EntityController<Audycja> {
     @FXML
     private TextField dataPoczatekGodzinaTextField;
     @FXML
-    private TextField czasTrwaniaTextField;
+    private DatePicker dataKoniecDzienDatePicker;
+    @FXML
+    private TextField dataKoniecGodzinaTextField;
 
     private static ObservableEntityListWrapper<Audycja> audycjaObservableEntityListWrapper;
 
@@ -51,9 +53,8 @@ public class AudycjaTabController implements EntityController<Audycja> {
         ViewInitializer.initializeChoiceBox(programChoiceBox, p -> p.getNazwa());
         ViewInitializer.initializeChoiceBox(studioChoiceBox, s -> s.getNazwa());
 
-
         addTimeCorrectionCheckForTextField(dataPoczatekGodzinaTextField);
-        addTimeCorrectionCheckForTextField(czasTrwaniaTextField);
+        addTimeCorrectionCheckForTextField(dataKoniecGodzinaTextField);
 
         audycjaForm = new AudycjaForm(this);
         MainController.addEntityController(this);
@@ -155,14 +156,21 @@ public class AudycjaTabController implements EntityController<Audycja> {
         dataPoczatekGodzinaTextField.setText(dataPoczatekGodzina);
     }
 
-    public String getCzasTrwaniaFromTextField() {
-        return czasTrwaniaTextField.getText();
+    public LocalDate getDataKoniecDzienFromDatePicker() {
+        return dataKoniecDzienDatePicker.getValue();
     }
 
-    public void setCzasTrwaniaToTextField(String czasTrwania) {
-        czasTrwaniaTextField.setText(czasTrwania);
+    public void setDataKoniecDzienToDatePicker(LocalDate dataKoniecDzienDate) {
+        dataKoniecDzienDatePicker.setValue(dataKoniecDzienDate);
     }
 
+    public String getDataKoniecGodzinaFromTextField() {
+        return dataKoniecGodzinaTextField.getText();
+    }
+
+    public void setDataKoniecGodzinaToTextField(String dataKoniecGodzina) {
+        dataKoniecGodzinaTextField.setText(dataKoniecGodzina);
+    }
     public Optional<Program> getProgramFromChoiceBox() {
         return Optional.ofNullable(programChoiceBox.getValue());
     }

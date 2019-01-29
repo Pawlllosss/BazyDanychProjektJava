@@ -30,6 +30,9 @@ public class ProgramFormValidator extends Validator {
         else if(!isTextFieldCorrectlyFilled(sekcjaFormValues.opis)) {
             isCorrect = false;
         }
+        else if(sekcjaFormValues.sekcja == null) {
+            isCorrect = false;
+        }
 
         return isCorrect;
     }

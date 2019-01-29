@@ -11,15 +11,6 @@ public class AudycjaFormValidator extends Validator {
 
         wasEdited = true;
 
-//        if(checkIfValuesAreNotEqual(audycjaToCheck.getImie(), audycjaFormValues.imie)) {
-//            wasEdited = true;
-//        }
-//        else if (checkIfValuesAreNotEqual(audycjaToCheck.getNazwisko(), audycjaFormValues.nazwisko)) {
-//            wasEdited = true;
-//        }
-//        else if (checkIfValuesAreNotEqual(audycjaToCheck.getSekcjaId(), audycjaFormValues.sekcja.getSekcjaId())) {
-//            wasEdited = true;
-//        }
 
         return wasEdited;
     }
@@ -27,12 +18,6 @@ public class AudycjaFormValidator extends Validator {
     public boolean isFormCorrectlyFilled(AudycjaFormValues redaktorFormValues) {
         boolean isCorrect = true;
 
-//        if(!isTextFieldCorrectlyFilled(redaktorFormValues.imie)) {
-//            isCorrect = false;
-//        }
-//        else if(!isTextFieldCorrectlyFilled(redaktorFormValues.nazwisko)) {
-//            isCorrect = false;
-//        }
 
         return isCorrect;
     }

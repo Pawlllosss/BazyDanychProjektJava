@@ -43,14 +43,14 @@ public class AudycjaDAO implements DAO<Audycja> {
 
     @Override
     public void save(Audycja audycja) {
-        String audycjaInsertQuery = "INSERT INTO redaktor.audycja(data_poczatek, czas_trwania, program_id, studio_id) " +
+        String audycjaInsertQuery = "INSERT INTO redaktor.audycja(data_poczatek, data_koniec, program_id, studio_id) " +
                 "VALUES (?, ?, ?, ?);";
 
         PreparedStatement preparedStatement = connectionHandler.prepareStatement(audycjaInsertQuery);
 
         try {
             preparedStatement.setTimestamp(1, audycja.getDataPoczatek());
-            preparedStatement.setTime(2, audycja.getCzasTrwania());
+            preparedStatement.setTimestamp(2, audycja.getDataKoniec());
             PreparedStatementSetter.setForeignKey(preparedStatement, 3, audycja.getProgramId());
             PreparedStatementSetter.setForeignKey(preparedStatement, 4, audycja.getStudioId());
             preparedStatement.executeUpdate();
@@ -80,11 +80,11 @@ public class AudycjaDAO implements DAO<Audycja> {
         while(resultSet.next()) {
             Long audycjaId  = resultSet.getLong("audycja_id");
             Timestamp dataPoczatek = resultSet.getTimestamp("data_poczatek");
-            Time czasTrwania = resultSet.getTime("czas_trwania");
+            Timestamp dataKoniec = resultSet.getTimestamp("data_koniec");
             Long programId = resultSet.getLong("program_id");
             Long studioId = resultSet.getLong("studio_id");
 
-            Audycja audycja = new Audycja(audycjaId, dataPoczatek, czasTrwania, programId, studioId);
+            Audycja audycja = new Audycja(audycjaId, dataPoczatek, dataKoniec, programId, studioId);
             audycjas.add(audycja);
         }
 

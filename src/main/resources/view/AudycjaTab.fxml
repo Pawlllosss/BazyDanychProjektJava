@@ -44,20 +44,23 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <Label text="Czas trwania(HH:mm):" GridPane.rowIndex="4" />
-                  <Button mnemonicParsing="false" onAction="#addAudycja" prefHeight="26.0" prefWidth="139.0" text="Dodaj Audycję" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                  <Button mnemonicParsing="false" onAction="#editAudycja" text="Wyślij edycję" GridPane.rowIndex="5" />
+                  <Button mnemonicParsing="false" onAction="#addAudycja" prefHeight="26.0" prefWidth="139.0" text="Dodaj Audycję" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Button mnemonicParsing="false" onAction="#editAudycja" text="Wyślij edycję" GridPane.rowIndex="6" />
                   <Label text="Program:" />
                   <Label text="Studio:" GridPane.rowIndex="1" />
                   <Label text="Początek dzień:" GridPane.rowIndex="2" />
                   <ChoiceBox fx:id="programChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" />
                   <ChoiceBox fx:id="studioChoiceBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <DatePicker fx:id="dataPoczatekDzienDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField fx:id="czasTrwaniaTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <TextField fx:id="dataKoniecGodzinaTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <TextField fx:id="dataPoczatekGodzinaTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Label text="Początek godzina(HH:mm):" GridPane.rowIndex="3" />
+                  <Label text="Koniec dzień:" GridPane.rowIndex="4" />
+                  <Label text="Koniec godzina(HH:mm):" GridPane.rowIndex="5" />
+                  <DatePicker fx:id="dataKoniecDzienDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </children>

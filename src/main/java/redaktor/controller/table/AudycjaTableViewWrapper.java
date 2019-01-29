@@ -27,8 +27,8 @@ public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
         StudioDAO studioDAO = StudioDAO.getInstance();
 
         TableColumn<Audycja, Long> audycjaIdColumn = ViewInitializer.createColumn("Id audycji", "audycjaId", 50);
-        TableColumn<Audycja, LocalDate> dataPoczatek = ViewInitializer.createColumn("Data", "dataPoczatek", 50);
-        TableColumn<Audycja, Time> czasTrwania = ViewInitializer.createColumn("Czas", "czasTrwania", 50);
+        TableColumn<Audycja, LocalDate> dataPoczatek = ViewInitializer.createColumn("Data pocz.", "dataPoczatek", 50);
+        TableColumn<Audycja, Time> czasTrwania = ViewInitializer.createColumn("Data kon.", "dataKoniec", 50);
 
         TableColumn<Audycja, String> programNazwaColumn = new TableColumn<>("Program");
         TableColumn<Audycja, String> studioNazwaColumn = new TableColumn<>("Studio");

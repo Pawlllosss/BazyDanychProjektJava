@@ -6,14 +6,14 @@ import java.sql.Timestamp;
 public class Audycja {
     private Long audycjaId;
     private Timestamp dataPoczatek;
-    private Time czasTrwania;
+    private Timestamp dataKoniec;
     private Long programId;
     private Long studioId;
 
-    public Audycja(Long audycjaId, Timestamp dataPoczatek, Time czasTrwania, Long programId, Long studioId) {
+    public Audycja(Long audycjaId, Timestamp dataPoczatek, Timestamp dataKoniec, Long programId, Long studioId) {
         this.audycjaId = audycjaId;
         this.dataPoczatek = dataPoczatek;
-        this.czasTrwania = czasTrwania;
+        this.dataKoniec = dataKoniec;
         this.programId = programId;
         this.studioId = studioId;
     }
@@ -34,12 +34,12 @@ public class Audycja {
         this.dataPoczatek = dataPoczatek;
     }
 
-    public Time getCzasTrwania() {
-        return czasTrwania;
+    public Timestamp getDataKoniec() {
+        return dataKoniec;
     }
 
-    public void setCzasTrwania(Time czasTrwania) {
-        this.czasTrwania = czasTrwania;
+    public void setDataKoniec(Timestamp dataKoniec) {
+        this.dataKoniec = dataKoniec;
     }
 
     public Long getProgramId() {
