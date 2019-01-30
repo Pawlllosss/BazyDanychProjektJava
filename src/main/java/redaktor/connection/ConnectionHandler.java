@@ -1,5 +1,8 @@
 package redaktor.connection;
 
+import redaktor.connection.configuration.DatabaseConnectionConfigurationFileParser;
+import redaktor.connection.configuration.DatabaseConnectionDetails;
+
 import java.sql.*;
 
 public class ConnectionHandler {
@@ -51,10 +54,15 @@ public class ConnectionHandler {
     private ConnectionHandler() {
         connection = null;
         try {
+            System.out.println(System.getProperty("user.dir"));
             Class.forName("org.postgresql.Driver");
+
+            DatabaseConnectionConfigurationFileParser confFileParser = new DatabaseConnectionConfigurationFileParser("dbConfig.json");
+            DatabaseConnectionDetails connectionDetails = confFileParser.parse();
+
             connection = DriverManager
-                    .getConnection("jdbc:postgresql://localhost:5432/RedaktorMod2",
-                            "postgres", "123");
+                    .getConnection(connectionDetails.connectionUrl,
+                            connectionDetails.username, connectionDetails.password);
 //            connection = DriverManager
 //                    .getConnection("jdbc:postgresql://pascal.fis.agh.edu.pl:5432/u6oczadly",
 //                            "u6oczadly", "6oczadly");
