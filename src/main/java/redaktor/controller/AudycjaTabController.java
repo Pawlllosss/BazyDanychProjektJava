@@ -8,13 +8,16 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.audycja.AudycjaForm;
 import redaktor.controller.helper.crud.EntityAdder;
+import redaktor.controller.helper.observable.ObservableCustomUpdateListWrapper;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.observable.ObservableListWrapper;
 import redaktor.controller.table.AudycjaTableViewWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Audycja;
 import redaktor.model.Studio;
 import redaktor.model.program.Program;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -24,9 +27,14 @@ public class AudycjaTabController implements EntityController<Audycja> {
 
     private AudycjaForm audycjaForm;
     private AudycjaTableViewWrapper audycjaTableViewWrapper;
+    private AudycjaTableViewWrapper audycjaDayTableViewWrapper;
+
+    private ObservableListWrapper<Audycja> audycjaDayObservableListWrapper;
 
     @FXML
     private TableView<Audycja> audycjaTableView;
+    @FXML
+    private TableView<Audycja> audycjaDayTableView;
     @FXML
     private ChoiceBox<Program> programChoiceBox;
     @FXML
@@ -39,6 +47,8 @@ public class AudycjaTabController implements EntityController<Audycja> {
     private DatePicker dataKoniecDzienDatePicker;
     @FXML
     private TextField dataKoniecGodzinaTextField;
+    @FXML
+    private DatePicker audycjaDayDatePicker;
 
     private static ObservableEntityListWrapper<Audycja> audycjaObservableEntityListWrapper;
 
@@ -49,6 +59,17 @@ public class AudycjaTabController implements EntityController<Audycja> {
 
         audycjaTableViewWrapper = new AudycjaTableViewWrapper(audycjaTableView);
         audycjaTableViewWrapper.initialize(audycjaObservableEntityListWrapper);
+
+        audycjaDayObservableListWrapper = new ObservableCustomUpdateListWrapper<>(observableList -> {
+            LocalDate localDate = getAudycjaDayFromDatePicker();
+            if(localDate != null) {
+                Date audycjaDate = Date.valueOf(localDate);
+                observableList.setAll(audycjaDAO.getAudycjasInDay(audycjaDate));
+            }
+        });
+
+        audycjaDayTableViewWrapper = new AudycjaTableViewWrapper(audycjaDayTableView);
+        audycjaDayTableViewWrapper.initialize(audycjaDayObservableListWrapper);
 
         ViewInitializer.initializeChoiceBox(programChoiceBox, p -> p.getNazwa());
         ViewInitializer.initializeChoiceBox(studioChoiceBox, s -> s.getNazwa());
@@ -132,6 +153,11 @@ public class AudycjaTabController implements EntityController<Audycja> {
         FormLoader.tryToLoadValuesIntoForm(audycjaTableView, audycjaForm, "Nie wybrano audycji!");
     }
 
+    @FXML
+    private void fillForChosenDayAudycjaDayTableView() {
+        audycjaDayObservableListWrapper.updateObservableList();
+    }
+
     private void addTimeCorrectionCheckForTextField(TextField textField) {
         textField.textProperty().addListener((observableValue, oldString, newString) -> {
             if (!newString.matches("(\\d{0,2}:?){0,2}")) {
@@ -185,5 +211,9 @@ public class AudycjaTabController implements EntityController<Audycja> {
 
     public void setStudioToChoiceBox(Studio studio) {
         studioChoiceBox.setValue(studio);
+    }
+
+    public LocalDate getAudycjaDayFromDatePicker() {
+       return  audycjaDayDatePicker.getValue();
     }
 }

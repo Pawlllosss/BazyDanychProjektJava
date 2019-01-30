@@ -44,7 +44,7 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
 
         LocalDate dataKoniecDzien = controller.getDataKoniecDzienFromDatePicker();
         String dataKoniecGodzina = controller.getDataKoniecGodzinaFromTextField();
-        Timestamp dataKoniec = createTimestampFromLocalDateAndHourMinutesString(dataKoniecDzien, dataPoczatekGodzina);
+        Timestamp dataKoniec = createTimestampFromLocalDateAndHourMinutesString(dataKoniecDzien, dataKoniecGodzina);
 
         Audycja audycja = new Audycja(0L, dataPoczatek, dataKoniec, programId, studioId);
 
@@ -68,7 +68,7 @@ public class AudycjaForm implements FormWithValidation<Audycja> {
         controller.setDataPoczatekDzienToDatePicker(audycjaDataPoczatekLocalDate);
         controller.setDataPoczatekGodzinaToTextField(audycjaPoczatekGodzina);
 
-        Timestamp audycjaDataKoniec = audycja.getDataPoczatek();
+        Timestamp audycjaDataKoniec = audycja.getDataKoniec();
         LocalDate audycjaDataKoniecLocalDate = getLocalDateFromTimestamp(audycjaDataKoniec);
         String audycjaKoniecGodzina = getHourMinutesStringFromTimestamp(audycjaDataKoniec);
 

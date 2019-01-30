@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.observable.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
@@ -18,7 +18,7 @@ public class RedaktorTableViewWrapper extends TableViewWrapper<Redaktor> {
     }
 
     @Override
-    public void initialize(ObservableEntityListWrapper<Redaktor> observableEntityListWrapper) {
+    public void initialize(ObservableListWrapper<Redaktor> observableEntityListWrapper) {
         SekcjaDAO sekcjaDAO = SekcjaDAO.getInstance();
 
         TableColumn<Redaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 80);

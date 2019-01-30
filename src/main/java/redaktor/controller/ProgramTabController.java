@@ -15,7 +15,7 @@ import redaktor.controller.form.program.ProgramForm;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
 import redaktor.controller.helper.observable.listener.ObservableListWrapperUpdateListener;
 import redaktor.controller.table.TableViewHelper;
-import redaktor.controller.helper.observable.ObservableViewListWrapper;
+import redaktor.controller.helper.observable.ObservableCustomUpdateListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.program.Program;
@@ -48,8 +48,8 @@ public class ProgramTabController implements EntityController<Program> {
     @FXML
     private ChoiceBox<Sekcja> sekcjaChoiceBox;
 
-    private ObservableViewListWrapper<ProgramRedaktorCount> programRedaktorCountObservableViewListWrapper;
-    private ObservableViewListWrapper<ProgramPrzypisanyRedaktor> programPrzypisanyRedaktorObservableViewListWrapper;
+    private ObservableCustomUpdateListWrapper<ProgramRedaktorCount> programRedaktorCountObservableCustomUpdateListWrapper;
+    private ObservableCustomUpdateListWrapper<ProgramPrzypisanyRedaktor> programPrzypisanyRedaktorObservableCustomUpdateListWrapper;
 
     private ObservableListWrapperUpdateListener observableListWrapperUpdateListener;
 
@@ -61,11 +61,11 @@ public class ProgramTabController implements EntityController<Program> {
         sekcjaDAO = SekcjaDAO.getInstance();
         programObservableEntityListWrapper = new ObservableEntityListWrapper<>(programDAO);
 
-        programRedaktorCountObservableViewListWrapper = new ObservableViewListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramRedaktorCount()));
-        programPrzypisanyRedaktorObservableViewListWrapper = new ObservableViewListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramPrzypisanyRedaktor()));
+        programRedaktorCountObservableCustomUpdateListWrapper = new ObservableCustomUpdateListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramRedaktorCount()));
+        programPrzypisanyRedaktorObservableCustomUpdateListWrapper = new ObservableCustomUpdateListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramPrzypisanyRedaktor()));
 
         observableListWrapperUpdateListener = new ObservableListWrapperUpdateListener();
-        observableListWrapperUpdateListener.appendObservableViewListWrappers(programRedaktorCountObservableViewListWrapper, programPrzypisanyRedaktorObservableViewListWrapper);
+        observableListWrapperUpdateListener.appendObservableViewListWrappers(programRedaktorCountObservableCustomUpdateListWrapper, programPrzypisanyRedaktorObservableCustomUpdateListWrapper);
 
         initializeProgramTableView();
         initializeProgramRedaktorCountTableView();
@@ -236,7 +236,7 @@ public class ProgramTabController implements EntityController<Program> {
         TableColumn<ProgramRedaktorCount, Long> redaktorCountColumn = ViewInitializer.createColumn("Liczba redaktorów", "redaktorCount", 120);
 
         ViewInitializer.addColumnsToTableView(programRedaktorCountTableView, programIdColumn, programNazwaColumn, redaktorCountColumn);
-        ViewInitializer.setObservableListToTableView(programRedaktorCountTableView, programRedaktorCountObservableViewListWrapper.getObservableList());
+        ViewInitializer.setObservableListToTableView(programRedaktorCountTableView, programRedaktorCountObservableCustomUpdateListWrapper.getObservableList());
     }
 
     private void initializeProgramPrzypisanyRedaktorTableView() {
@@ -246,6 +246,6 @@ public class ProgramTabController implements EntityController<Program> {
         TableColumn<ProgramPrzypisanyRedaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 50);
 
         ViewInitializer.addColumnsToTableView(programPrzypisanyRedaktorTableView, programIdColumn, programNazwaColumn, imieNazwiskoColumn, redaktorIdColumn);
-        ViewInitializer.setObservableListToTableView(programPrzypisanyRedaktorTableView, programPrzypisanyRedaktorObservableViewListWrapper.getObservableList());
+        ViewInitializer.setObservableListToTableView(programPrzypisanyRedaktorTableView, programPrzypisanyRedaktorObservableCustomUpdateListWrapper.getObservableList());
     }
 }

@@ -4,10 +4,8 @@ import redaktor.DAO.delete.DeleteQueryExecutor;
 import redaktor.DAO.get.GetExecutor;
 import redaktor.DAO.statement.PreparedStatementSetter;
 import redaktor.DAO.update.AudycjaUpdateQueryBuilder;
-import redaktor.DAO.update.StudioUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Audycja;
-import redaktor.model.Studio;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -26,7 +24,7 @@ public class AudycjaDAO implements DAO<Audycja> {
 
     private AudycjaDAO() {
         connectionHandler = ConnectionHandler.getInstance();
-        getExecutor = new GetExecutor<>("audycja", "audycja_id", AudycjaDAO::getStudiosFromResultSet);
+        getExecutor = new GetExecutor<>("audycja", "audycja_id", AudycjaDAO::getAudycjasFromResultSet);
     }
 
     @Override
@@ -74,7 +72,24 @@ public class AudycjaDAO implements DAO<Audycja> {
         deleteQueryExecutor.executeDeleteQuery();
     }
 
-    public static List<Audycja> getStudiosFromResultSet(ResultSet resultSet) throws SQLException {
+    public List<Audycja> getAudycjasInDay(Date date) {
+        final String AUDYCJAS_IN_DAY_QUERY = "SELECT * FROM get_audycjas_in_day(?);";
+
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(AUDYCJAS_IN_DAY_QUERY);
+        List<Audycja> audycjasInDay = null;
+
+        try {
+            preparedStatement.setDate(1, date);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            audycjasInDay = getAudycjasFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return audycjasInDay;
+    }
+
+    public static List<Audycja> getAudycjasFromResultSet(ResultSet resultSet) throws SQLException {
         List<Audycja> audycjas = new LinkedList<>();
 
         while(resultSet.next()) {

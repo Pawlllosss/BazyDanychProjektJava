@@ -4,11 +4,11 @@ import javafx.collections.ObservableList;
 
 import java.util.function.Consumer;
 
-public class ObservableViewListWrapper<T> extends ObservableListWrapper<T> {
+public class ObservableCustomUpdateListWrapper<T> extends ObservableListWrapper<T> {
 
     private Consumer<ObservableList<T>> observableListUpdater;
 
-    public ObservableViewListWrapper(Consumer<ObservableList<T>> observableListUpdater) {
+    public ObservableCustomUpdateListWrapper(Consumer<ObservableList<T>> observableListUpdater) {
         super();
         this.observableListUpdater = observableListUpdater;
 

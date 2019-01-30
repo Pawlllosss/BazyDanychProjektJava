@@ -9,7 +9,7 @@ public class AudycjaUpdateQueryBuilder extends UpdateQueryBuilder<Audycja>{
     @Override
     protected void appendModifiedFieldsToQuery(Audycja originalAudycja, Audycja editedAudycja) {
         compareValuesWithEqualsAndAppendToQueryDiffers(originalAudycja.getDataPoczatek(), editedAudycja.getDataPoczatek(), "data_poczatek");
-        compareValuesWithEqualsAndAppendToQueryDiffers(originalAudycja.getDataKoniec(), editedAudycja.getDataKoniec(), "czas_trwania");
+        compareValuesWithEqualsAndAppendToQueryDiffers(originalAudycja.getDataKoniec(), editedAudycja.getDataKoniec(), "data_koniec");
         compareValuesWithEqualsAndAppendToQueryDiffers(originalAudycja.getProgramId(), editedAudycja.getProgramId(), "program_id");
         compareValuesWithEqualsAndAppendToQueryDiffers(originalAudycja.getStudioId(), editedAudycja.getStudioId(), "studio_id");
     }

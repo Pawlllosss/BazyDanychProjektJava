@@ -6,6 +6,7 @@ import javafx.scene.control.TableView;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.StudioDAO;
 import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.observable.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Audycja;
 import redaktor.model.Studio;
@@ -22,13 +23,13 @@ public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
     }
 
     @Override
-    public void initialize(ObservableEntityListWrapper<Audycja> observableEntityListWrapper) {
+    public void initialize(ObservableListWrapper<Audycja> observableEntityListWrapper) {
         ProgramDAO programDAO = ProgramDAO.getInstance();
         StudioDAO studioDAO = StudioDAO.getInstance();
 
         TableColumn<Audycja, Long> audycjaIdColumn = ViewInitializer.createColumn("Id audycji", "audycjaId", 50);
-        TableColumn<Audycja, LocalDate> dataPoczatek = ViewInitializer.createColumn("Data pocz.", "dataPoczatek", 50);
-        TableColumn<Audycja, Time> czasTrwania = ViewInitializer.createColumn("Data kon.", "dataKoniec", 50);
+        TableColumn<Audycja, Time> godzinaPoczatek = ViewInitializer.createColumn("Data pocz.", "dataPoczatek", 50);
+        TableColumn<Audycja, Time> godzinaKoniec = ViewInitializer.createColumn("Data kon.", "dataKoniec", 50);
 
         TableColumn<Audycja, String> programNazwaColumn = new TableColumn<>("Program");
         TableColumn<Audycja, String> studioNazwaColumn = new TableColumn<>("Studio");
@@ -51,7 +52,7 @@ public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
         });
 
 
-        addColumnsToTableView(audycjaIdColumn, programNazwaColumn, studioNazwaColumn, dataPoczatek, czasTrwania);
+        addColumnsToTableView(audycjaIdColumn, programNazwaColumn, studioNazwaColumn, godzinaPoczatek, godzinaKoniec);
         setObservableListToTableView(observableEntityListWrapper.getObservableList());
     }
 }

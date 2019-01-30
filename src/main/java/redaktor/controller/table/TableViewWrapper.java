@@ -3,12 +3,12 @@ package redaktor.controller.table;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.helper.observable.ObservableListWrapper;
 
 public abstract class TableViewWrapper<T> {
     protected TableView<T> tableView;
 
-    public abstract void initialize(ObservableEntityListWrapper<T> observableEntityListWrapper);
+    public abstract void initialize(ObservableListWrapper<T> observableEntityListWrapper);
 
     public TableViewWrapper(TableView<T> tableView) {
         this.tableView = tableView;
