@@ -8,9 +8,9 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.audycja.AudycjaForm;
 import redaktor.controller.helper.crud.EntityAdder;
-import redaktor.controller.helper.observable.ObservableCustomUpdateListWrapper;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
-import redaktor.controller.helper.observable.ObservableListWrapper;
+import redaktor.controller.observable.ObservableCustomUpdateNoUpdateArgumentsListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
+import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.AudycjaTableViewWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Audycja;
@@ -29,7 +29,7 @@ public class AudycjaTabController implements EntityController<Audycja> {
     private AudycjaTableViewWrapper audycjaTableViewWrapper;
     private AudycjaTableViewWrapper audycjaDayTableViewWrapper;
 
-    private ObservableListWrapper<Audycja> audycjaDayObservableListWrapper;
+    private ObservableNoUpdateArgumentsListWrapper<Audycja> audycjaDayObservableNoUpdateArgumentsListWrapper;
 
     @FXML
     private TableView<Audycja> audycjaTableView;
@@ -50,17 +50,17 @@ public class AudycjaTabController implements EntityController<Audycja> {
     @FXML
     private DatePicker audycjaDayDatePicker;
 
-    private static ObservableEntityListWrapper<Audycja> audycjaObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Audycja> audycjaObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         audycjaDAO = AudycjaDAO.getInstance();
-        audycjaObservableEntityListWrapper = new ObservableEntityListWrapper<>(audycjaDAO);
+        audycjaObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(audycjaDAO);
 
         audycjaTableViewWrapper = new AudycjaTableViewWrapper(audycjaTableView);
         audycjaTableViewWrapper.initialize(audycjaObservableEntityListWrapper);
 
-        audycjaDayObservableListWrapper = new ObservableCustomUpdateListWrapper<>(observableList -> {
+        audycjaDayObservableNoUpdateArgumentsListWrapper = new ObservableCustomUpdateNoUpdateArgumentsListWrapper<>(observableList -> {
             LocalDate localDate = getAudycjaDayFromDatePicker();
             if(localDate != null) {
                 Date audycjaDate = Date.valueOf(localDate);
@@ -69,7 +69,7 @@ public class AudycjaTabController implements EntityController<Audycja> {
         });
 
         audycjaDayTableViewWrapper = new AudycjaTableViewWrapper(audycjaDayTableView);
-        audycjaDayTableViewWrapper.initialize(audycjaDayObservableListWrapper);
+        audycjaDayTableViewWrapper.initialize(audycjaDayObservableNoUpdateArgumentsListWrapper);
 
         ViewInitializer.initializeChoiceBox(programChoiceBox, p -> p.getNazwa());
         ViewInitializer.initializeChoiceBox(studioChoiceBox, s -> s.getNazwa());
@@ -91,7 +91,7 @@ public class AudycjaTabController implements EntityController<Audycja> {
         studioChoiceBox.setItems(studioObservableList);
     }
 
-    //TODO: move to abstract
+    //TODO: move to base
     public static ObservableList<Audycja> getObservableList() {
         return audycjaObservableEntityListWrapper.getObservableList();
     }
@@ -155,13 +155,13 @@ public class AudycjaTabController implements EntityController<Audycja> {
 
     @FXML
     private void fillForChosenDayAudycjaDayTableView() {
-        audycjaDayObservableListWrapper.updateObservableList();
+        audycjaDayObservableNoUpdateArgumentsListWrapper.updateObservableList();
     }
 
     private void addTimeCorrectionCheckForTextField(TextField textField) {
         textField.textProperty().addListener((observableValue, oldString, newString) -> {
             if (!newString.matches("(\\d{0,2}:?){0,2}")) {
-                dataPoczatekGodzinaTextField.setText(oldString);
+                textField.setText(oldString);
             }
         });
     }

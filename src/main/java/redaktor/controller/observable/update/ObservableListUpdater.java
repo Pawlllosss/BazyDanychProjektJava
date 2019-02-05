@@ -1,4 +1,4 @@
-package redaktor.controller.helper.observable.update;
+package redaktor.controller.observable.update;
 
 import javafx.collections.ObservableList;
 

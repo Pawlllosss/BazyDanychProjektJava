@@ -9,7 +9,7 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.studio.StudioForm;
 import redaktor.controller.helper.crud.EntityAdder;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.model.Studio;
 
@@ -26,12 +26,12 @@ public class StudioTabController implements EntityController<Studio> {
     @FXML
     private TextField nrPokojuTextField;
 
-    private static ObservableEntityListWrapper<Studio> studioObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Studio> studioObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         studioDAO = studioDAO.getInstance();
-        studioObservableEntityListWrapper = new ObservableEntityListWrapper<>(studioDAO);
+        studioObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(studioDAO);
 
         studioTableViewWrapper = new StudioTableViewWrapper(studioTableView);
         studioTableViewWrapper.initialize(studioObservableEntityListWrapper);

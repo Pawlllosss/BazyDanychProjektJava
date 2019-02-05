@@ -18,7 +18,7 @@
                   <fx:include source="RedaktorzyTab.fxml" />
                </content>
             </Tab>
-            <Tab text="ProgramTab">
+            <Tab text="Program">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -30,7 +30,7 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab text="StudioTab">
+            <Tab text="Studio">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -42,7 +42,7 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab text="AudycjaTab">
+            <Tab text="Audycja">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <padding>
@@ -54,7 +54,19 @@
                   </AnchorPane>
                </content>
             </Tab>
-            <Tab text="PiosenkaTab">
+            <Tab text="Audycja-Piosenki">
+               <content>
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <children>
+                        <fx:include source="AudycjaPiosenkiTab.fxml" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Piosenka">
                <content>
                   <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <padding>

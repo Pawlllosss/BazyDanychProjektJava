@@ -12,7 +12,7 @@ import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.sekcja.SekcjaForm;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
@@ -36,13 +36,13 @@ public class SekcjeTabController implements EntityController<Sekcja> {
     @FXML
     private TextField nazwaTextField;
 
-    private static ObservableEntityListWrapper<Sekcja> sekcjaObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Sekcja> sekcjaObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        sekcjaObservableEntityListWrapper = new ObservableEntityListWrapper<>(sekcjaDAO);
+        sekcjaObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(sekcjaDAO);
 
         initializeSekcjaTableView();
         ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());

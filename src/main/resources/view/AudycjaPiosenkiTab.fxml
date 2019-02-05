@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="996.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.AudycjaPiosenkiTabController">
+   <children>
+      <HBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox prefHeight="428.0" prefWidth="437.0">
+               <children>
+                  <TableView fx:id="audycjaTableView" prefHeight="191.0" prefWidth="437.0" />
+                  <Separator orientation="VERTICAL" prefHeight="39.0" prefWidth="63.0" />
+                  <HBox>
+                     <children>
+                        <Separator prefHeight="10.0" prefWidth="140.0">
+                           <effect>
+                              <Blend />
+                           </effect>
+                        </Separator>
+                        <Button mnemonicParsing="false" onAction="#showSongsForAudycja" text="Pokaż piosenki dla audycji" />
+                     </children>
+                  </HBox>
+                  <Separator orientation="VERTICAL" prefHeight="35.0" prefWidth="63.0" />
+                  <TableView fx:id="chosenAudycjaPiosenkiTableView" prefHeight="336.0" prefWidth="439.0" />
+               </children>
+            </VBox>
+            <Separator prefHeight="10.0" prefWidth="189.0" />
+            <VBox>
+               <children>
+                  <TableView fx:id="piosenkaTableView" prefHeight="200.0" prefWidth="200.0" />
+                  <GridPane prefHeight="418.0" prefWidth="341.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="200.0" minWidth="10.0" prefWidth="200.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="164.0" minWidth="10.0" prefWidth="141.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="Czas odtworzenia(HH:mm:ss):" />
+                        <TextField fx:id="czasOdtwarzaniaTextField" GridPane.columnIndex="1" />
+                        <Button mnemonicParsing="false" onAction="#assignPiosenkaToAudycja" prefHeight="26.0" prefWidth="139.0" text="Przypisz Piosenkę" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Button mnemonicParsing="false" onAction="#deleteSongFromAudycja" text="Usuń z audycji" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

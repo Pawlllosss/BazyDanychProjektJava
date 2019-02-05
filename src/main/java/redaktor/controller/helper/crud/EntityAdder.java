@@ -3,10 +3,10 @@ package redaktor.controller.helper.crud;
 import redaktor.DAO.DAO;
 import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormWithValidation;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 
 public class EntityAdder {
-    public static <T> void tryToAddEntity(FormWithValidation<T> entityForm, DAO<T> dao, ObservableEntityListWrapper<T> observableEntityListWrapper) {
+    public static <T> void tryToAddEntity(FormWithValidation<T> entityForm, DAO<T> dao, ObservableEntityNoUpdateArgumentsListWrapper<T> observableEntityListWrapper) {
         if(entityForm.isFormCorrectlyFilled()) {
             T entity = entityForm.readForm();
             dao.save(entity);

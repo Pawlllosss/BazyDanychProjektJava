@@ -1,29 +1,38 @@
 package redaktor.controller.table;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.StudioDAO;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
-import redaktor.controller.helper.observable.ObservableListWrapper;
+import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Audycja;
 import redaktor.model.Studio;
 import redaktor.model.program.Program;
 
 import java.sql.Time;
-import java.time.LocalDate;
 import java.util.Optional;
 
 public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
 
     public AudycjaTableViewWrapper(TableView<Audycja> tableView) {
         super(tableView);
+        createAndaddColumnsToTableView();
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Audycja> observableEntityListWrapper) {
+    public void initialize(ObservableNoUpdateArgumentsListWrapper<Audycja> observableEntityListWrapper) {
+        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    }
+
+    @Override
+    public void initialize(ObservableList<Audycja> observableList) {
+        setObservableListToTableView(observableList);
+    }
+
+    private void createAndaddColumnsToTableView() {
         ProgramDAO programDAO = ProgramDAO.getInstance();
         StudioDAO studioDAO = StudioDAO.getInstance();
 
@@ -51,8 +60,6 @@ public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
             return new SimpleStringProperty(studioNazwa);
         });
 
-
         addColumnsToTableView(audycjaIdColumn, programNazwaColumn, studioNazwaColumn, godzinaPoczatek, godzinaKoniec);
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
     }
 }

@@ -1,10 +1,11 @@
 package redaktor.controller.table;
 
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redaktor.DAO.SekcjaDAO;
-import redaktor.controller.helper.observable.ObservableListWrapper;
+import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
@@ -15,10 +16,20 @@ public class RedaktorTableViewWrapper extends TableViewWrapper<Redaktor> {
 
     public RedaktorTableViewWrapper(TableView<Redaktor> tableView) {
         super(tableView);
+        createAndAddColumnsToTableView();
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Redaktor> observableEntityListWrapper) {
+    public void initialize(ObservableNoUpdateArgumentsListWrapper<Redaktor> observableEntityListWrapper) {
+        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    }
+
+    @Override
+    public void initialize(ObservableList<Redaktor> observableList) {
+        setObservableListToTableView(observableList);
+    }
+
+    private void createAndAddColumnsToTableView() {
         SekcjaDAO sekcjaDAO = SekcjaDAO.getInstance();
 
         TableColumn<Redaktor, Long> redaktorIdColumn = ViewInitializer.createColumn("Id redaktora", "redaktorId", 80);
@@ -35,6 +46,6 @@ public class RedaktorTableViewWrapper extends TableViewWrapper<Redaktor> {
         });
 
         addColumnsToTableView(redaktorIdColumn, imieColumn, nazwiskoColumn, sekcjaNazwaColumn);
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
     }
+
 }

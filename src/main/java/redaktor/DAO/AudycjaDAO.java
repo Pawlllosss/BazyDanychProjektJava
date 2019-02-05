@@ -6,6 +6,8 @@ import redaktor.DAO.statement.PreparedStatementSetter;
 import redaktor.DAO.update.AudycjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Audycja;
+import redaktor.model.PiosenkaOdtwarzanie;
+import redaktor.model.program.view.ProgramRedaktorCount;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -94,6 +96,24 @@ public class AudycjaDAO implements DAO<Audycja> {
         return audycjasInDay;
     }
 
+    public List<PiosenkaOdtwarzanie> getPiosenkasForAudycja(long id) {
+        //TODO: move it somewhere else
+        final String PIOSENKAS_FOR_AUDYCJA_QUERY = "SELECT * FROM piosenka_odtwarzanie WHERE audycja_id = ?";
+
+        PreparedStatement selectByIdStatement = connectionHandler.prepareStatement(PIOSENKAS_FOR_AUDYCJA_QUERY);
+        List<PiosenkaOdtwarzanie> piosenkasOdtwarzanie = new LinkedList<>();
+
+        try {
+            selectByIdStatement.setLong(1, id);
+            ResultSet resultSet = selectByIdStatement.executeQuery();
+            piosenkasOdtwarzanie = getPiosenkasOdtwarzanieFromResultSet(resultSet);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return piosenkasOdtwarzanie;
+    }
+
     private List<Audycja> getAudycjasFromResultSet(ResultSet resultSet) throws SQLException {
         List<Audycja> audycjas = new LinkedList<>();
 
@@ -109,5 +129,22 @@ public class AudycjaDAO implements DAO<Audycja> {
         }
 
         return audycjas;
+    }
+
+
+    private List<PiosenkaOdtwarzanie> getPiosenkasOdtwarzanieFromResultSet(ResultSet resultSet) throws SQLException {
+        List<PiosenkaOdtwarzanie> piosenkasOdtwarzanie = new LinkedList<>();
+
+        while(resultSet.next()) {
+            Long piosenkaOdtwarzanieId  = resultSet.getLong("piosenka_odtwarzanie_id");
+            Timestamp czasOdtwarzania = resultSet.getTimestamp("czas_odtwarzania");
+            Long piosenkaId = resultSet.getLong("piosenka_id");
+            Long audycjaId = resultSet.getLong("audycja_id");
+
+            PiosenkaOdtwarzanie piosenkaOdtwarzanie = new PiosenkaOdtwarzanie(piosenkaOdtwarzanieId, czasOdtwarzania, piosenkaId, audycjaId);
+            piosenkasOdtwarzanie.add(piosenkaOdtwarzanie);
+        }
+
+        return piosenkasOdtwarzanie;
     }
 }

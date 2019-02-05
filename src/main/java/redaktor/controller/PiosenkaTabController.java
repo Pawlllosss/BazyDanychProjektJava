@@ -11,7 +11,7 @@ import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.piosenka.PiosenkaForm;
 import redaktor.controller.helper.crud.EntityAdder;
 import redaktor.controller.helper.crud.EntityDeleter;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.PiosenkaTableViewWrapper;
 import redaktor.model.Piosenka;
 
@@ -27,12 +27,12 @@ public class PiosenkaTabController implements EntityController<Piosenka> {
     @FXML
     private TextField wykonawcaTextField;
 
-    private static ObservableEntityListWrapper<Piosenka> piosenkaObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Piosenka> piosenkaObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         piosenkaDAO = PiosenkaDAO.getInstance();
-        piosenkaObservableEntityListWrapper = new ObservableEntityListWrapper<>(piosenkaDAO);
+        piosenkaObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(piosenkaDAO);
 
         piosenkaTableViewWrapper = new PiosenkaTableViewWrapper(piosenkaTableView);
         piosenkaTableViewWrapper.initialize(piosenkaObservableEntityListWrapper);

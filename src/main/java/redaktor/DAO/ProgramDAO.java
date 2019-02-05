@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProgramDAO implements DAO<Program> {
-    private final String TABLE_NAME = "piosenka";
+    private final String TABLE_NAME = "program";
     private final String SCHEMA_NAME = "redaktor";
-    private final String ID_FIELD = "piosenka_id";
+    private final String ID_FIELD = "program_id";
 
     private static ProgramDAO programDAO = new ProgramDAO();
     private ConnectionHandler connectionHandler;

@@ -1,6 +1,5 @@
 package redaktor.controller;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -9,9 +8,8 @@ import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.redaktor.RedaktorForm;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.RedaktorTableViewWrapper;
-import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.controller.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
@@ -36,13 +34,13 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
     @FXML
     private TextField nazwiskoTextField;
 
-    private static ObservableEntityListWrapper<Redaktor> redaktorObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Redaktor> redaktorObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         redaktorDAO = RedaktorDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        redaktorObservableEntityListWrapper = new ObservableEntityListWrapper<>(redaktorDAO);
+        redaktorObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(redaktorDAO);
 
         redaktorTableViewWrapper = new RedaktorTableViewWrapper(redaktorTableView);
         redaktorTableViewWrapper.initialize(redaktorObservableEntityListWrapper);

@@ -12,10 +12,10 @@ import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.program.ProgramForm;
-import redaktor.controller.helper.observable.ObservableEntityListWrapper;
-import redaktor.controller.helper.observable.listener.ObservableListWrapperUpdateListener;
+import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
+import redaktor.controller.observable.listener.ObservableListWrapperUpdateListener;
 import redaktor.controller.table.TableViewHelper;
-import redaktor.controller.helper.observable.ObservableCustomUpdateListWrapper;
+import redaktor.controller.observable.ObservableCustomUpdateNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.program.Program;
@@ -48,21 +48,21 @@ public class ProgramTabController implements EntityController<Program> {
     @FXML
     private ChoiceBox<Sekcja> sekcjaChoiceBox;
 
-    private ObservableCustomUpdateListWrapper<ProgramRedaktorCount> programRedaktorCountObservableCustomUpdateListWrapper;
-    private ObservableCustomUpdateListWrapper<ProgramPrzypisanyRedaktor> programPrzypisanyRedaktorObservableCustomUpdateListWrapper;
+    private ObservableCustomUpdateNoUpdateArgumentsListWrapper<ProgramRedaktorCount> programRedaktorCountObservableCustomUpdateListWrapper;
+    private ObservableCustomUpdateNoUpdateArgumentsListWrapper<ProgramPrzypisanyRedaktor> programPrzypisanyRedaktorObservableCustomUpdateListWrapper;
 
     private ObservableListWrapperUpdateListener observableListWrapperUpdateListener;
 
-    private static ObservableEntityListWrapper<Program> programObservableEntityListWrapper;
+    private static ObservableEntityNoUpdateArgumentsListWrapper<Program> programObservableEntityListWrapper;
 
     @FXML
     private void initialize() {
         programDAO = ProgramDAO.getInstance();
         sekcjaDAO = SekcjaDAO.getInstance();
-        programObservableEntityListWrapper = new ObservableEntityListWrapper<>(programDAO);
+        programObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(programDAO);
 
-        programRedaktorCountObservableCustomUpdateListWrapper = new ObservableCustomUpdateListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramRedaktorCount()));
-        programPrzypisanyRedaktorObservableCustomUpdateListWrapper = new ObservableCustomUpdateListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramPrzypisanyRedaktor()));
+        programRedaktorCountObservableCustomUpdateListWrapper = new ObservableCustomUpdateNoUpdateArgumentsListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramRedaktorCount()));
+        programPrzypisanyRedaktorObservableCustomUpdateListWrapper = new ObservableCustomUpdateNoUpdateArgumentsListWrapper<>((observableList) -> observableList.setAll(programDAO.getProgramPrzypisanyRedaktor()));
 
         observableListWrapperUpdateListener = new ObservableListWrapperUpdateListener();
         observableListWrapperUpdateListener.appendObservableViewListWrappers(programRedaktorCountObservableCustomUpdateListWrapper, programPrzypisanyRedaktorObservableCustomUpdateListWrapper);
