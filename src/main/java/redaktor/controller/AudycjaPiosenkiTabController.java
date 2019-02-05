@@ -93,7 +93,15 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
 
     @FXML
     private void deleteSongFromAudycja() {
+        PiosenkaOdtwarzanie piosenkaOdtwarzanie = audycjaAssignedPiosenkiTableViewWrapper.getSelectedItem();
 
+        if(piosenkaOdtwarzanie != null) {
+            audycjaDAO.unassignPiosenkaFromAudycja(piosenkaOdtwarzanie.getPiosenkaOdtwarzanieId());
+        }
+        else {
+            WarningAlert warningAlert = new WarningAlert("Nie wybrano piosenki do usunięcia z audycji!");
+            warningAlert.showAndWait();
+        }
     }
 
     @FXML

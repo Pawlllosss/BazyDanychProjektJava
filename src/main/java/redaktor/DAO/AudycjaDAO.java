@@ -111,6 +111,12 @@ public class AudycjaDAO implements DAO<Audycja> {
         }
     }
 
+    public void unassignPiosenkaFromAudycja(long id) {
+        final String PIOSENKA_ODTWARZANIE_DELETE_QUERY = "DELETE FROM redaktor.piosenka_odtwarzanie WHERE piosenka_odtwarzanie_id = ?";
+        DeleteQueryExecutor deleteQueryExecutor = new DeleteQueryExecutor(PIOSENKA_ODTWARZANIE_DELETE_QUERY, id);
+        deleteQueryExecutor.executeDeleteQuery();
+    }
+
     public List<PiosenkaOdtwarzanie> getPiosenkasForAudycja(long id) {
         //TODO: move it somewhere else
         final String PIOSENKAS_FOR_AUDYCJA_QUERY = "SELECT * FROM redaktor.piosenka_odtwarzanie WHERE audycja_id = ?";
