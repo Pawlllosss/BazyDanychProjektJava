@@ -18,8 +18,8 @@ public class GetExecutor<T> {
     private ConnectionHandler connectionHandler;
     private ResultSetRetriever<T> resultSetRetriever;
 
-    public GetExecutor(String tableName, String idFieldName, ResultSetRetriever<T> resultSetRetriever) {
-        this.GET_QUERY_FORMAT = prepareGetQueryFormat(tableName);
+    public GetExecutor(String schemaName, String tableName, String idFieldName, ResultSetRetriever<T> resultSetRetriever) {
+        this.GET_QUERY_FORMAT = prepareGetQueryFormat(schemaName, tableName);
         this.ID_FIELD_NAME = idFieldName;
         this.connectionHandler = ConnectionHandler.getInstance();
         this.resultSetRetriever = resultSetRetriever;
@@ -61,7 +61,7 @@ public class GetExecutor<T> {
         return entities;
     }
 
-    private String prepareGetQueryFormat(String tableName) {
-        return String.format("SELECT * FROM redaktor.%s r ", tableName);
+    private String prepareGetQueryFormat(String schemaName, String tableName) {
+        return String.format("SELECT * FROM %s.%s r ", schemaName, tableName);
     }
 }

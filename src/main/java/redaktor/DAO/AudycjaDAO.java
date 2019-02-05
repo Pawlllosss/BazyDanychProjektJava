@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class AudycjaDAO implements DAO<Audycja> {
+    private final String TABLE_NAME = "audycja";
+    private final String SCHEMA_NAME = "redaktor";
+    private final String ID_FIELD = "audycja_id";
 
     private static AudycjaDAO studioDAO = new AudycjaDAO();
     private ConnectionHandler connectionHandler;
@@ -24,7 +27,7 @@ public class AudycjaDAO implements DAO<Audycja> {
 
     private AudycjaDAO() {
         connectionHandler = ConnectionHandler.getInstance();
-        getExecutor = new GetExecutor<>("audycja", "audycja_id", AudycjaDAO::getAudycjasFromResultSet);
+        getExecutor = new GetExecutor<>(SCHEMA_NAME, TABLE_NAME, ID_FIELD, this::getAudycjasFromResultSet);
     }
 
     @Override
@@ -62,6 +65,8 @@ public class AudycjaDAO implements DAO<Audycja> {
         AudycjaUpdateQueryBuilder audycjaUpdateQueryBuilder = new AudycjaUpdateQueryBuilder();
         final String UPDATE_QUERY = audycjaUpdateQueryBuilder.buildUpdateQuery(originalEntity, editedEntity);
 
+        System.out.println(UPDATE_QUERY);
+
         connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }
 
@@ -89,7 +94,7 @@ public class AudycjaDAO implements DAO<Audycja> {
         return audycjasInDay;
     }
 
-    public static List<Audycja> getAudycjasFromResultSet(ResultSet resultSet) throws SQLException {
+    private List<Audycja> getAudycjasFromResultSet(ResultSet resultSet) throws SQLException {
         List<Audycja> audycjas = new LinkedList<>();
 
         while(resultSet.next()) {

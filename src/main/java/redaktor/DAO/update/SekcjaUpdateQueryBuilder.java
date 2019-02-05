@@ -18,7 +18,7 @@ public class SekcjaUpdateQueryBuilder extends UpdateQueryBuilder<Sekcja>{
     }
 
     @Override
-    public String getTableName() {
+    public String getTableNameWithSchema() {
         return TABLE_NAME;
     }
 }

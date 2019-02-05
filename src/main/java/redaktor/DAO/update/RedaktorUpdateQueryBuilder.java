@@ -19,7 +19,7 @@ public class RedaktorUpdateQueryBuilder extends UpdateQueryBuilder<Redaktor>{
     }
 
     @Override
-    public String getTableName() {
+    public String getTableNameWithSchema() {
         return TABLE_NAME;
     }
 }

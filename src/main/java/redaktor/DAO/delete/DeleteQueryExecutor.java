@@ -15,6 +15,8 @@ public class DeleteQueryExecutor {
         this.deleteQuery = deleteQuery;
         this.id = id;
         this.connectionHandler = ConnectionHandler.getInstance();
+
+        System.out.println(deleteQuery);
     }
 
     public void executeDeleteQuery() {

@@ -19,7 +19,7 @@ public class ProgramUpdateQueryBuilder extends UpdateQueryBuilder<Program> {
     }
 
     @Override
-    public String getTableName() {
+    public String getTableNameWithSchema() {
         return TABLE_NAME;
     }
 }

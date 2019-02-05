@@ -18,7 +18,7 @@ public class StudioUpdateQueryBuilder extends UpdateQueryBuilder<Studio>{
     }
 
     @Override
-    public String getTableName() {
+    public String getTableNameWithSchema() {
         return TABLE_NAME;
     }
 }

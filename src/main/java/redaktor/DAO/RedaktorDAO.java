@@ -28,7 +28,6 @@ public class RedaktorDAO implements DAO<Redaktor> {
         connectionHandler = ConnectionHandler.getInstance();
     }
 
-
     @Override
     public Optional<Redaktor> get(long id) {
         String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.redaktor r WHERE r.redaktor_id = ?;";

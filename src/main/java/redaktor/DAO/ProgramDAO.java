@@ -4,7 +4,6 @@ import redaktor.DAO.delete.DeleteQueryExecutor;
 import redaktor.DAO.get.GetExecutor;
 import redaktor.DAO.update.ProgramUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
-import redaktor.model.Studio;
 import redaktor.model.program.Program;
 import redaktor.model.program.view.ProgramPrzypisanyRedaktor;
 import redaktor.model.program.view.ProgramRedaktorCount;
@@ -17,6 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class ProgramDAO implements DAO<Program> {
+    private final String TABLE_NAME = "piosenka";
+    private final String SCHEMA_NAME = "redaktor";
+    private final String ID_FIELD = "piosenka_id";
 
     private static ProgramDAO programDAO = new ProgramDAO();
     private ConnectionHandler connectionHandler;
@@ -29,7 +31,7 @@ public class ProgramDAO implements DAO<Program> {
 
     private ProgramDAO() {
         connectionHandler = ConnectionHandler.getInstance();
-        getExecutor = new GetExecutor<>("program", "program_id", ProgramDAO::getProgramyFromResultSet);
+        getExecutor = new GetExecutor<>(SCHEMA_NAME, TABLE_NAME, ID_FIELD, this::getProgramsFromResultSet);
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ProgramDAO implements DAO<Program> {
         List<Program> programy = null;
 
         try {
-            programy = getProgramyFromResultSet(resultSet);
+            programy = getProgramsFromResultSet(resultSet);
         }
         catch(SQLException exception) {
             exception.printStackTrace();
@@ -147,7 +149,7 @@ public class ProgramDAO implements DAO<Program> {
         }
     }
 
-    public static List<Program> getProgramyFromResultSet(ResultSet resultSet) throws SQLException {
+    private List<Program> getProgramsFromResultSet(ResultSet resultSet) throws SQLException {
         List<Program> programs = new LinkedList<>();
 
         while(resultSet.next()) {

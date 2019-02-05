@@ -6,7 +6,7 @@ public abstract class UpdateQueryBuilder<T> {
     private boolean isFirstField;
 
     public String buildUpdateQuery(T originalValueObject, T editedValueObject) {
-        final String UPDATE_QUERY_BEGIN = "UPDATE " +  getTableName() + " SET ";
+        final String UPDATE_QUERY_BEGIN = "UPDATE " +  getTableNameWithSchema() + " SET ";
 
         isFirstField = true;
 
@@ -19,7 +19,7 @@ public abstract class UpdateQueryBuilder<T> {
 
     protected abstract void appendModifiedFieldsToQuery(T originalValueObject, T editedValueObject);
     protected abstract void appendWhereIdOfModifiedObject(T originalValueObject);
-    public abstract String getTableName();
+    public abstract String getTableNameWithSchema();
 
     private  <T> String createFieldUpdateQueryPart(String fieldName, T fieldValue) {
         final String UPDATE_PART = fieldName + " = '" + fieldValue + "' ";

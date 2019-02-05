@@ -20,7 +20,7 @@ public class AudycjaUpdateQueryBuilder extends UpdateQueryBuilder<Audycja>{
     }
 
     @Override
-    public String getTableName() {
+    public String getTableNameWithSchema() {
         return TABLE_NAME;
     }
 }

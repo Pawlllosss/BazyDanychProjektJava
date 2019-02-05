@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class StudioDAO implements DAO<Studio> {
+    private final String TABLE_NAME = "studio";
+    private final String SCHEMA_NAME = "redaktor";
+    private final String ID_FIELD = "studio_id";
 
     private static StudioDAO studioDAO = new StudioDAO();
     private ConnectionHandler connectionHandler;
@@ -25,10 +28,9 @@ public class StudioDAO implements DAO<Studio> {
 
     private StudioDAO() {
         connectionHandler = ConnectionHandler.getInstance();
-        getExecutor = new GetExecutor<>("studio", "studio_id", StudioDAO::getStudiosFromResultSet);
+        getExecutor = new GetExecutor<>(SCHEMA_NAME, TABLE_NAME, ID_FIELD, this::getStudiosFromResultSet);
     }
 
-    //TODO: move getters to separate class
     @Override
     public Optional<Studio> get(long id) {
         Studio studio = getExecutor.execute(id);
@@ -67,12 +69,12 @@ public class StudioDAO implements DAO<Studio> {
 
     @Override
     public void delete(long id) {
-        String redaktorDeleteQuery = "DELETE FROM redaktor.redaktor WHERE redaktor_id = ?";
+        String redaktorDeleteQuery = "DELETE FROM redaktor.studio WHERE studio_id = ?";
         DeleteQueryExecutor deleteQueryExecutor = new DeleteQueryExecutor(redaktorDeleteQuery, id);
         deleteQueryExecutor.executeDeleteQuery();
     }
 
-    public static List<Studio> getStudiosFromResultSet(ResultSet resultSet) throws SQLException {
+    private List<Studio> getStudiosFromResultSet(ResultSet resultSet) throws SQLException {
         List<Studio> studios = new LinkedList<>();
 
         while(resultSet.next()) {
