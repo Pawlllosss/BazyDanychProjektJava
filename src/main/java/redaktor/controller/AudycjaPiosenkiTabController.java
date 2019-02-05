@@ -60,6 +60,8 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
 
         //is it needed here?
 //        piosenkaOdtwarzanieForm = new PiosenkaOdtwarzanieForm(this);
+
+        MainController.addEntityController(this);
     }
 
 
