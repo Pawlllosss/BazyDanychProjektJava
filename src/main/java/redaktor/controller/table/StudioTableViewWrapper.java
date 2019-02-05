@@ -3,7 +3,7 @@ package redaktor.controller.table;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
+import redaktor.controller.observable.ObservableListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Studio;
 
@@ -15,7 +15,7 @@ public class StudioTableViewWrapper extends TableViewWrapper<Studio> {
     }
 
     @Override
-    public void initialize(ObservableNoUpdateArgumentsListWrapper<Studio> observableEntityListWrapper) {
+    public void initialize(ObservableListWrapper<Studio> observableEntityListWrapper) {
         setObservableListToTableView(observableEntityListWrapper.getObservableList());
     }
 

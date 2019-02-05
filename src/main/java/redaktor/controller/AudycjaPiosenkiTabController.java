@@ -5,32 +5,28 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.AudycjaDAO;
-import redaktor.DAO.PiosenkaDAO;
 import redaktor.controller.alert.WarningAlert;
-import redaktor.controller.observable.ObservableCustomUpdateNoUpdateArgumentsListWrapper;
-import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.controller.observable.PiosenkaOdtwarzanieListWrapper;
 import redaktor.controller.table.AudycjaTableViewWrapper;
+import redaktor.controller.table.PiosenkaOdtwarzanieTableViewWrapper;
 import redaktor.controller.table.PiosenkaTableViewWrapper;
 import redaktor.model.Audycja;
 import redaktor.model.Piosenka;
 import redaktor.model.PiosenkaOdtwarzanie;
 
-import java.util.List;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOdtwarzanie>{
     private AudycjaDAO audycjaDAO;
-    private PiosenkaDAO piosenkaDAO;
-
-//    private PiosenkaOdtwarzanieForm piosenkaOdtwarzanieForm;
 
     private AudycjaTableViewWrapper audycjaTableViewWrapper;
     private PiosenkaTableViewWrapper piosenkaTableViewWrapper;
-//    private PiosenkaOdtwarzanieTableViewWrapper audycjaAssignedPiosenkiTableViewWrapper; //? czy ma to sens
+    private PiosenkaOdtwarzanieTableViewWrapper audycjaAssignedPiosenkiTableViewWrapper;
 
-    private ObservableNoUpdateArgumentsListWrapper<Audycja> audycjaObservableNoUpdateArgumentsListWrapper;
-    private ObservableNoUpdateArgumentsListWrapper<Piosenka> piosenkaObservableNoUpdateArgumentsListWrapper;
     private PiosenkaOdtwarzanieListWrapper audycjaAssignedPiosenkiObservableListWrapper;
 
     @FXML
@@ -38,28 +34,22 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
     @FXML
     private TableView<Piosenka> piosenkaTableView;
     @FXML
-    private TableView<Piosenka> chosenAudycjaPiosenkiTableView;
+    private TableView<PiosenkaOdtwarzanie> audycjaAssignedPiosenkiPiosenkiTableView;
     @FXML
-    private TextField czasOdtwarzaniaTextField;
+    private TextField czasOdtworzeniaTextField;
 
     @FXML
     private void initialize() {
         audycjaDAO = AudycjaDAO.getInstance();
-        piosenkaDAO = PiosenkaDAO.getInstance();
-
-        audycjaObservableNoUpdateArgumentsListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(audycjaDAO);
 
         audycjaTableViewWrapper = new AudycjaTableViewWrapper(audycjaTableView);
         piosenkaTableViewWrapper = new PiosenkaTableViewWrapper(piosenkaTableView);
 
         audycjaAssignedPiosenkiObservableListWrapper = new PiosenkaOdtwarzanieListWrapper(audycjaDAO);
-//        audycjaAssignedPiosenkiTableViewWrapper = new PiosenkaOdtwarzanieTableViewWrapper(audycjaAssignedPiosenkiObservableListWrapper);
+        audycjaAssignedPiosenkiTableViewWrapper = new PiosenkaOdtwarzanieTableViewWrapper(audycjaAssignedPiosenkiPiosenkiTableView);
+        audycjaAssignedPiosenkiTableViewWrapper.initialize(audycjaAssignedPiosenkiObservableListWrapper);
 
-
-        addTimeCorrectionCheckForTextField(czasOdtwarzaniaTextField);
-
-        //is it needed here?
-//        piosenkaOdtwarzanieForm = new PiosenkaOdtwarzanieForm(this);
+        addTimeCorrectionCheckForTextField(czasOdtworzeniaTextField);
 
         MainController.addEntityController(this);
     }
@@ -76,7 +66,29 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
 
     @FXML
     private void assignPiosenkaToAudycja() {
+        Audycja audycja = audycjaTableViewWrapper.getSelectedItem();
+        Piosenka piosenka = piosenkaTableViewWrapper.getSelectedItem();
 
+        if(audycja != null && piosenka != null) {
+            long audycjaId = audycja.getAudycjaId();
+            long piosenkaId = piosenka.getPiosenkaId();
+            String czasOdtworzeniaFromTextField = czasOdtworzeniaTextField.getText();
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+            try {
+                Date date = sdf.parse(czasOdtworzeniaFromTextField);
+                Time czasOdtworzenia = new Time(date.getTime());
+
+                PiosenkaOdtwarzanie piosenkaOdtwarzanie = new PiosenkaOdtwarzanie(0l, czasOdtworzenia, piosenkaId, audycjaId);
+                audycjaDAO.assignPiosenkaToAudycja(piosenkaOdtwarzanie);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            WarningAlert warningAlert = new WarningAlert("Należy zaznaczyć audycję i piosenkę!");
+            warningAlert.showAndWait();
+        }
     }
 
     @FXML
@@ -106,11 +118,8 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
         });
     }
 
+    //for form in future
     public String getCzasOdtwarzaniaFromTextField() {
-        return czasOdtwarzaniaTextField.getText();
-    }
-
-    public void setCzasOdtwarzanieToTextField(String czasOdtwarzania) {
-        czasOdtwarzaniaTextField.setText(czasOdtwarzania);
+        return czasOdtworzeniaTextField.getText();
     }
 }

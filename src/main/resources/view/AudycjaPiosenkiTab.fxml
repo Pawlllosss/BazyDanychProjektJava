@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -15,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="633.0" prefWidth="996.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="redaktor.controller.AudycjaPiosenkiTabController">
    <children>
-      <HBox prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox prefHeight="633.0" prefWidth="996.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox prefHeight="428.0" prefWidth="437.0">
                <children>
@@ -32,7 +33,7 @@
                      </children>
                   </HBox>
                   <Separator orientation="VERTICAL" prefHeight="35.0" prefWidth="63.0" />
-                  <TableView fx:id="chosenAudycjaPiosenkiTableView" prefHeight="336.0" prefWidth="439.0" />
+                  <TableView fx:id="audycjaAssignedPiosenkiPiosenkiTableView" prefHeight="336.0" prefWidth="439.0" />
                </children>
             </VBox>
             <Separator prefHeight="10.0" prefWidth="189.0" />
@@ -50,7 +51,7 @@
                      </rowConstraints>
                      <children>
                         <Label text="Czas odtworzenia(HH:mm:ss):" />
-                        <TextField fx:id="czasOdtwarzaniaTextField" GridPane.columnIndex="1" />
+                        <TextField fx:id="czasOdtworzeniaTextField" GridPane.columnIndex="1" />
                         <Button mnemonicParsing="false" onAction="#assignPiosenkaToAudycja" prefHeight="26.0" prefWidth="139.0" text="Przypisz Piosenkę" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button mnemonicParsing="false" onAction="#deleteSongFromAudycja" text="Usuń z audycji" GridPane.rowIndex="1" />
                      </children>
@@ -60,4 +61,7 @@
          </children>
       </HBox>
    </children>
+   <padding>
+      <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+   </padding>
 </AnchorPane>

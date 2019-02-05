@@ -7,7 +7,6 @@ import redaktor.DAO.update.AudycjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Audycja;
 import redaktor.model.PiosenkaOdtwarzanie;
-import redaktor.model.program.view.ProgramRedaktorCount;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -96,9 +95,25 @@ public class AudycjaDAO implements DAO<Audycja> {
         return audycjasInDay;
     }
 
+    public void assignPiosenkaToAudycja(PiosenkaOdtwarzanie piosenkaOdtwarzanie) {
+        final String PIOSENKA_ODTWARZANIE_QUERY = "INSERT INTO redaktor.piosenka_odtwarzanie(czas_odtworzenia, piosenka_id, audycja_id) " +
+                "VALUES (?, ?, ?);";
+
+        PreparedStatement preparedStatement = connectionHandler.prepareStatement(PIOSENKA_ODTWARZANIE_QUERY);
+
+        try {
+            preparedStatement.setTime(1, piosenkaOdtwarzanie.getCzasOdtworzenia());
+            PreparedStatementSetter.setForeignKey(preparedStatement, 2, piosenkaOdtwarzanie.getPiosenkaId());
+            PreparedStatementSetter.setForeignKey(preparedStatement, 3, piosenkaOdtwarzanie.getAudycjaId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<PiosenkaOdtwarzanie> getPiosenkasForAudycja(long id) {
         //TODO: move it somewhere else
-        final String PIOSENKAS_FOR_AUDYCJA_QUERY = "SELECT * FROM piosenka_odtwarzanie WHERE audycja_id = ?";
+        final String PIOSENKAS_FOR_AUDYCJA_QUERY = "SELECT * FROM redaktor.piosenka_odtwarzanie WHERE audycja_id = ?";
 
         PreparedStatement selectByIdStatement = connectionHandler.prepareStatement(PIOSENKAS_FOR_AUDYCJA_QUERY);
         List<PiosenkaOdtwarzanie> piosenkasOdtwarzanie = new LinkedList<>();
@@ -137,7 +152,7 @@ public class AudycjaDAO implements DAO<Audycja> {
 
         while(resultSet.next()) {
             Long piosenkaOdtwarzanieId  = resultSet.getLong("piosenka_odtwarzanie_id");
-            Timestamp czasOdtwarzania = resultSet.getTimestamp("czas_odtwarzania");
+            Time czasOdtwarzania = resultSet.getTime("czas_odtworzenia");
             Long piosenkaId = resultSet.getLong("piosenka_id");
             Long audycjaId = resultSet.getLong("audycja_id");
 

@@ -1,16 +1,16 @@
 package redaktor.model;
 
-import java.sql.Timestamp;
+import java.sql.Time;
 
 public class PiosenkaOdtwarzanie {
     private Long piosenkaOdtwarzanieId;
-    private Timestamp czasOdtwarzania;
+    private Time czasOdtworzenia;
     private Long piosenkaId;
     private Long audycjaId;
 
-    public PiosenkaOdtwarzanie(Long piosenkaOdtwarzanieId, Timestamp czasOdtwarzania, Long piosenkaId, Long audycjaId) {
+    public PiosenkaOdtwarzanie(Long piosenkaOdtwarzanieId, Time czasOdtworzenia, Long piosenkaId, Long audycjaId) {
         this.piosenkaOdtwarzanieId = piosenkaOdtwarzanieId;
-        this.czasOdtwarzania = czasOdtwarzania;
+        this.czasOdtworzenia = czasOdtworzenia;
         this.piosenkaId = piosenkaId;
         this.audycjaId = audycjaId;
     }
@@ -23,12 +23,12 @@ public class PiosenkaOdtwarzanie {
         this.piosenkaOdtwarzanieId = piosenkaOdtwarzanieId;
     }
 
-    public Timestamp getCzasOdtwarzania() {
-        return czasOdtwarzania;
+    public Time getCzasOdtworzenia() {
+        return czasOdtworzenia;
     }
 
-    public void setCzasOdtwarzania(Timestamp czasOdtwarzania) {
-        this.czasOdtwarzania = czasOdtwarzania;
+    public void setCzasOdtworzenia(Time czasOdtworzenia) {
+        this.czasOdtworzenia = czasOdtworzenia;
     }
 
     public Long getPiosenkaId() {
