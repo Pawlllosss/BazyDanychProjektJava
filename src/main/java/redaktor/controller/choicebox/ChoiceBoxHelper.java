@@ -1,4 +1,4 @@
-package redaktor.controller.helper;
+package redaktor.controller.choicebox;
 
 import javafx.scene.control.ChoiceBox;
 

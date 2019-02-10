@@ -1,4 +1,4 @@
-package redaktor.controller.helper.crud;
+package redaktor.controller.crud;
 
 import redaktor.DAO.DAO;
 import redaktor.controller.alert.WarningAlert;

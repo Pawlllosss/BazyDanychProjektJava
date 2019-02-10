@@ -1,4 +1,4 @@
-package redaktor.controller.helper.time;
+package redaktor.controller.time;
 
 import java.sql.Time;
 import java.text.ParseException;

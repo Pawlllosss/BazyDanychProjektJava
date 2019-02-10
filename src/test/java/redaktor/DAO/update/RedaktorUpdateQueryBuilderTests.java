@@ -6,7 +6,7 @@ import redaktor.model.Redaktor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class RedaktorUpdateQueryBuilderTest {
+public class RedaktorUpdateQueryBuilderTests {
 
     private RedaktorUpdateQueryBuilder redaktorUpdateQueryBuilder;
 

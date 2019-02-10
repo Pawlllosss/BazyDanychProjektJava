@@ -6,7 +6,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.AudycjaDAO;
 import redaktor.controller.alert.WarningAlert;
-import redaktor.controller.helper.time.TimeParser;
+import redaktor.controller.time.TimeParser;
 import redaktor.controller.observable.PiosenkaOdtwarzanieListWrapper;
 import redaktor.controller.table.AudycjaTableViewWrapper;
 import redaktor.controller.table.PiosenkaOdtwarzanieTableViewWrapper;

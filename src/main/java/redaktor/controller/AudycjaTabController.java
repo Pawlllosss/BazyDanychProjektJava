@@ -11,7 +11,7 @@ import redaktor.controller.alert.WarningAlert;
 import redaktor.controller.form.FormChecker;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.audycja.AudycjaForm;
-import redaktor.controller.helper.crud.EntityAdder;
+import redaktor.controller.crud.EntityAdder;
 import redaktor.controller.observable.ObservableCustomUpdateNoUpdateArgumentsListWrapper;
 import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;

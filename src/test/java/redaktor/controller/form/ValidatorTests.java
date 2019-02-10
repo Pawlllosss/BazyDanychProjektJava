@@ -18,7 +18,7 @@ public class ValidatorTests {
 
     @Nested
     @DisplayName("Tests for method isTextFieldEmptyOrNull")
-    class TestsOfMethodisStringEmptyOrNull {
+    class TestsOfMethodIsStringEmptyOrNull {
         @Test
         void shouldReturnTrueIfStringIsNull() {
             boolean result = validator.isTextFieldEmptyOrNull(null);
