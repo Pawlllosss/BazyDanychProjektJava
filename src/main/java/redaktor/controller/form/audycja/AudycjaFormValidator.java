@@ -2,7 +2,6 @@ package redaktor.controller.form.audycja;
 
 import redaktor.controller.form.Validator;
 import redaktor.model.Audycja;
-import redaktor.model.Redaktor;
 
 //TODO: date and time validation!
 public class AudycjaFormValidator extends Validator {

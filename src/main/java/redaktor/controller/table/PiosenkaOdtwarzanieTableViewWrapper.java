@@ -4,20 +4,12 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import redaktor.DAO.AudycjaDAO;
 import redaktor.DAO.PiosenkaDAO;
-import redaktor.DAO.ProgramDAO;
-import redaktor.DAO.StudioDAO;
 import redaktor.controller.observable.ObservableListWrapper;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
-import redaktor.model.Audycja;
 import redaktor.model.Piosenka;
 import redaktor.model.PiosenkaOdtwarzanie;
-import redaktor.model.Studio;
-import redaktor.model.program.Program;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Optional;
 
@@ -28,8 +20,8 @@ public class PiosenkaOdtwarzanieTableViewWrapper extends TableViewWrapper<Piosen
     }
 
     @Override
-    public void initialize(ObservableListWrapper<PiosenkaOdtwarzanie> observableEntityListWrapper) {
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    public void initialize(ObservableListWrapper<PiosenkaOdtwarzanie> observableListWrapper) {
+        setObservableListToTableView(observableListWrapper.getObservableList());
     }
 
     @Override

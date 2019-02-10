@@ -3,7 +3,6 @@ package redaktor.controller.form.piosenka;
 import redaktor.controller.PiosenkaTabController;
 import redaktor.controller.form.FormWithValidation;
 import redaktor.model.Piosenka;
-import redaktor.model.Studio;
 
 public class PiosenkaForm implements FormWithValidation<Piosenka> {
     private PiosenkaTabController controller;

@@ -56,7 +56,7 @@ public class PiosenkaTabController implements EntityController<Piosenka> {
 
     @FXML
     private void deletePiosenka() {
-        EntityDeleter.tryToDeleteEntity(piosenkaTableViewWrapper, piosenkaDAO, piosenkaObservableEntityListWrapper, piosenka -> piosenka.getPiosenkaId());
+        EntityDeleter.tryToDeleteEntity(piosenkaTableViewWrapper, piosenkaDAO, piosenkaObservableEntityListWrapper, Piosenka::getPiosenkaId);
     }
 
     @FXML
@@ -64,8 +64,7 @@ public class PiosenkaTabController implements EntityController<Piosenka> {
         Piosenka piosenkaToEdit = piosenkaTableViewWrapper.getSelectedItem();
 
         if(piosenkaToEdit != null) {
-            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(piosenkaForm, piosenkaToEdit))
-            {
+            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(piosenkaForm, piosenkaToEdit)) {
                 long editedPiosenkaId = piosenkaToEdit.getPiosenkaId();
                 Piosenka editedPiosenka = piosenkaForm.readForm();
                 editedPiosenka.setPiosenkaId(editedPiosenkaId);
@@ -82,7 +81,7 @@ public class PiosenkaTabController implements EntityController<Piosenka> {
 
     @FXML
     private void loadPiosenkaEditForm() {
-        FormLoader.tryToLoadValuesIntoForm(piosenkaTableView, piosenkaForm, "Nie wybrano Piosenka!");
+        FormLoader.tryToLoadValuesIntoForm(piosenkaTableView, piosenkaForm, "Nie wybrano piosenki!");
     }
 
     public String getTytulFromTextField() {

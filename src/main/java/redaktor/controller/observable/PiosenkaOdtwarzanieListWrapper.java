@@ -3,8 +3,6 @@ package redaktor.controller.observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import redaktor.DAO.AudycjaDAO;
-import redaktor.DAO.DAO;
-import redaktor.model.Audycja;
 import redaktor.model.PiosenkaOdtwarzanie;
 
 import java.util.List;

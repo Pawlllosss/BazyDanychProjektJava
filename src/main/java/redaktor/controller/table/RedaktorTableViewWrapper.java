@@ -6,7 +6,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.observable.ObservableListWrapper;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
@@ -21,8 +20,8 @@ public class RedaktorTableViewWrapper extends TableViewWrapper<Redaktor> {
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Redaktor> observableEntityListWrapper) {
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    public void initialize(ObservableListWrapper<Redaktor> observableListWrapper) {
+        setObservableListToTableView(observableListWrapper.getObservableList());
     }
 
     @Override

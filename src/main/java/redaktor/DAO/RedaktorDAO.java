@@ -2,17 +2,14 @@ package redaktor.DAO;
 
 import redaktor.DAO.statement.PreparedStatementSetter;
 import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
-import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Redaktor;
-import redaktor.model.Sekcja;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class RedaktorDAO implements DAO<Redaktor> {

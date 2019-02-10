@@ -2,7 +2,6 @@ package redaktor.controller.form.piosenka;
 
 import redaktor.controller.form.Validator;
 import redaktor.model.Piosenka;
-import redaktor.model.Studio;
 
 public class PiosenkaFormValidator extends Validator {
     public boolean isFormDifferentFromEntity(PiosenkaFormValues piosenkaFormValues, Piosenka piosenkaToCheck) {

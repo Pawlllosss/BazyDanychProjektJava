@@ -50,7 +50,6 @@ public class ConnectionHandler {
         return preparedStatement;
     }
 
-    //TODO: connection from some configuration file
     private ConnectionHandler() {
         connection = null;
         try {
@@ -63,9 +62,6 @@ public class ConnectionHandler {
             connection = DriverManager
                     .getConnection(connectionDetails.connectionUrl,
                             connectionDetails.username, connectionDetails.password);
-//            connection = DriverManager
-//                    .getConnection("jdbc:postgresql://pascal.fis.agh.edu.pl:5432/u6oczadly",
-//                            "u6oczadly", "6oczadly");
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName()+": "+e.getMessage());

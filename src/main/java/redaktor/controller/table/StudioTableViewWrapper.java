@@ -15,8 +15,8 @@ public class StudioTableViewWrapper extends TableViewWrapper<Studio> {
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Studio> observableEntityListWrapper) {
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    public void initialize(ObservableListWrapper<Studio> observableListWrapper) {
+        setObservableListToTableView(observableListWrapper.getObservableList());
     }
 
     @Override

@@ -1,14 +1,11 @@
 package redaktor.controller;
 
-//TODO: create tabs
-//TODO: refresh redactor list automatically
-
 import javafx.fxml.FXML;
+
 import java.util.LinkedList;
 
 public class MainController {
 
-    //TODO: move it to some wrapper?
     private static LinkedList<EntityController> entityControllers;
 
 

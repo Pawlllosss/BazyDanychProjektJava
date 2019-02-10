@@ -6,6 +6,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.AudycjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.helper.time.TimeParser;
 import redaktor.controller.observable.PiosenkaOdtwarzanieListWrapper;
 import redaktor.controller.table.AudycjaTableViewWrapper;
 import redaktor.controller.table.PiosenkaOdtwarzanieTableViewWrapper;
@@ -15,10 +16,7 @@ import redaktor.model.Piosenka;
 import redaktor.model.PiosenkaOdtwarzanie;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOdtwarzanie>{
     private AudycjaDAO audycjaDAO;
@@ -72,17 +70,8 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
         if(audycja != null && piosenka != null) {
             long audycjaId = audycja.getAudycjaId();
             long piosenkaId = piosenka.getPiosenkaId();
-            String czasOdtworzeniaFromTextField = czasOdtworzeniaTextField.getText();
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-            try {
-                Date date = sdf.parse(czasOdtworzeniaFromTextField);
-                Time czasOdtworzenia = new Time(date.getTime());
 
-                PiosenkaOdtwarzanie piosenkaOdtwarzanie = new PiosenkaOdtwarzanie(0l, czasOdtworzenia, piosenkaId, audycjaId);
-                audycjaDAO.assignPiosenkaToAudycja(piosenkaOdtwarzanie);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            tryToAssignPiosenkaToAudycja(audycjaId, piosenkaId);
         }
         else
         {
@@ -124,6 +113,21 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
                 textField.setText(oldString);
             }
         });
+    }
+
+    private void tryToAssignPiosenkaToAudycja(Long piosenkaId, Long audycjaId) {
+        String czasOdtworzeniaFromTextField = czasOdtworzeniaTextField.getText();
+
+        try {
+            Time czasOdtworzenia = TimeParser.parseTimeFromString(czasOdtworzeniaFromTextField);
+
+            PiosenkaOdtwarzanie piosenkaOdtwarzanie = new PiosenkaOdtwarzanie(0l, czasOdtworzenia, piosenkaId, audycjaId);
+            audycjaDAO.assignPiosenkaToAudycja(piosenkaOdtwarzanie);
+        } catch (ParseException e) {
+            WarningAlert warningAlert = new WarningAlert("Błąd przy przypisywaniu piosenki do audycji");
+            warningAlert.showAndWait();
+
+        }
     }
 
     //for form in future

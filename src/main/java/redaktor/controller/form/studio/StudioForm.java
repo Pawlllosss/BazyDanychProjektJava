@@ -1,15 +1,9 @@
 package redaktor.controller.form.studio;
 
-import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.StudioDAO;
-import redaktor.controller.SekcjeTabController;
 import redaktor.controller.StudioTabController;
 import redaktor.controller.form.FormWithValidation;
-import redaktor.model.Redaktor;
-import redaktor.model.Sekcja;
 import redaktor.model.Studio;
-
-import java.util.Optional;
 
 public class StudioForm implements FormWithValidation<Studio> {
 

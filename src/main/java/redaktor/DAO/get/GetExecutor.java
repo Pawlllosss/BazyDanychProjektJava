@@ -1,15 +1,12 @@
 package redaktor.DAO.get;
 
 import redaktor.connection.ConnectionHandler;
-import redaktor.model.Redaktor;
-import redaktor.model.Studio;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Function;
 
 public class GetExecutor<T> {
     private final String GET_QUERY_FORMAT;

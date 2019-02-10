@@ -1,7 +1,6 @@
 package redaktor.controller.form.program;
 
 import redaktor.controller.form.Validator;
-import redaktor.model.Sekcja;
 import redaktor.model.program.Program;
 
 public class ProgramFormValidator extends Validator {

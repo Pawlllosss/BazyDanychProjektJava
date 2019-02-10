@@ -3,10 +3,8 @@ package redaktor.DAO;
 import redaktor.DAO.delete.DeleteQueryExecutor;
 import redaktor.DAO.get.GetExecutor;
 import redaktor.DAO.update.PiosenkaUpdateQueryBuilder;
-import redaktor.DAO.update.StudioUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
 import redaktor.model.Piosenka;
-import redaktor.model.Studio;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

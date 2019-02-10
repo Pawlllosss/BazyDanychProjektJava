@@ -1,18 +1,20 @@
 package redaktor.controller;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormChecker;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.sekcja.SekcjaForm;
+import redaktor.controller.helper.crud.EntityAdder;
+import redaktor.controller.helper.crud.EntityDeleter;
 import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
+import redaktor.controller.table.SekcjaTableViewWrapper;
 import redaktor.controller.table.TableViewHelper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
@@ -23,11 +25,11 @@ import java.util.Optional;
 
 
 public class SekcjeTabController implements EntityController<Sekcja> {
-
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
 
     private SekcjaForm sekcjaForm;
+    private SekcjaTableViewWrapper sekcjaTableViewWrapper;
 
     @FXML
     private TableView<Sekcja> sekcjaTableView;
@@ -44,10 +46,12 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         sekcjaDAO = SekcjaDAO.getInstance();
         sekcjaObservableEntityListWrapper = new ObservableEntityNoUpdateArgumentsListWrapper<>(sekcjaDAO);
 
-        initializeSekcjaTableView();
-        ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
+        sekcjaTableViewWrapper = new SekcjaTableViewWrapper(sekcjaTableView);
+        sekcjaTableViewWrapper.initialize(sekcjaObservableEntityListWrapper);
 
         sekcjaForm = new SekcjaForm(this);
+        ViewInitializer.initializeChoiceBox(szefChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
+
         MainController.addEntityController(this);
     }
 
@@ -57,40 +61,18 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         szefChoiceBox.setItems(redaktorObservableList);
     }
 
-    //TODO: wait for Java8... (update: NOPE, maybe use abstract class)
-//    @Override
     public static ObservableList<Sekcja> getObservableList() {
         return sekcjaObservableEntityListWrapper.getObservableList();
     }
 
     @FXML
     private void addSekcja() {
-        if(sekcjaForm.isFormCorrectlyFilled()) {
-            Sekcja sekcja = sekcjaForm.readForm();
-            sekcjaDAO.save(sekcja);
-            sekcjaObservableEntityListWrapper.updateObservableList();
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-            warningAlert.showAndWait();
-        }
+        EntityAdder.tryToAddEntity(sekcjaForm, sekcjaDAO, sekcjaObservableEntityListWrapper);
     }
 
     @FXML
     private void deleteSekcja() {
-
-        Sekcja sekcja = TableViewHelper.getSelectedItem(sekcjaTableView);
-
-        if(sekcja != null) {
-            long sekcjaId = sekcja.getSekcjaId();
-            sekcjaDAO.delete(sekcjaId);
-            sekcjaObservableEntityListWrapper.updateObservableList();
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano sekcji!");
-            warningAlert.showAndWait();
-        }
-
+        EntityDeleter.tryToDeleteEntity(sekcjaTableViewWrapper, sekcjaDAO, sekcjaObservableEntityListWrapper, Sekcja::getSekcjaId);
     }
 
     @FXML
@@ -98,18 +80,7 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         Sekcja sekcjaToEdit = TableViewHelper.getSelectedItem(sekcjaTableView);
 
         if(sekcjaToEdit != null) {
-
-            if(!sekcjaForm.isFormCorrectlyFilled()) {
-                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-                warningAlert.showAndWait();
-                return;
-            }
-
-            if(!sekcjaForm.isFormDifferentFromEntity(sekcjaToEdit)) {
-                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
-                warningAlert.showAndWait();
-            }
-            else {
+            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(sekcjaForm, sekcjaToEdit)) {
                 Long editedSekcjaId = sekcjaToEdit.getSekcjaId();
                 Sekcja editedSekcja = sekcjaForm.readForm();
                 editedSekcja.setSekcjaId(editedSekcjaId);
@@ -145,30 +116,4 @@ public class SekcjeTabController implements EntityController<Sekcja> {
         szefChoiceBox.setValue(szef);
     }
 
-    private void initializeSekcjaTableView() {
-        TableColumn<Sekcja, Long> sekcjaIdColumn = ViewInitializer.createColumn("Id sekcja", "sekcjaId", 80);
-        TableColumn<Sekcja, String> nazwaColumn = ViewInitializer.createColumn("Nazwa", "nazwa", 50);
-        TableColumn<Sekcja, String> szefIdColumn = ViewInitializer.createColumn("Id szef", "szefId", 50);
-        TableColumn<Sekcja, String> szefImieColumn = new TableColumn<>("Imie szefa");
-        TableColumn<Sekcja, String> szefNazwiskoColumn = new TableColumn<>("Nazwisko szefa");
-
-        szefImieColumn.setCellValueFactory(szefStringCellDataFeatures -> {
-            Sekcja sekcja = szefStringCellDataFeatures.getValue();
-            Optional<Redaktor> szef = redaktorDAO.get(sekcja.getSzefId());
-            String szefImie = szef.map(szefLambda -> szefLambda.getImie()).orElse("");
-
-            return new SimpleStringProperty(szefImie);
-        });
-
-        szefNazwiskoColumn.setCellValueFactory(szefStringCellDataFeatures -> {
-            Sekcja sekcja = szefStringCellDataFeatures.getValue();
-            Optional<Redaktor> szef = redaktorDAO.get(sekcja.getSzefId());
-            String szefNazwisko = szef.map(szefLambda -> szefLambda.getNazwisko()).orElse("");
-
-            return new SimpleStringProperty(szefNazwisko);
-        });
-
-        ViewInitializer.addColumnsToTableView(sekcjaTableView, sekcjaIdColumn, nazwaColumn, szefIdColumn, szefImieColumn, szefNazwiskoColumn);
-        ViewInitializer.setObservableListToTableView(sekcjaTableView, sekcjaObservableEntityListWrapper.getObservableList());
-    }
 }

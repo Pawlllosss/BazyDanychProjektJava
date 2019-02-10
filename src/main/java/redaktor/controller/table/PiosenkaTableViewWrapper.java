@@ -4,7 +4,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import redaktor.controller.observable.ObservableListWrapper;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Piosenka;
 
@@ -16,8 +15,8 @@ public class PiosenkaTableViewWrapper extends TableViewWrapper<Piosenka> {
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Piosenka> observableEntityListWrapper) {
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    public void initialize(ObservableListWrapper<Piosenka> observableListWrapper) {
+        setObservableListToTableView(observableListWrapper.getObservableList());
     }
 
     @Override

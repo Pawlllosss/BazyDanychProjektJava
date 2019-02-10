@@ -1,10 +1,10 @@
 package redaktor.DAO.update;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import redaktor.DAO.update.RedaktorUpdateQueryBuilder;
 import redaktor.model.Redaktor;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RedaktorUpdateQueryBuilderTest {
 

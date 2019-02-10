@@ -2,12 +2,17 @@ package redaktor.controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import redaktor.DAO.RedaktorDAO;
 import redaktor.DAO.SekcjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormChecker;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.redaktor.RedaktorForm;
+import redaktor.controller.helper.crud.EntityAdder;
+import redaktor.controller.helper.crud.EntityDeleter;
 import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.RedaktorTableViewWrapper;
 import redaktor.controller.table.TableViewHelper;
@@ -19,7 +24,6 @@ import java.util.Optional;
 
 
 public class RedaktorzyTabController implements EntityController<Redaktor> {
-
     private RedaktorDAO redaktorDAO;
     private SekcjaDAO sekcjaDAO;
     private RedaktorForm redaktorForm;
@@ -58,58 +62,26 @@ public class RedaktorzyTabController implements EntityController<Redaktor> {
         sekcjaChoiceBox.setItems(sekcjaObservableList);
     }
 
-    //TODO: maybe create abstract class?
-//    @Override
     public static ObservableList<Redaktor> getObservableList() {
         return redaktorObservableEntityListWrapper.getObservableList();
     }
 
     @FXML
     private void addRedactor() {
-        if(redaktorForm.isFormCorrectlyFilled()) {
-            Redaktor redaktor = redaktorForm.readForm();
-            redaktorDAO.save(redaktor);
-            redaktorObservableEntityListWrapper.updateObservableList();
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-            warningAlert.showAndWait();
-        }
+        EntityAdder.tryToAddEntity(redaktorForm, redaktorDAO, redaktorObservableEntityListWrapper);
     }
 
     @FXML
     private void deleteRedaktor() {
-        Redaktor redaktor = TableViewHelper.getSelectedItem(redaktorTableView);
-
-        if(redaktor != null) {
-            long redaktorId = redaktor.getRedaktorId();
-            redaktorDAO.delete(redaktorId);
-            redaktorObservableEntityListWrapper.updateObservableList();
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano redaktora!");
-            warningAlert.showAndWait();
-        }
+        EntityDeleter.tryToDeleteEntity(redaktorTableViewWrapper, redaktorDAO, redaktorObservableEntityListWrapper, Redaktor::getRedaktorId);
     }
 
     @FXML
     private void editRedaktor() {
-
         Redaktor redaktorToEdit = TableViewHelper.getSelectedItem(redaktorTableView);
 
         if(redaktorToEdit != null) {
-
-            if(!redaktorForm.isFormCorrectlyFilled()) {
-                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-                warningAlert.showAndWait();
-                return;
-            }
-
-            if(!redaktorForm.isFormDifferentFromEntity(redaktorToEdit)) {
-                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
-                warningAlert.showAndWait();
-            }
-            else {
+            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(redaktorForm, redaktorToEdit)) {
                 long editedRedaktorId = redaktorToEdit.getRedaktorId();
                 Redaktor editedRedaktor = redaktorForm.readForm();
                 editedRedaktor.setRedaktorId(editedRedaktorId);

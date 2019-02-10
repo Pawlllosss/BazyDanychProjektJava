@@ -6,9 +6,11 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import redaktor.DAO.StudioDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormChecker;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.studio.StudioForm;
 import redaktor.controller.helper.crud.EntityAdder;
+import redaktor.controller.helper.crud.EntityDeleter;
 import redaktor.controller.observable.ObservableEntityNoUpdateArgumentsListWrapper;
 import redaktor.controller.table.StudioTableViewWrapper;
 import redaktor.model.Studio;
@@ -46,8 +48,6 @@ public class StudioTabController implements EntityController<Studio> {
     public void setItemsFromOtherControllers() {
     }
 
-    //TODO: maybe create abstract class?
-//    @Override
     public static ObservableList<Studio> getObservableList() {
         return studioObservableEntityListWrapper.getObservableList();
     }
@@ -59,17 +59,7 @@ public class StudioTabController implements EntityController<Studio> {
 
     @FXML
     private void deleteStudio() {
-        Studio studio = studioTableViewWrapper.getSelectedItem();
-
-        if(studio != null) {
-            long studioId = studio.getStudioId();
-            studioDAO.delete(studioId);
-            studioObservableEntityListWrapper.updateObservableList();
-        }
-        else {
-            WarningAlert warningAlert = new WarningAlert("Nie wybrano Studia!");
-            warningAlert.showAndWait();
-        }
+        EntityDeleter.tryToDeleteEntity(studioTableViewWrapper, studioDAO, studioObservableEntityListWrapper, Studio::getStudioId);
     }
 
     @FXML
@@ -77,17 +67,7 @@ public class StudioTabController implements EntityController<Studio> {
         Studio studioToEdit = studioTableViewWrapper.getSelectedItem();
 
         if(studioToEdit != null) {
-            if(!studioForm.isFormCorrectlyFilled()) {
-                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-                warningAlert.showAndWait();
-                return;
-            }
-
-            if(!studioForm.isFormDifferentFromEntity(studioToEdit)) {
-                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
-                warningAlert.showAndWait();
-            }
-            else {
+            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(studioForm, studioToEdit)) {
                 long editedStudioId = studioToEdit.getStudioId();
                 Studio editedStudio = studioForm.readForm();
                 editedStudio.setStudioId(editedStudioId);
@@ -115,7 +95,6 @@ public class StudioTabController implements EntityController<Studio> {
             }
         });
     }
-
 
     public String getNazwaFromTextField() {
         return nazwaTextField.getText();

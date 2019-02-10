@@ -7,7 +7,6 @@ import javafx.scene.control.TableView;
 import redaktor.DAO.ProgramDAO;
 import redaktor.DAO.StudioDAO;
 import redaktor.controller.observable.ObservableListWrapper;
-import redaktor.controller.observable.ObservableNoUpdateArgumentsListWrapper;
 import redaktor.initialize.ViewInitializer;
 import redaktor.model.Audycja;
 import redaktor.model.Studio;
@@ -24,8 +23,8 @@ public class AudycjaTableViewWrapper extends TableViewWrapper<Audycja> {
     }
 
     @Override
-    public void initialize(ObservableListWrapper<Audycja> observableEntityListWrapper) {
-        setObservableListToTableView(observableEntityListWrapper.getObservableList());
+    public void initialize(ObservableListWrapper<Audycja> observableListWrapper) {
+        setObservableListToTableView(observableListWrapper.getObservableList());
     }
 
     @Override

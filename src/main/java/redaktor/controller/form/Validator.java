@@ -61,7 +61,6 @@ public class Validator {
         return !checkIfValuesAreEqual(val1, val2);
     }
 
-    //TODO: could also use apache tools
     private String removeDiactricalMarksFromString(String string) {
         String normalizedString = Normalizer.normalize(string, Normalizer.Form.NFD);
         return normalizedString.replaceAll("[^\\p{ASCII}]", "");

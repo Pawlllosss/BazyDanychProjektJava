@@ -2,9 +2,13 @@ package redaktor.controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import redaktor.DAO.AudycjaDAO;
 import redaktor.controller.alert.WarningAlert;
+import redaktor.controller.form.FormChecker;
 import redaktor.controller.form.FormLoader;
 import redaktor.controller.form.audycja.AudycjaForm;
 import redaktor.controller.helper.crud.EntityAdder;
@@ -71,8 +75,8 @@ public class AudycjaTabController implements EntityController<Audycja> {
         audycjaDayTableViewWrapper = new AudycjaTableViewWrapper(audycjaDayTableView);
         audycjaDayTableViewWrapper.initialize(audycjaDayObservableNoUpdateArgumentsListWrapper);
 
-        ViewInitializer.initializeChoiceBox(programChoiceBox, p -> p.getNazwa());
-        ViewInitializer.initializeChoiceBox(studioChoiceBox, s -> s.getNazwa());
+        ViewInitializer.initializeChoiceBox(programChoiceBox, Program::getNazwa);
+        ViewInitializer.initializeChoiceBox(studioChoiceBox, Studio::getNazwa);
 
         addTimeCorrectionCheckForTextField(dataPoczatekGodzinaTextField);
         addTimeCorrectionCheckForTextField(dataKoniecGodzinaTextField);
@@ -91,7 +95,6 @@ public class AudycjaTabController implements EntityController<Audycja> {
         studioChoiceBox.setItems(studioObservableList);
     }
 
-    //TODO: move to base
     public static ObservableList<Audycja> getObservableList() {
         return audycjaObservableEntityListWrapper.getObservableList();
     }
@@ -121,18 +124,7 @@ public class AudycjaTabController implements EntityController<Audycja> {
         Audycja audycjaToEdit = audycjaTableViewWrapper.getSelectedItem();
 
         if(audycjaToEdit != null) {
-
-            if(!audycjaForm.isFormCorrectlyFilled()) {
-                WarningAlert warningAlert = new WarningAlert("Niepoprawnie wypełnione pola!");
-                warningAlert.showAndWait();
-                return;
-            }
-
-            if(!audycjaForm.isFormDifferentFromEntity(audycjaToEdit)) {
-                WarningAlert warningAlert = new WarningAlert("Nie zmodyfikowano żadnych pól!");
-                warningAlert.showAndWait();
-            }
-            else {
+            if(FormChecker.checkIfFormSuitableForEditAndDisplayWarningIfNot(audycjaForm, audycjaToEdit)) {
                 long editedAudycjaId = audycjaToEdit.getAudycjaId();
                 Audycja editedAudycja = audycjaForm.readForm();
                 editedAudycja.setAudycjaId(editedAudycjaId);
