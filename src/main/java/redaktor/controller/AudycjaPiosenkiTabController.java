@@ -71,7 +71,7 @@ public class AudycjaPiosenkiTabController implements EntityController<PiosenkaOd
             long audycjaId = audycja.getAudycjaId();
             long piosenkaId = piosenka.getPiosenkaId();
 
-            tryToAssignPiosenkaToAudycja(audycjaId, piosenkaId);
+            tryToAssignPiosenkaToAudycja(piosenkaId, audycjaId);
         }
         else
         {

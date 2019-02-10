@@ -19,6 +19,8 @@ import redaktor.controller.table.ProgramPrzypisanyRedaktorTableViewWrapper;
 import redaktor.controller.table.ProgramRedaktorCountTableViewWrapper;
 import redaktor.controller.table.ProgramTableViewWrapper;
 import redaktor.controller.table.TableViewHelper;
+import redaktor.initialize.ViewInitializer;
+import redaktor.initialize.display.RedaktorChoiceBoxDisplayNameRetriever;
 import redaktor.model.Redaktor;
 import redaktor.model.Sekcja;
 import redaktor.model.program.Program;
@@ -78,6 +80,9 @@ public class ProgramTabController implements EntityController<Program> {
 
         programPrzypisanyRedaktorTableViewWrapper = new ProgramPrzypisanyRedaktorTableViewWrapper(programPrzypisanyRedaktorTableView);
         programPrzypisanyRedaktorTableViewWrapper.initialize(programPrzypisanyRedaktorObservableCustomUpdateListWrapper);
+
+        ViewInitializer.initializeChoiceBox(redaktorChoiceBox, new RedaktorChoiceBoxDisplayNameRetriever());
+        ViewInitializer.initializeChoiceBox(sekcjaChoiceBox, Sekcja::getNazwa);
 
         programForm = new ProgramForm(this);
         MainController.addEntityController(this);

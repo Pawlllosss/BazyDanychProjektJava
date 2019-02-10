@@ -1,5 +1,7 @@
 package redaktor.DAO;
 
+import redaktor.DAO.delete.DeleteQueryExecutor;
+import redaktor.DAO.get.GetExecutor;
 import redaktor.DAO.statement.PreparedStatementSetter;
 import redaktor.DAO.update.SekcjaUpdateQueryBuilder;
 import redaktor.connection.ConnectionHandler;
@@ -13,9 +15,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class SekcjaDAO implements DAO<Sekcja> {
+    private final String TABLE_NAME = "sekcja";
+    private final String SCHEMA_NAME = "redaktor";
+    private final String ID_FIELD = "sekcja_id";
 
     private static SekcjaDAO sekcjaDAO = new SekcjaDAO();
     private ConnectionHandler connectionHandler;
+    private GetExecutor<Sekcja> getExecutor;
 
     public static SekcjaDAO getInstance() {
         return sekcjaDAO;
@@ -23,45 +29,19 @@ public class SekcjaDAO implements DAO<Sekcja> {
 
     private SekcjaDAO() {
         connectionHandler = ConnectionHandler.getInstance();
+        getExecutor = new GetExecutor<>(SCHEMA_NAME, TABLE_NAME, ID_FIELD, this::getSekcjasFromResultSet);
     }
 
     @Override
     public Optional<Sekcja> get(long id) {
-        String sekcjaSelectBySekcjaIdQuery = "SELECT * FROM redaktor.sekcja s WHERE s.sekcja_id = ?;";
-
-        List<Sekcja> sections = new LinkedList<>();
-        Sekcja sekcja = null;
-
-        PreparedStatement selectBySekcjaIdStatement = connectionHandler.prepareStatement(sekcjaSelectBySekcjaIdQuery);
-        try {
-            selectBySekcjaIdStatement.setLong(1, id);
-            ResultSet resultSet = selectBySekcjaIdStatement.executeQuery();
-            sections = getSectionsFromResultSet(resultSet);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        if (!sections.isEmpty()) {
-            sekcja = sections.get(0);
-        }
-
+        Sekcja sekcja = getExecutor.execute(id);
         return Optional.ofNullable(sekcja);
     }
 
     @Override
     public List<Sekcja> getAll() {
-        final String SEKCJA_SELECT_QUERY = "SELECT * FROM redaktor.sekcja;";
-
-        ResultSet resultSet = connectionHandler.executeSelectQuery(SEKCJA_SELECT_QUERY);
-        List<Sekcja> sections = null;
-
-        try {
-            sections = getSectionsFromResultSet(resultSet);
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return sections;
+        List<Sekcja> sekcjas = getExecutor.executeAll();
+        return sekcjas;
     }
 
     @Override
@@ -86,26 +66,17 @@ public class SekcjaDAO implements DAO<Sekcja> {
         SekcjaUpdateQueryBuilder sekcjaUpdateQueryBuilder = new SekcjaUpdateQueryBuilder();
         final String UPDATE_QUERY = sekcjaUpdateQueryBuilder.buildUpdateQuery(originalEntity, editedEntity);
 
-        System.out.println(UPDATE_QUERY);
-
         connectionHandler.executeUpdateQuery(UPDATE_QUERY);
     }
 
     @Override
     public void delete(long id) {
         String sekcjaDeleteQuery = "DELETE FROM redaktor.sekcja WHERE sekcja_id = ?";
-
-        PreparedStatement preparedStatement = connectionHandler.prepareStatement(sekcjaDeleteQuery);
-
-        try {
-            preparedStatement.setLong(1, id);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        DeleteQueryExecutor deleteQueryExecutor = new DeleteQueryExecutor(sekcjaDeleteQuery, id);
+        deleteQueryExecutor.executeDeleteQuery();
     }
 
-    private List<Sekcja> getSectionsFromResultSet(ResultSet resultSet) throws SQLException {
+    private List<Sekcja> getSekcjasFromResultSet(ResultSet resultSet) throws SQLException {
         List<Sekcja> sections = new LinkedList<>();
 
         while (resultSet.next()) {

@@ -40,7 +40,7 @@ public class ProgramTableViewWrapper extends TableViewWrapper<Program> {
         sekcjaNazwaColumn.setCellValueFactory(programStringCellDataFeatures -> {
                     Program program = programStringCellDataFeatures.getValue();
                     Optional<Sekcja> sekcja = sekcjaDAO.get(program.getSekcjaId());
-                    String sekcjaNazwa = sekcja.map(sekcjaLambda -> sekcjaLambda.getNazwa()).orElse("");
+                    String sekcjaNazwa = sekcja.map(Sekcja::getNazwa).orElse("");
 
                     return new SimpleStringProperty(sekcjaNazwa);
                 });
